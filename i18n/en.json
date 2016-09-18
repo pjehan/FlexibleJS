@@ -1,0 +1,35 @@
+{
+  "btn.add": "Add",
+  "btn.edit": "Edit",
+  "btn.delete": "Delete",
+  "btn.login": "Login",
+  "btn.register": "Register",
+
+  "title.login": "Login",
+  "title.register": "Register",
+  "title.users": "Users",
+  "title.user.new": "New user",
+  "title.user.edit": "Edit user",
+
+  "form.username": "Username",
+  "form.password": "Password",
+  "form.active": "Active",
+
+  "table.boolean.true": "Yes",
+  "table.boolean.false": "No",
+
+  "notification.newuser.title": "New user",
+  "notification.newuser.message": "User created with success",
+  "notification.newuser.alreadyexists.title": "User already exists",
+  "notification.newuser.alreadyexists.message": "User with username {username} already exists",
+  "notification.newuser.error.title": "User error",
+  "notification.newuser.error.message": "Failed to create new user",
+  "notification.updateuser.error.title": "User error",
+  "notification.updateuser.error.message": "Failed to update user",
+  "notification.deleteuser.error.title": "User error",
+  "notification.deleteuser.error.message": "Failed to delete user",
+  "notification.unauthorized.title": "Unauthorized",
+  "notification.unauthorized.message": "Wrong Username/Password",
+  "notification.notactive.title": "Account not active",
+  "notification.notactive.message": "Your account is created but not activated yet"
+}

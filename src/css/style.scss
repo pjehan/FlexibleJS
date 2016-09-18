@@ -1,0 +1,75 @@
+@import "variables";
+@import "bootstrap";
+@import "bootswatch";
+@import "font-awesome";
+
+html {
+  font-size: 14px;
+}
+
+body {
+  padding-top: 64px;
+}
+
+main > .container {
+  margin-top: 10px;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+#page-header {
+  z-index: 999;
+}
+
+.btn-drag {
+  cursor: move;
+}
+
+.breadcrumb {
+  margin-bottom: 0;
+}
+
+.img-container {
+  display: flex;
+}
+
+.img-container > div {
+  margin: 5px 5px 5px 0;
+}
+
+.panel-title {
+  > .btn-group, .form-group {
+    margin-right: 5px;
+  }
+
+  .form-group {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  .form-group.input-resizer {
+    width: 100px;
+  }
+}
+
+.panel-hover-header {
+  position: relative;
+}
+
+.panel-hover-header > .panel-heading {
+  position: absolute;
+  display: none;
+  top: -53px;
+}
+
+.react-bs-table-container {
+  margin-top: 10px;
+}
