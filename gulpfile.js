@@ -3,7 +3,7 @@ var gutil = require('gulp-util');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var minify = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 var nodemon = require('gulp-nodemon');
 var notify = require("gulp-notify");
 var debug = require('gulp-debug');
@@ -49,7 +49,7 @@ gulp.task('css', function() {
 
   return merge(cssFiles, scssFiles)
   .pipe(concat('style.css'))
-  .pipe(minify({processImport: false}))
+  .pipe(cleanCSS({processImport: false}))
   .pipe(gulp.dest(buildStylesDir));
 });
 
