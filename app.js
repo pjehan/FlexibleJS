@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-    secret: 'keyboard cat',
+    secret: '07bdcdb67a687b4bfbff0c29029e8b14',
     resave: false,
     saveUninitialized: false
 }));

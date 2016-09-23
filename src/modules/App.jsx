@@ -7,7 +7,7 @@ import fr from 'react-intl/locale-data/fr'
 import enMessages from '../../i18n/en.json'
 import frMessages from '../../i18n/fr.json'
 
-import { Button, Nav, Navbar, NavDropdown, MenuItem, NavItem, Modal } from 'react-bootstrap'
+import { Button, Nav, Navbar, NavDropdown, MenuItem, NavItem, Modal, FormGroup, FormControl } from 'react-bootstrap'
 
 import { OrderedSet } from 'immutable'
 import { NotificationStack } from 'react-notification'
@@ -32,13 +32,20 @@ var NProgress = require('nprogress');
 var MyApp = React.createClass({
 
   getInitialState() {
-    return { user: null, notifications: OrderedSet(), count: 0, modal: { show: false } }
+    return { user: null, sites: [], selectedSite: null, notifications: OrderedSet(), count: 0, modal: { show: false } }
   },
 
   componentDidMount: function() {
     var self = this;
     $.get('/api/users/currentuser', function(user){
       self.setState({user: user});
+    });
+    $.get('/api/templates', function(sites){
+      var selectedSite = self.state.selectedSite;
+      if (!selectedSite) {
+        selectedSite = sites[0];
+      }
+      self.setState({sites: sites, selectedSite: selectedSite});
     });
 
     NProgress.configure({ parent: 'main' });
@@ -62,6 +69,10 @@ var MyApp = React.createClass({
 
   handleUser: function(user) {
     this.setState({ user: user });
+  },
+
+  handleSiteChange: function(site, event) {
+    this.setState({ selectedSite: site });
   },
 
   handleModal: function (modal) {
@@ -98,7 +109,7 @@ var MyApp = React.createClass({
 
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {handleNotification: this.addNotification, handleUser: this.handleUser, handleModal: this.handleModal})
+      React.cloneElement(child, {site: this.state.selectedSite, handleNotification: this.addNotification, handleUser: this.handleUser, handleModal: this.handleModal})
     );
   },
 
@@ -121,9 +132,21 @@ var MyApp = React.createClass({
           </LinkContainer>
         </Nav>
       );
+
+      var siteNodes = this.state.sites.map(function(site){
+        return (
+          <MenuItem onClick={this.handleSiteChange.bind(this, site)} className={(this.state.selectedSite == site) ? 'active' : ''} key={site.id}>{site.title}</MenuItem>
+        );
+      }.bind(this));
+
+      var selectedSite = (this.state.selectedSite) ? this.state.selectedSite.title : "";
+
       rightNav = (
         <Nav pullRight>
-          <NavDropdown id="profile-dropdown" title="Profile">
+          <NavDropdown id="site-dropdown" title={selectedSite}>
+            {siteNodes}
+          </NavDropdown>
+          <NavDropdown id="profile-dropdown" title={this.state.user.username}>
             <MenuItem>Profile</MenuItem>
             <LinkContainer to="/logout">
               <MenuItem>Logout</MenuItem>

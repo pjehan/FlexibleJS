@@ -8,17 +8,30 @@ import { browserHistory } from 'react-router'
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return {pages: [], templates: [], page: {}, showNewPageModal: false};
+    return {pages: [], templates: [], page: {}, language: null, showNewPageModal: false};
   },
 
   componentDidMount: function() {
-    var self = this;
-    $.get('/api/pages', function(result){
-      self.setState({pages: result});
-    });
-    $.get('/api/templates', function(result){
-      self.setState({templates: result});
-    });
+    this.handleSiteChange(this.props);
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.handleSiteChange(nextProps);
+  },
+
+  handleSiteChange: function(props) {
+    if (props.site) {
+      var self = this;
+      $.get('/api/pages/', {site_id: props.site.id})
+      .done(function(result){
+        self.setState({pages: result});
+      });
+      this.setState({templates: props.site.templates, language: props.site.lang[0]});
+    }
+  },
+
+  handleLanguageChange: function(event) {
+    this.setState({ language: event.target.value });
   },
 
   closeNewPageModal() {
@@ -39,10 +52,13 @@ module.exports = React.createClass({
     e.preventDefault();
     var self = this;
 
+    var page = this.state.page;
+    page.site_id = this.props.site.id;
+
     $.ajax({
       type: 'POST',
       url: '/api/pages/',
-      data: this.state.page
+      data: page
     })
     .done(function(data) {
       self.closeNewPageModal();
@@ -91,7 +107,7 @@ module.exports = React.createClass({
 
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
+      React.cloneElement(child, {language: this.state.language, site: this.props.site, handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
     );
   },
 
@@ -117,11 +133,25 @@ module.exports = React.createClass({
       );
     }.bind(this));
 
+    var site;
+    var languageNodes;
+    if (this.props.site) {
+      site = this.props.site.title;
+      languageNodes = this.props.site.lang.map(function(language){
+        return (
+          <option value={language} key={language}>{language}</option>
+        );
+      }.bind(this));
+    }
+
     return (
       <Grid>
         <Row>
           <Col sm={3}>
-            <h1>Pages</h1>
+            <h4>{site}</h4>
+            <FormControl componentClass="select" className="language-dropdown" onChange={this.handleLanguageChange}>
+              {languageNodes}
+            </FormControl>
             <Nav bsStyle="pills" stacked>
               {pageNodes}
             </Nav>

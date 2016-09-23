@@ -37,7 +37,7 @@ function deletePage(id) {
 router.get('/', function(req, res, next) {
   mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
     if (err) throw err;
-    db.collection('pages').find({parent: null}).toArray(function(err, items){
+    db.collection('pages').find({site_id: req.query.site_id, parent: null}).toArray(function(err, items){
       res.json(items);
     });
   });
@@ -63,6 +63,7 @@ router.get('/:id/:component_id/children', function(req, res, next) {
  * @return {json} JSON created object
  */
 router.post('/', function(req, res, next) {
+  var site_id = req.body.site_id;
   var template = req.body.template;
   var title = req.body.title;
 
@@ -73,7 +74,7 @@ router.post('/', function(req, res, next) {
   mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
     if (err) throw err;
     db.collection('pages').insertOne(
-      {template: template, parent: parent, component_id: component_id, title: title, slug: slug(title, {lower: true}), created_date: new Date(), updated_date: new Date()},
+      {site_id: site_id, template: template, parent: parent, component_id: component_id, title: title, slug: slug(title, {lower: true}), created_date: new Date(), updated_date: new Date()},
       function(err, template) {
         if (err) throw err;
         res.json(template.ops[0]);

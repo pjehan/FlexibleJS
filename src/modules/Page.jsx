@@ -15,8 +15,14 @@ module.exports =  React.createClass({
   componentDidMount: function() {
     var self = this;
     $.get('/api/pages/' + this.props.params.id, function(page){
-      $.get('/api/templates/' + page.template, function(template){
+      $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
         self.getPageParents(page, [], function(parents) {
+          // Create node per lang if not exists
+          for (var i = 0; i < self.props.site.lang.length; i++) {
+            if (!page[self.props.site.lang[i]]) {
+              page[self.props.site.lang[i]] = {};
+            }
+          }
           self.setState({page: page, template: template, parents: parents});
         });
       });
@@ -54,13 +60,17 @@ module.exports =  React.createClass({
   },
 
   handleChange: function(data) {
-    this.state.page[data.id] = data.value;
+    if (!this.state.page[this.props.language]) {
+      this.state.page[this.props.language] = {}
+    }
+
+    this.state.page[this.props.language][data.id] = data.value;
   },
 
   submit: function (e){
     e.preventDefault();
     var self = this;
-
+    
     $.ajax({
       type: 'PUT',
       url: '/api/pages/' + this.state.page._id,
@@ -122,8 +132,8 @@ module.exports =  React.createClass({
         }
         seo = (
           <ExpandablePanel header="SEO">
-            <Component key="seo_title" template={seo_title_template} component={self.state.page} handleChange={this.handleChange}></Component>
-            <Component key="seo_metadescription" template={seo_metadescription_template} component={self.state.page} handleChange={this.handleChange}></Component>
+            <Component key="seo_title" template={seo_title_template} component={self.state.page[this.props.language]} handleChange={this.handleChange}></Component>
+            <Component key="seo_metadescription" template={seo_metadescription_template} component={self.state.page[this.props.language]} handleChange={this.handleChange}></Component>
           </ExpandablePanel>
         )
       }
@@ -133,7 +143,7 @@ module.exports =  React.createClass({
           <Component
             key={component.id}
             template={component}
-            component={self.state.page}
+            component={self.state.page[this.props.language]}
             handleChange={self.handleChange}
             handleNotification={this.props.handleNotification}
             handleModal={this.props.handleModal}>
