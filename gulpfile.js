@@ -50,7 +50,8 @@ gulp.task('css', function() {
   return merge(cssFiles, scssFiles)
   .pipe(concat('style.css'))
   .pipe(cleanCSS({processImport: false}))
-  .pipe(gulp.dest(buildStylesDir));
+  .pipe(gulp.dest(buildStylesDir))
+  .pipe(livereload());
 });
 
 gulp.task('fonts', function(){
@@ -62,7 +63,7 @@ gulp.task('nodemon', function() {
   gutil.log('Nodemon...');
   return nodemon({
     script: 'app.js'
-    , ext: 'js jade json'
+    , ext: 'css js jade json'
     , ignore: ['public/*', 'src/*']
     , env: { 'NODE_ENV': 'development' }
   }).on('restart', function(){
@@ -82,6 +83,7 @@ function buildScript(file, watch) {
   var bundler = watch ? watchify(browserify(props)) : browserify(props);
   if (watch) {
     livereload.listen();
+    gulp.watch(stylesDir + '/**/*.scss', ['css']);
   }
   function rebundle() {
     var stream = bundler.bundle();

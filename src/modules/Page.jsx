@@ -8,8 +8,15 @@ import Component from '../modules/components/Component.jsx'
 
 module.exports =  React.createClass({
 
+  /**
+   * page {object}: Current modified page
+   * change {boolean}: Is page changed
+   * template {object}: Current page template
+   * parents {array}: Parents pages (used for breadcrumb)
+   * seo_open {boolean}: If true, display SEO form
+   */
   getInitialState: function() {
-    return {page: null, template: null, parents: [], seo_open: false};
+    return {page: null, changes: false, template: null, parents: [], seo_open: false};
   },
 
   componentDidMount: function() {
@@ -17,7 +24,7 @@ module.exports =  React.createClass({
     $.get('/api/pages/' + this.props.params.id, function(page){
       $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
         self.getPageParents(page, [], function(parents) {
-          // Create node per lang if not exists
+          // Create object node per lang if not exists
           for (var i = 0; i < self.props.site.lang.length; i++) {
             if (!page[self.props.site.lang[i]]) {
               page[self.props.site.lang[i]] = {};
@@ -55,22 +62,33 @@ module.exports =  React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.props.params.id = newProps.routeParams.id;
-    this.componentDidMount();
+    // If page changed, update state
+    if (this.props.params.id != newProps.routeParams.id) {
+      this.props.params.id = newProps.routeParams.id;
+      this.componentDidMount();
+    }
+  },
+
+  componentWillUnmount: function() {
+    if (this.state.changes) {
+      console.log('TODO: Display alert because current changes are not saved');
+    }
   },
 
   handleChange: function(data) {
-    if (!this.state.page[this.props.language]) {
-      this.state.page[this.props.language] = {}
+    var page = this.state.page;
+    if (!page[this.props.language]) {
+      page[this.props.language] = {}
     }
 
-    this.state.page[this.props.language][data.id] = data.value;
+    page[this.props.language][data.id] = data.value;
+    this.setState({page: page, changes: true });
   },
 
   submit: function (e){
     e.preventDefault();
     var self = this;
-    
+
     $.ajax({
       type: 'PUT',
       url: '/api/pages/' + this.state.page._id,
@@ -78,7 +96,7 @@ module.exports =  React.createClass({
       contentType: "application/json"
     })
     .done(function(data) {
-      self.setState({page: data});
+      self.setState({page: data, changes: false});
     })
     .fail(function(jqXHR, textStatus) {
       console.log(jqXHR);

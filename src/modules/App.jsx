@@ -80,6 +80,19 @@ var MyApp = React.createClass({
     this.setState({ modal: modal });
   },
 
+  handleModalClose: function() {
+    var self = this;
+
+    // If a function is defined when the close button is clicked
+    if (this.state.modal.close) {
+      this.state.modal.close(function() {
+        self.close();
+      });
+    } else {
+      self.close();
+    }
+  },
+
   close() {
     this.setState({ modal: { show: false } });
   },
@@ -223,7 +236,7 @@ var MyApp = React.createClass({
               {modalBody}
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={this.close}>Close</Button>
+              <Button onClick={this.handleModalClose}>Close</Button>
               {modalButtons}
             </Modal.Footer>
           </Modal>

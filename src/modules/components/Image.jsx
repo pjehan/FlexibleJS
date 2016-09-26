@@ -1,9 +1,9 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 
-import { FormControl, Button } from 'react-bootstrap'
-//var $ = window.jQuery = require('jquery')
+import { FormControl, Button, ButtonGroup } from 'react-bootstrap'
 
-module.exports =  React.createClass({
+var Image = React.createClass({
 
   getInitialState: function() {
     return {id: null, value: []};
@@ -14,7 +14,9 @@ module.exports =  React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState({id: newProps.template.id, value: (newProps.value) || []});
+    if (this.state.id != newProps.template.id) {
+      this.setState({id: newProps.template.id, value: (newProps.value) || []});
+    }
   },
 
   getImageUrl: function(img) {
@@ -37,7 +39,14 @@ module.exports =  React.createClass({
     })
     .done(function(data) {
       var images = (self.props.template.multiple) ? self.state.value : [];
-      self.setState({value: images.concat(data)}, function() {
+      var newImages = [];
+      for (var i = 0; i < data.length; i++) {
+        newImages.push({
+          src: data[i],
+          alt: null
+        });
+      }
+      self.setState({value: images.concat(newImages)}, function() {
         this.props.handleChange(this.state);
       });
     })
@@ -53,26 +62,46 @@ module.exports =  React.createClass({
     var self = this;
 
     var images = this.state.value.filter((obj) => {return obj != image});
+    self.setState({value: images}, function() {
+      self.props.handleChange(self.state);
+    });
+  },
+
+  handleAlt: function(image, e) {
+    e.preventDefault();
+
+    var self = this;
+    var alt = image.alt;
 
     this.props.handleModal({
-      title: 'Delete this page?',
-      body: 'Are you sur you want to delete this page? This action is not reversible.',
-      icon: 'minus-circle text-danger',
+      title: 'Edit image alternate text',//this.props.intl.formatMessage({id: 'modal.page.delete.title'}),
+      body: (
+        <FormControl type="text" defaultValue={alt} onChange={this.handleAltChange.bind(this, image)} />
+      ),
       buttons: [
         {
-          style: 'danger',
-          icon: 'trash',
-          content: 'Delete',
+          style: 'success',
+          icon: 'check',
+          content: 'Save',
           onClick: function () {
-            console.log(images);
-            self.setState({value: images}, function() {
-              console.log(self.state);
-              self.props.handleChange(self.state);
-            });
+            console.log(self.state);
+            self.props.handleChange(self.state);
           }
         }
-      ]
+      ],
+      close: function(callback) {
+        var images = self.state.value.filter((obj) => {return obj.src != image.src});
+        image.alt = alt;
+        self.setState({value: images.concat(image)});
+        callback();
+      }
     });
+  },
+
+  handleAltChange: function(image, e) {
+    var images = this.state.value.filter((obj) => {return obj.src != image.src});
+    image.alt = e.target.value;
+    this.setState({value: images.concat(image)});
   },
 
   render() {
@@ -81,9 +110,14 @@ module.exports =  React.createClass({
       var imageNodes = this.state.value.map(function(image, index){
         return (
           <div key={index}>
-            <img src={this.getImageUrl(image)} className="img-thumbnail img-responsive"/>
-            <input type="hidden" name={this.props.template.id} value={image}></input>
-            <Button bsStyle="danger" block onClick={this.handleDelete.bind(this, image)}><i className="fa fa-trash"></i> Delete</Button>
+            <div className="img-overlay">
+              <ButtonGroup>
+                <Button bsStyle="primary" onClick={this.handleAlt.bind(this, image)}><i className="fa fa-pencil"></i></Button>
+                <Button bsStyle="danger" onClick={this.handleDelete.bind(this, image)}><i className="fa fa-trash"></i></Button>
+              </ButtonGroup>
+            </div>
+            <img src={this.getImageUrl(image.src)} className="img-thumbnail img-responsive"/>
+            <input type="hidden" name={this.props.template.id} value={image.src}></input>
           </div>
         );
       }.bind(this));
@@ -122,3 +156,5 @@ module.exports =  React.createClass({
   }
 
 })
+
+module.exports = injectIntl(Image);

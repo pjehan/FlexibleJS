@@ -25,24 +25,24 @@ module.exports = {
       case "color":
       return (
         <div>
-          <Input template={template} value={value} handleChange={self.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Input>
+          <Input template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Input>
           <FormControl.Feedback />
         </div>
       )
       break;
       case "image":
       return (
-        <Image template={template} value={value} handleChange={self.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Image>
+        <Image template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Image>
       )
       break;
       case "textarea":
       return (
-        <Textarea template={template} value={value} handleChange={self.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Textarea>
+        <Textarea template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Textarea>
       )
       break;
       case "wysiwyg":
       return (
-        <Wysiwyg template={template} value={value} handleChange={self.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Wysiwyg>
+        <Wysiwyg template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Wysiwyg>
       )
       break;
       default:

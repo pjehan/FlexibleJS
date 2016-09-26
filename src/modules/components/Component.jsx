@@ -9,10 +9,6 @@ import { getFormComponent } from '../../js/utils.jsx'
 
 module.exports = React.createClass({
 
-  handleChange: function(data) {
-    this.props.handleChange(data);
-  },
-
   render() {
 
     var value = this.props.component[this.props.template.id];
@@ -20,11 +16,11 @@ module.exports = React.createClass({
 
     if (this.props.template.type == 'list') {
       formComponent = (
-        <List template={this.props.template} component={this.props.component} handleChange={this.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
+        <List template={this.props.template} component={this.props.component} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
       );
     } else if (this.props.template.type == 'builder') {
       formComponent = (
-        <Builder template={this.props.template} value={value} handleChange={this.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></Builder>
+        <Builder template={this.props.template} value={value} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></Builder>
       );
     } else {
       formComponent = getFormComponent(this, this.props.template, value);

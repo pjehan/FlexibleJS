@@ -1,11 +1,12 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { Grid, Row, Col, Button, Nav, NavItem, Modal, OverlayTrigger, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 import { browserHistory } from 'react-router'
 
-module.exports = React.createClass({
+var Pages = React.createClass({
 
   getInitialState: function() {
     return {pages: [], templates: [], page: {}, language: null, showNewPageModal: false};
@@ -77,8 +78,8 @@ module.exports = React.createClass({
     var self = this;
 
     this.props.handleModal({
-      title: 'Delete this page?',
-      body: 'Are you sur you want to delete this page? This action is not reversible.',
+      title: this.props.intl.formatMessage({id: 'modal.page.delete.title'}),
+      body: this.props.intl.formatMessage({id: 'modal.page.delete.message'}),
       icon: 'minus-circle text-danger',
       buttons: [
         {
@@ -210,3 +211,5 @@ module.exports = React.createClass({
     )
   }
 })
+
+module.exports = injectIntl(Pages);
