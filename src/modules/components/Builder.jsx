@@ -42,7 +42,7 @@ module.exports =  React.createClass({
 
   handleChange: function(data) {
     var rows = clone(this.state.value);
-
+    
     for (var i = 0; i < rows.length; i++) {
       if (rows[i].id == data.id) {
         rows[i] = data.value;

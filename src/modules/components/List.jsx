@@ -6,7 +6,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import { ButtonGroup, Button, Modal, OverlayTrigger, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 import moment from 'moment'
-//var $ = window.jQuery = require('jquery')
 
 module.exports =  React.createClass({
 
@@ -16,18 +15,20 @@ module.exports =  React.createClass({
 
   componentDidMount: function() {
     var self = this;
-    $.get('/api/pages/' + this.props.component._id + '/' + this.props.template.id + '/children', function(result){
+    $.get('/api/pages/' + this.props.componentId + '/' + this.props.template.id + '/children', function(result){
       self.setState({pages: result});
     });
-    this.setState({page: {template: this.props.template.template, parent: this.props.component._id}});
+    this.setState({page: {template: this.props.template.template, parent: this.props.componentId}});
   },
 
   componentWillReceiveProps: function(newProps) {
-    var self = this;
-    $.get('/api/pages/' + newProps.component._id + '/' + newProps.template.id + '/children', function(result){
-      self.setState({pages: result});
-    });
-    this.setState({page: {template: newProps.template.template, parent: newProps.component._id}});
+    if (newProps.template.template != this.state.page.template) {
+      var self = this;
+      $.get('/api/pages/' + newProps.componentId + '/' + newProps.template.id + '/children', function(result){
+        self.setState({pages: result});
+      });
+      this.setState({page: {template: newProps.template.template, parent: newProps.componentId}});
+    }
   },
 
   handleChange: function(event) {

@@ -14,7 +14,7 @@ var Image = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    if (this.state.id != newProps.template.id) {
+    if (this.state.id != newProps.template.id || this.state.value != newProps.value) {
       this.setState({id: newProps.template.id, value: (newProps.value) || []});
     }
   },
@@ -84,24 +84,25 @@ var Image = React.createClass({
           icon: 'check',
           content: 'Save',
           onClick: function () {
-            console.log(self.state);
             self.props.handleChange(self.state);
           }
         }
       ],
       close: function(callback) {
-        var images = self.state.value.filter((obj) => {return obj.src != image.src});
-        image.alt = alt;
-        self.setState({value: images.concat(image)});
+        var i = self.state.value.findIndex((obj) => {return obj.src == image.src});
+        var images = self.state.value;
+        images[i].alt = alt;
+        self.setState({value: images});
         callback();
       }
     });
   },
 
   handleAltChange: function(image, e) {
-    var images = this.state.value.filter((obj) => {return obj.src != image.src});
-    image.alt = e.target.value;
-    this.setState({value: images.concat(image)});
+    var i = this.state.value.findIndex((obj) => {return obj.src == image.src});
+    var images = this.state.value;
+    images[i].alt = e.target.value;
+    this.setState({value: images});
   },
 
   render() {

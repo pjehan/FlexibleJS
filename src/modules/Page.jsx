@@ -162,6 +162,7 @@ module.exports =  React.createClass({
             key={component.id}
             template={component}
             component={self.state.page[this.props.language]}
+            componentId={self.state.page._id}
             handleChange={self.handleChange}
             handleNotification={this.props.handleNotification}
             handleModal={this.props.handleModal}>

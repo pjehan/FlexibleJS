@@ -17,7 +17,9 @@ var Pages = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.handleSiteChange(nextProps);
+    if (!this.props.site || this.props.site.id != nextProps.site.id) {
+      this.handleSiteChange(nextProps);
+    }
   },
 
   handleSiteChange: function(props) {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { FormControl } from 'react-bootstrap'
+import { FormControl, Alert } from 'react-bootstrap'
 
 import Input from '../modules/components/Input.jsx'
 import Image from '../modules/components/Image.jsx'

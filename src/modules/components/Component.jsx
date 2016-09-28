@@ -16,7 +16,7 @@ module.exports = React.createClass({
 
     if (this.props.template.type == 'list') {
       formComponent = (
-        <List template={this.props.template} component={this.props.component} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
+        <List template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
       );
     } else if (this.props.template.type == 'builder') {
       formComponent = (

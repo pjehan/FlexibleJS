@@ -77,7 +77,6 @@ var BuilderRow = React.createClass({
 
   handleChange: function(data) {
     var row = clone(this.state.value);
-
     for (var i = 0; i < row.components.length; i++) {
       if (row.components[i].id == data.id) {
         row.components[i] = data.value;
@@ -140,11 +139,10 @@ var BuilderRow = React.createClass({
     };
 
     var componentNodes = [];
-
     if (this.state.value) {
       componentNodes = this.state.value.components.map(function(component, index){
         return (
-          <BuilderCol component={component} index={index} handleChange={this.handleChange} handleColDelete={this.handleColDelete.bind(this, component)} handleMoveCol={this.handleMoveCol} key={component.id}></BuilderCol>
+          <BuilderCol component={component} index={index} handleChange={this.handleChange} handleColDelete={this.handleColDelete.bind(this, component)} handleMoveCol={this.handleMoveCol} key={index}></BuilderCol>
         )
       }.bind(this));
     }
