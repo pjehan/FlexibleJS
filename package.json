@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "array.prototype.move": "0.0.3",
+    "async": "^2.0.1",
     "body-parser": "~1.15.1",
     "bootswatch": "^3.3.7",
     "clone": "^1.0.2",
@@ -48,6 +49,7 @@
     "jquery": "^1.11.0",
     "lodash.flow": "^3.4.0",
     "moment": "^2.14.1",
+    "mongodb": "^2.2.10",
     "mongoose": "^4.4.1",
     "morgan": "~1.7.0",
     "multiparty": "^4.1.2",
