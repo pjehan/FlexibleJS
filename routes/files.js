@@ -60,7 +60,6 @@ router.post('/upload/:name', function(req, res, next) {
     var originalFilenames = [];
     async.eachSeries(Object.keys(files), function (fieldKey, fieldNext){
       if (files.hasOwnProperty(fieldKey)) {
-
         async.eachSeries(Object.keys(files[fieldKey]), function (fileKey, fileNext){
           var file = files[fieldKey][fileKey];
           if (file.fieldName == fieldName && file.size > 0) {
@@ -68,6 +67,8 @@ router.post('/upload/:name', function(req, res, next) {
               originalFilenames.push(filename);
               fileNext();
             });
+          } else {
+            fileNext();
           }
         }, function(err) {
           fieldNext();
