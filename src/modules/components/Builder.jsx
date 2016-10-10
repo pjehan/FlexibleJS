@@ -42,7 +42,7 @@ module.exports =  React.createClass({
 
   handleChange: function(data) {
     var rows = clone(this.state.value);
-    
+
     for (var i = 0; i < rows.length; i++) {
       if (rows[i].id == data.id) {
         rows[i] = data.value;
@@ -86,7 +86,16 @@ module.exports =  React.createClass({
   render() {
     var rowNodes = this.state.value.map(function(row, index){
       return (
-        <BuilderRow row={row} index={index} handleChange={this.handleChange} handleRowDelete={this.handleRowDelete.bind(this, row)} handleMoveRow={this.handleMoveRow} key={row.id}></BuilderRow>
+        <BuilderRow
+          key={row.id}
+          row={row}
+          index={index}
+          handleChange={this.handleChange}
+          handleNotification={this.props.handleNotification}
+          handleModal={this.props.handleModal}
+          handleRowDelete={this.handleRowDelete.bind(this, row)}
+          handleMoveRow={this.handleMoveRow}>
+        </BuilderRow>
       )
     }.bind(this));
 
