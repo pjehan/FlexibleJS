@@ -22,17 +22,19 @@ module.exports =  React.createClass({
   componentDidMount: function() {
     var self = this;
     $.get('/api/pages/' + this.props.params.id, function(page){
-      $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
-        self.getPageParents(page, [], function(parents) {
-          // Create object node per lang if not exists
-          for (var i = 0; i < self.props.site.lang.length; i++) {
-            if (!page[self.props.site.lang[i]]) {
-              page[self.props.site.lang[i]] = {};
+      if (self.props.site) {
+        $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
+          self.getPageParents(page, [], function(parents) {
+            // Create object node per lang if not exists
+            for (var i = 0; i < self.props.site.lang.length; i++) {
+              if (!page[self.props.site.lang[i]]) {
+                page[self.props.site.lang[i]] = {};
+              }
             }
-          }
-          self.setState({page: page, template: template, parents: parents});
-        });
-      });
+            self.setState({page: page, template: template, parents: parents});
+          });
+        });        
+      }
     });
   },
 

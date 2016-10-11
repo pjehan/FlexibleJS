@@ -2,10 +2,12 @@ import React from 'react'
 
 import { FormControl } from 'react-bootstrap'
 
+import ReactSummernote from 'react-summernote';
+
 module.exports =  React.createClass({
 
   getInitialState: function() {
-    return {id: null, value: null};
+    return {id: this.props.template.id, value: this.props.value};
   },
 
   componentDidMount: function() {
@@ -25,8 +27,8 @@ module.exports =  React.createClass({
     }
   },
 
-  handleChange: function(event) {
-    this.setState({value: event.target.value});
+  handleChange: function(value) {
+    this.setState({value: value});
   },
 
   render() {
@@ -39,14 +41,27 @@ module.exports =  React.createClass({
     }
 
     return (
-      <FormControl
-      componentClass="textarea"
-      {...attrs}
-      name={this.props.template.id}
-      value={(this.state.value) ? this.state.value : ''}
-      placeholder={this.props.template.placeholder}
-      onChange={this.handleChange}
-      />
+      <ReactSummernote
+        componentClass="textarea"
+        {...attrs}
+        name={this.props.template.id}
+        value={(this.state.value) ? this.state.value : ''}
+        placeholder={this.props.template.placeholder}
+        onChange={this.handleChange}
+        options={{
+          lang: 'fr-FR',
+          height: 350,
+          dialogsInBody: true,
+          toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview']]
+          ]
+        }}
+        />
     );
 
   }

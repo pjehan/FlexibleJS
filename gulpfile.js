@@ -33,7 +33,10 @@ function handleErrors() {
 
 gulp.task('css', function() {
 
-  var cssFiles = gulp.src(npmDir + '/nprogress/nprogress.css');
+  var cssFiles = gulp.src([
+    npmDir + '/nprogress/nprogress.css',
+    npmDir + '/react-summernote/dist/react-summernote.css'
+  ]);
   var scssFiles = gulp.src(stylesDir + '/style.scss')
   .pipe(sass({
     outputStyle: 'compressed',
@@ -55,6 +58,8 @@ gulp.task('css', function() {
 });
 
 gulp.task('fonts', function(){
+  gulp.src(npmDir + '/react-summernote/dist/summernote.*')
+    .pipe(gulp.dest('./public/css'));
   return gulp.src(npmDir + '/font-awesome/fonts/**.*')
   .pipe(gulp.dest('./public/fonts'));
 });
