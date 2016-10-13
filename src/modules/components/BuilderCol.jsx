@@ -87,11 +87,9 @@ var BuilderCol = React.createClass({
 
   handleColResize: function(event) {
     var col = clone(this.state.value);
-
     col.size = parseInt(event.target.value);
-
     this.setState({value: col}, function() {
-      this.props.handleChange(this.state);
+      this.props.handleChange(this.state.value);
     });
   },
 

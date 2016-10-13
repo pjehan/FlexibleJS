@@ -80,6 +80,9 @@ var BuilderRow = React.createClass({
     for (var i = 0; i < row.components.length; i++) {
       if (row.components[i].id == data.id) {
         row.components[i].value = data.value;
+        if (data.size) {
+          row.components[i].size = data.size;
+        }
       }
     }
     this.setState({value: row}, function() {
@@ -162,6 +165,7 @@ var BuilderRow = React.createClass({
         <ButtonGroup>
           <DropdownButton bsStyle="primary" title={btnNew} id={"dropdown-" + this.state.id}>
             <MenuItem onClick={this.handleColNew.bind(this, 'text')}>Text</MenuItem>
+            <MenuItem onClick={this.handleColNew.bind(this, 'textarea')}>Textarea</MenuItem>
             <MenuItem onClick={this.handleColNew.bind(this, 'wysiwyg')}>Wysiwyg</MenuItem>
             <MenuItem onClick={this.handleColNew.bind(this, 'image')}>Image</MenuItem>
           </DropdownButton>
