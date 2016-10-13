@@ -18,11 +18,11 @@ module.exports =  React.createClass({
     this.setState({id: this.props.template.id, value: (this.props.value) || []});
     // Display panel heading on mouseover
     $('main').on('mouseenter', '.panel-hover-header', function () {
-      $('.panel-heading').hide();
-      $(this).children('.panel-heading').show();
+      $('.panel-hover-header > .panel-heading').hide();
+      $(this).children('.panel-hover-header > .panel-heading').show();
     });
     $('main').on('mouseleave', '.panel-hover-header', function () {
-      $(this).children('.panel-heading').hide();
+      $(this).children('.panel-hover-header > .panel-heading').hide();
       $(this).parent().closest('.panel-hover-header').children('.panel-heading:first').show();
     });
   },
