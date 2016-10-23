@@ -44,7 +44,7 @@ And then inside a page template, you can define a list of components.
 There is 7 component types:
 
 #### Input
-The input component can be use to display any HTML input element.
+The input component can be used to display any HTML input element.
 ```json
 {
   "id": "component-identifier",
@@ -77,7 +77,7 @@ You can also add any HTML attributes:
 ```
 
 #### Textarea
-The textarea component can be use to display an HTML textarea element.
+The textarea component can be used to display an HTML textarea element.
 ```json
 {
   "id": "component-identifier",
@@ -87,7 +87,8 @@ The textarea component can be use to display an HTML textarea element.
 ```
 
 #### WYSIWYG
-The WYSIWYG component can be use to display a WYSIWYG.
+The WYSIWYG component can be used to display a WYSIWYG.
+This component is based on SummerNote for UI.
 ```json
 {
   "id": "component-identifier",
@@ -97,7 +98,7 @@ The WYSIWYG component can be use to display a WYSIWYG.
 ```
 
 #### Image
-The image component can be use to display an image uploader.
+The image component can be used to display an image uploader.
 ```json
 {
   "id": "component-identifier",
@@ -117,7 +118,8 @@ You can upload multiple images by adding the multiple property:
 ```
 
 #### Dropdown
-The dropdown component can be use to display an HTML select option element.
+The dropdown component can be used to display an HTML select option element.  
+This component is based on Select2 for UI.
 ```json
 {
   "id": "component-identifier",
@@ -128,7 +130,7 @@ The dropdown component can be use to display an HTML select option element.
 ```
 
 #### Builder
-The builder component can be use to display a page builder. A page builder allow a website administrator to create a responsive webpage by adding components into rows and columns.
+The builder component can be used to display a page builder. A page builder allow a website administrator to create a responsive webpage by adding components into rows and columns.
 ```json
 {
   "id": "component-identifier",
@@ -138,7 +140,7 @@ The builder component can be use to display a page builder. A page builder allow
 ```
 
 #### List
-The list component can be use to display a list of elements. Those elements are pages and have to be of the same type.
+The list component can be used to display a list of elements. Those elements are pages and have to be of the same type.
 ```json
 {
   "id": "component-identifier",
