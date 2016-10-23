@@ -4,6 +4,7 @@ import { FormControl, Alert } from 'react-bootstrap'
 
 import Input from '../modules/components/Input.jsx'
 import Image from '../modules/components/Image.jsx'
+import Dropdown from '../modules/components/Dropdown.jsx'
 import Textarea from '../modules/components/Textarea.jsx'
 import Wysiwyg from '../modules/components/Wysiwyg.jsx'
 import List from '../modules/components/List.jsx'
@@ -28,6 +29,11 @@ module.exports = {
           <Input template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Input>
           <FormControl.Feedback />
         </div>
+      )
+      break;
+      case "dropdown":
+      return (
+        <Dropdown template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Dropdown>
       )
       break;
       case "image":

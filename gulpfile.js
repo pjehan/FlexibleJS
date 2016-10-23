@@ -35,7 +35,8 @@ gulp.task('css', function() {
 
   var cssFiles = gulp.src([
     npmDir + '/nprogress/nprogress.css',
-    npmDir + '/react-summernote/dist/react-summernote.css'
+    npmDir + '/react-summernote/dist/react-summernote.css',
+    npmDir + '/select2/dist/css/select2.css'
   ]);
   var scssFiles = gulp.src(stylesDir + '/style.scss')
   .pipe(sass({
@@ -68,7 +69,7 @@ gulp.task('nodemon', function() {
   gutil.log('Nodemon...');
   return nodemon({
     script: 'app.js'
-    , ext: 'css js jade json'
+    , ext: 'css js jade'
     , ignore: ['public/*', 'src/*']
     , env: { 'NODE_ENV': 'development' }
   }).on('restart', function(){

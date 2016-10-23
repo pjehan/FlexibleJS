@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { FormControl } from 'react-bootstrap'
-
 import ReactSummernote from 'react-summernote';
 
 module.exports =  React.createClass({

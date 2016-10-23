@@ -71,6 +71,7 @@
     "react-router": "^2.6.0",
     "react-router-bootstrap": "^0.23.1",
     "react-summernote": "^1.0.3",
+    "select2": "^4.0.3",
     "serve-favicon": "~2.3.0",
     "slug": "^0.9.1",
     "unicode": "^0.6.1"
