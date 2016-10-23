@@ -28,6 +28,7 @@ var Pages = React.createClass({
       $.get('/api/pages/', {site_id: props.site.id})
       .done(function(result){
         self.setState({pages: result});
+        browserHistory.push('/pages'); // Redirect user to pages to reset selected page
       });
       this.setState({templates: props.site.templates, language: props.site.lang[0]});
     }
