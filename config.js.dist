@@ -1,0 +1,17 @@
+var config = {
+  app: {
+    port: 3000
+  },
+  session: {
+    secret: '07bdcdb67a687b4bfbff0c29029e8b14'
+  },
+  db: {
+    host: 'localhost',
+    port: 27017,
+    name: 'db_name'
+  }
+};
+
+config.db.url = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
+
+module.exports = config;

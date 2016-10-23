@@ -4,7 +4,6 @@ var fs = require("fs");
 var path = require('path');
 var multiparty = require('multiparty');
 
-var mongodb = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 
 function getSites() {

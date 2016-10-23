@@ -7,9 +7,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+
+var config = require('./config');
 
 var users = require('./routes/users');
 var files = require('./routes/files');
@@ -17,6 +20,8 @@ var templates = require('./routes/templates');
 var pages = require('./routes/pages');
 
 var app = express();
+
+app.locals.config = config;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,9 +35,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-    secret: '07bdcdb67a687b4bfbff0c29029e8b14',
-    resave: false,
-    saveUninitialized: false
+  secret: config.session.secret,
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,16 +55,20 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // mongoose
-mongoose.connect('mongodb://localhost:27017/wb');
+mongoose.connect(config.db.url);
 
 app.get('*', function (req, res) {
   res.render('index');
-})
+});
 
-app.listen(3000, function (err) {
-  if (err) {
-    throw err;
-  }
+MongoClient.connect(config.db.url, function(err, db) {
+  if (err) throw err;
+  app.locals.db = db;
+  app.listen(config.app.port, function (err) {
+    if (err) {
+      throw err;
+    }
+  });
 });
 
 // catch 404 and forward to error handler

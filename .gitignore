@@ -45,3 +45,6 @@ public
 
 # FlexibleJS data structure
 data.json
+
+# FlexibleJS config file
+config.js

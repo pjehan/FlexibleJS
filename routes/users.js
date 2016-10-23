@@ -3,7 +3,6 @@ var router = express.Router();
 var passport = require('passport');
 var User = require('../models/user');
 
-var mongodb = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 
 function insertUser(user, callback) {
@@ -18,30 +17,28 @@ function insertUser(user, callback) {
   });
 }
 
-function updateUser(user, callback) {
+function updateUser(req, user, callback) {
 
-  mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
-    if (err) throw err;
-    var id = user._id;
-    delete user._id;
-    user.active = (user.active === 'true') ? true : false;
-    db.collection('users').findAndModify(
-      {"_id" : ObjectId(id)},
-      {},
-      { $set: user},
-      {new: true},
-      function(err, object) {
-        if (err) {
-          callback({
-            title: 'notification.updateuser.error.title',
-            message: 'notification.updateuser.error.message'
-          });
-        } else {
-          callback(null, object.value);
-        }
+  const db = req.app.locals.db;
+  var id = user._id;
+  delete user._id;
+  user.active = (user.active === 'true') ? true : false;
+  db.collection('users').findAndModify(
+    {"_id" : ObjectId(id)},
+    {},
+    { $set: user},
+    {new: true},
+    function(err, object) {
+      if (err) {
+        callback({
+          title: 'notification.updateuser.error.title',
+          message: 'notification.updateuser.error.message'
+        });
+      } else {
+        callback(null, object.value);
       }
-    );
-  });
+    }
+  );
 }
 
 router.get('/currentuser', function(req, res) {
@@ -49,27 +46,23 @@ router.get('/currentuser', function(req, res) {
 });
 
 router.get('/', function(req, res) {
-  mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
-    if (err) throw err;
-    db.collection('users').find().toArray(function (err, users) {
-      if (err) throw err
-      return res.json(users);
-    });
+  const db = req.app.locals.db;
+  db.collection('users').find().toArray(function (err, users) {
+    if (err) throw err
+    return res.json(users);
   });
 });
 
 router.post('/register', function(req, res) {
-  mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
-    if (err) throw err;
-    db.collection('users').count(function (err, nbAccounts) {
-      if (err) throw err
-      var user = req.body;
-      user.active = (nbAccounts === 0); // User is active if no user in database
-      insertUser(user, function(err, account) {
-        if (err) res.status(500).json(err); // Return notification
-        res.json(account);
-      })
-    });
+  const db = req.app.locals.db;
+  db.collection('users').count(function (err, nbAccounts) {
+    if (err) throw err
+    var user = req.body;
+    user.active = (nbAccounts === 0); // User is active if no user in database
+    insertUser(user, function(err, account) {
+      if (err) res.status(500).json(err); // Return notification
+      res.json(account);
+    })
   });
 });
 
@@ -94,19 +87,17 @@ router.post('/', function(req, res, next) {
 router.put('/', function(req, res, next) {
   var user = req.body;
 
-  updateUser(user, function(err, user) {
+  updateUser(req, user, function(err, user) {
     if (err) res.status(500).json(err); // Return notification
     res.json(user);
   })
 });
 
 router.delete('/:id', function(req, res, next) {
-  mongodb.connect('mongodb://localhost:27017/wb', function(err, db) {
+  const db = req.app.locals.db;
+  db.collection('users').deleteOne({"_id" : ObjectId(req.params.id)}, function(err) {
     if (err) throw err;
-    db.collection('users').deleteOne({"_id" : ObjectId(req.params.id)}, function(err) {
-      if (err) throw err;
-      res.json({});
-    });
+    res.json({});
   });
 });
 
