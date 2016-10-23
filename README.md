@@ -129,6 +129,20 @@ This component is based on Select2 for UI.
 }
 ```
 
+#### Map
+The map component can be used to display a map and select locations.  
+This component is based on Google Map for UI.
+```json
+{
+  "id": "component-identifier",
+  "title": "Component Name",
+  "type": "map",
+  "api_key": "YOUR_API_KEY",
+  "center": {"lat": 48.099709046649394,"lng": -1.6719820609741873},
+  "zoom": 9
+}
+```
+
 #### Builder
 The builder component can be used to display a page builder. A page builder allow a website administrator to create a responsive webpage by adding components into rows and columns.
 ```json

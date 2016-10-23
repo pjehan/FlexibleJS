@@ -7,7 +7,7 @@ import Image from '../modules/components/Image.jsx'
 import Dropdown from '../modules/components/Dropdown.jsx'
 import Textarea from '../modules/components/Textarea.jsx'
 import Wysiwyg from '../modules/components/Wysiwyg.jsx'
-import List from '../modules/components/List.jsx'
+import Map from '../modules/components/Map.jsx'
 
 module.exports = {
 
@@ -49,6 +49,11 @@ module.exports = {
       case "wysiwyg":
       return (
         <Wysiwyg template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Wysiwyg>
+      )
+      break;
+      case "map":
+      return (
+        <Map template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Map>
       )
       break;
       default:
