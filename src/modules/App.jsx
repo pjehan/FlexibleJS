@@ -217,7 +217,7 @@ var MyApp = React.createClass({
           <Navbar bsStyle="inverse" fixedTop={true}>
             <Navbar.Header>
               <Navbar.Brand>
-                <a href="/">Website Builder</a>
+                <a href="/" className="rubberBand animated">Flexible</a>
               </Navbar.Brand>
             </Navbar.Header>
             {leftNav}

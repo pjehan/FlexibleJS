@@ -34,6 +34,7 @@ function handleErrors() {
 gulp.task('css', function() {
 
   var cssFiles = gulp.src([
+    npmDir + '/animate.css/animate.css',
     npmDir + '/nprogress/nprogress.css',
     npmDir + '/react-summernote/dist/react-summernote.css',
     npmDir + '/select2/dist/css/select2.css'
