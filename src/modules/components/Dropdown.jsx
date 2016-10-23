@@ -3,6 +3,9 @@ import React from 'react'
 import { FormControl } from 'react-bootstrap'
 import select2 from 'select2';
 
+/*
+  TODO: Select other component. For example, display a list of products to display related products
+ */
 module.exports =  React.createClass({
 
   getInitialState: function() {
@@ -16,7 +19,9 @@ module.exports =  React.createClass({
 
     var self = this;
     // Because the change event is not triggered on the hidden select, we have to trigger it manually
-    $('#' + this.props.template.id).select2().on('change', function(event) {
+    $('#' + this.props.template.id).select2({
+      placeholder: this.props.template.placeholder
+    }).on('change', function(event) {
       self.handleChange(event);
     });
   },
