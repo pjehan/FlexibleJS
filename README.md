@@ -98,22 +98,16 @@ This component is based on SummerNote for UI.
 ```
 
 #### Image
-The image component can be used to display an image uploader.
-```json
-{
-  "id": "component-identifier",
-  "title": "Component Name",
-  "type": "image"
-}
-```
-
-You can upload multiple images by adding the multiple property:
+The image component can be used to display an image uploader.  
+You can use the `multiple` attribute to allow multiple images upload and you can define the image size with `height` and `width` attributes or the a maximum image size with the `max_height` and `max_width` attributes.
 ```json
 {
   "id": "component-identifier",
   "title": "Component Name",
   "type": "image",
-  "multiple": "multiple"
+  "multiple": "multiple",
+  "max_height": 250,
+  "max_width": 800
 }
 ```
 

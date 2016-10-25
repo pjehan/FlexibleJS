@@ -28,6 +28,10 @@ var Image = React.createClass({
     var form = $(e.target).parents('form')[0];
 
     var data = new FormData(form);
+    data.append('flexibleImageHeight', this.props.template.height);
+    data.append('flexibleImageWidth', this.props.template.width);
+    data.append('flexibleImageMaxHeight', this.props.template.max_height);
+    data.append('flexibleImageMaxWidth', this.props.template.max_width);
 
     $.ajax({
       type: 'POST',

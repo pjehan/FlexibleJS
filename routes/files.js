@@ -6,12 +6,14 @@ var multiparty = require('multiparty');
 var async = require('async');
 var jimp = require("jimp");
 
-var imageDir = __dirname + "/../public/uploads/";
-var imageMaxWidth = 2000;
-var imageMaxHeight = 1500;
+const fileDir = __dirname + "/../public/uploads/";
+var imageWidth = null;
+var imageHeight = null;
+var imageMaxWidth = null;
+var imageMaxHeight = null;
 
 function createFile(filename, data, number, callback) {
-  var filePath = imageDir + filename;
+  var filePath = fileDir + filename;
   fs.stat(filePath, function(err, stat) {
     if (err == null) {
       // File exists. Rename file.
@@ -25,16 +27,32 @@ function createFile(filename, data, number, callback) {
       createFile(filename, data, nextNumber, callback)
     } else if(err.code == 'ENOENT') {
       // Create directory if not exists
-      if (!fs.existsSync(imageDir)){
-          fs.mkdirSync(imageDir);
+      if (!fs.existsSync(fileDir)){
+        fs.mkdirSync(fileDir);
       }
       // Create new file
       fs.writeFile(filePath, data, function (err) {
         if (err) throw err;
         // Resize file
         jimp.read(filePath, function(err, image){
-          if (!err && (image.bitmap.width > imageMaxWidth || image.bitmap.height > imageMaxHeight)) {
-            image.scaleToFit(imageMaxWidth, imageMaxHeight).write(filePath);
+          if (!err) {
+            if (imageWidth || imageHeight) {
+              var width = imageWidth || jimp.AUTO;
+              var height = imageHeight || jimp.AUTO;
+              if (imageWidth && imageHeight) {
+                image.cover(width, height).write(filePath);
+              } else {
+                image.resize(width, height).write(filePath);
+              }
+            } else if (image.bitmap.width > imageMaxWidth || image.bitmap.height > imageMaxHeight) {
+              var width = imageMaxWidth || jimp.AUTO;
+              var height = imageMaxHeight || jimp.AUTO;
+              if (imageMaxWidth && imageMaxHeight) {
+                image.scaleToFit(width, height).write(filePath);
+              } else {
+                image.resize(width, height).write(filePath);
+              }
+            }
           }
         });
         callback(err, filename);
@@ -62,11 +80,18 @@ router.post('/upload/:name', function(req, res, next) {
 
   // Upload images
   form.parse(req, function(err, fields, files) {
+
+    imageWidth = parseInt(fields.flexibleImageWidth[0]);
+    imageHeight = parseInt(fields.flexibleImageHeight[0]);
+    imageMaxWidth = parseInt(fields.flexibleImageMaxWidth[0]);
+    imageMaxHeight = parseInt(fields.flexibleImageMaxHeight[0]);
+
     var originalFilenames = [];
     async.eachSeries(Object.keys(files), function (fieldKey, fieldNext){
       if (files.hasOwnProperty(fieldKey)) {
         async.eachSeries(Object.keys(files[fieldKey]), function (fileKey, fileNext){
           var file = files[fieldKey][fileKey];
+
           if (file.fieldName == fieldName && file.size > 0) {
             uploadFile(file, function(err, filename) {
               originalFilenames.push(filename);
@@ -75,10 +100,10 @@ router.post('/upload/:name', function(req, res, next) {
           } else {
             fileNext();
           }
+
         }, function(err) {
           fieldNext();
         });
-
       } else {
         fieldNext();
       }
