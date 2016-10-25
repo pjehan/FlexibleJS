@@ -7,8 +7,8 @@ var async = require('async');
 var jimp = require("jimp");
 
 var imageDir = __dirname + "/../public/uploads/";
-var imageMaxWidth = 1360;
-var imageMaxHeight = 1080;
+var imageMaxWidth = 2000;
+var imageMaxHeight = 1500;
 
 function createFile(filename, data, number, callback) {
   var filePath = imageDir + filename;
@@ -24,9 +24,14 @@ function createFile(filename, data, number, callback) {
       }
       createFile(filename, data, nextNumber, callback)
     } else if(err.code == 'ENOENT') {
+      // Create directory if not exists
+      if (!fs.existsSync(imageDir)){
+          fs.mkdirSync(imageDir);
+      }
       // Create new file
       fs.writeFile(filePath, data, function (err) {
         if (err) throw err;
+        // Resize file
         jimp.read(filePath, function(err, image){
           if (!err && (image.bitmap.width > imageMaxWidth || image.bitmap.height > imageMaxHeight)) {
             image.scaleToFit(imageMaxWidth, imageMaxHeight).write(filePath);
