@@ -52,17 +52,17 @@ module.exports =  React.createClass({
       var $pageheader = $('#page-header');
       var $container = $pageheader.closest('.container');
       var $panel = $pageheader.parents('.panel');
-      var $formgroup = $pageheader.siblings('.form-group');
+      var $formgroup = $pageheader.next();
       var margin =  parseInt($container.css("margin-right"));
       var padding = parseInt($container.css("padding-right"));
       $pageheader.css("right",margin+padding);
-      $pageheader.css("top",50);
+      $pageheader.css("top", 64);
       $pageheader.width($panel.width());
       $formgroup.css('margin-top', 60);
     })
     .on('affix-top.bs.affix', function () {
       var $pageheader = $('#page-header');
-      var $formgroup = $pageheader.siblings('.form-group');
+      var $formgroup = $pageheader.next();
       $pageheader.css("right","0px");
       $pageheader.css("width","auto");
       $formgroup.css('margin-top', 0);
