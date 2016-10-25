@@ -37,5 +37,7 @@
   "modal.page.delete.title": "Delete this page?",
   "modal.page.delete.message": "Are you sure you want to delete this page? This action is not reversible.",
   "modal.image.delete.title": "Delete this image?",
-  "modal.image.delete.message": "Are you sure you want to delete this image?"
+  "modal.image.delete.message": "Are you sure you want to delete this image?",
+  "modal.page.save_changes.title": "Do you want to save changes?",
+  "modal.page.save_changes.message": "You made unsaved changes on the current page. Do you want to save this changes?"
 }

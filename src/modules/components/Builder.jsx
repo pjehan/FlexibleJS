@@ -1,5 +1,6 @@
 import React from 'react'
 import randomstring from 'randomstring'
+import _ from 'lodash'
 import clone from 'clone'
 require('array.prototype.move')
 
@@ -32,7 +33,8 @@ module.exports =  React.createClass({
   },
 
   componentWillUpdate: function(newProps, newState) {
-    if (this.state.value != newState.value) {
+    // TODO: Fix a bug when re-ordering. The Lodash isEqual function doesn't consider properties order
+    if (this.state.value.length > 0 && !_.isEqual(this.state.value, newState.value)) {
       this.props.handleChange({
         id: newState.id,
         value: newState.value

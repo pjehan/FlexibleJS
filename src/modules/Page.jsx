@@ -1,4 +1,5 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { Grid, Row, Col, Panel, Breadcrumb, Button } from 'react-bootstrap'
@@ -6,15 +7,15 @@ import { Grid, Row, Col, Panel, Breadcrumb, Button } from 'react-bootstrap'
 import ExpandablePanel from '../modules/ExpandablePanel.jsx'
 import Component from '../modules/components/Component.jsx'
 
-module.exports =  React.createClass({
+var Page = React.createClass({
 
   /**
-   * page {object}: Current modified page
-   * change {boolean}: Is page changed
-   * template {object}: Current page template
-   * parents {array}: Parents pages (used for breadcrumb)
-   * seo_open {boolean}: If true, display SEO form
-   */
+  * page {object}: Current modified page
+  * changes {boolean}: Is page changed
+  * template {object}: Current page template
+  * parents {array}: Parents pages (used for breadcrumb)
+  * seo_open {boolean}: If true, display SEO form
+  */
   getInitialState: function() {
     return {page: null, changes: false, template: null, parents: [], seo_open: false};
   },
@@ -31,7 +32,24 @@ module.exports =  React.createClass({
                 page[self.props.site.lang[i]] = {};
               }
             }
-            self.setState({page: page, template: template, parents: parents});
+
+            self.setState({page: page, changes: false, template: template, parents: parents}, function() {
+              // Save page shortcut
+              $(window).bind('keydown', function(event) {
+                if ((event.ctrlKey || event.metaKey) && String.fromCharCode(event.which).toLowerCase() === 's') {
+                  event.preventDefault();
+                  self.saveChanges();
+                }
+              });
+            });
+
+            // Prevent user from refreshing the page without saving current changes
+            window.onbeforeunload = () => {
+              if (self.state.changes) {
+                return "";
+              }
+            }
+
           });
         });
       }
@@ -39,6 +57,7 @@ module.exports =  React.createClass({
   },
 
   componentDidUpdate: function() {
+    // Sticky header
     $('#page-header').affix({
       offset: {
         top: 10,
@@ -70,17 +89,26 @@ module.exports =  React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
+    var self = this;
     // If page changed, update state
     if (this.props.params.id != newProps.routeParams.id) {
-      this.props.params.id = newProps.routeParams.id;
-      this.componentDidMount();
+      if (this.state.changes) {
+        this.showSaveChangesModal(function() {
+          self.props.params.id = newProps.routeParams.id;
+          self.componentDidMount();
+        });
+      } else {
+        this.props.params.id = newProps.routeParams.id;
+        this.componentDidMount();
+      }
     }
   },
 
   componentWillUnmount: function() {
     if (this.state.changes) {
-      console.log('TODO: Display alert because current changes are not saved');
+      this.showSaveChangesModal();
     }
+    window.onbeforeunload = null; // Remove prevent reloading when unsave changes
   },
 
   handleChange: function(data) {
@@ -93,8 +121,32 @@ module.exports =  React.createClass({
     this.setState({page: page, changes: true });
   },
 
-  submit: function (e){
-    e.preventDefault();
+  showSaveChangesModal: function(callback) {
+    var self = this;
+
+    this.props.handleModal({
+      title: this.props.intl.formatMessage({id: 'modal.page.save_changes.title'}),
+      body: this.props.intl.formatMessage({id: 'modal.page.save_changes.message'}),
+      icon: 'exclamation-circle text-warning',
+      close: function(closeCallback) {
+        callback();
+        closeCallback();
+      },
+      buttons: [
+        {
+          style: 'success',
+          icon: 'check',
+          content: 'Save',
+          onClick: function () {
+            self.saveChanges();
+            callback();
+          }
+        }
+      ]
+    });
+  },
+
+  saveChanges: function() {
     var self = this;
 
     $.ajax({
@@ -110,7 +162,11 @@ module.exports =  React.createClass({
       console.log(jqXHR);
       console.log(textStatus);
     });
+  },
 
+  submit: function (e){
+    e.preventDefault();
+    this.saveChanges();
   },
 
   getPageParents: function(page, parents, callback) {
@@ -185,7 +241,7 @@ module.exports =  React.createClass({
             <form action={"api/pages/" + self.state.page._id} method="PUT" onSubmit={self.submit} encType="multipart/form-data">
 
               <Panel id="page-header">
-                <Button type="submit" bsStyle="success" className="pull-right"><i className="fa fa-check"></i> Save</Button>
+                <Button type="submit" bsStyle="success" className="pull-right" disabled={!this.state.changes} title="Ctrl + S"><i className="fa fa-check"></i> Save</Button>
                 <Breadcrumb>
                   {breadcrumbNodes}
                   <Breadcrumb.Item href="#" active>
@@ -208,4 +264,6 @@ module.exports =  React.createClass({
       </div>
     )
   }
-})
+});
+
+module.exports = injectIntl(Page);
