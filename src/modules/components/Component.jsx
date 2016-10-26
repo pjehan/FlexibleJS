@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Alert, FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap'
 
+import FormField from './FormField.jsx'
 import List from './List.jsx'
 import Builder from './Builder.jsx'
 
@@ -16,7 +17,7 @@ module.exports = React.createClass({
 
     if (this.props.template.type == 'list') {
       formComponent = (
-        <List template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
+        <List site={this.props.site} template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></List>
       );
     } else if (this.props.template.type == 'builder') {
       formComponent = (
@@ -27,11 +28,9 @@ module.exports = React.createClass({
     }
 
     return (
-      <FormGroup controlId={this.props.template.id}>
-        <ControlLabel>{this.props.template.title}</ControlLabel>
+      <FormField id={this.props.template.id} title={this.props.template.title} help={this.props.template.help}>
         {formComponent}
-        <HelpBlock>{this.props.template.help}</HelpBlock>
-      </FormGroup>
+      </FormField>
     );
 
   }

@@ -9,9 +9,9 @@ module.exports =  React.createClass({
 
   render() {
     const header = (
-      <div>
-        {this.props.header}
+      <div className='expandable-panel-heading clearfix'>
         <Button className="pull-right" bsSize="xsmall" onClick={()=> this.setState({ open: !this.state.open })}><i className={(this.state.open) ? 'fa fa-arrow-up' : 'fa fa-arrow-down'}></i></Button>
+        {this.props.header}
       </div>
     );
 

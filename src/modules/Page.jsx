@@ -229,6 +229,7 @@ var Page = React.createClass({
             <Component
               key={component.id}
               template={component}
+              site={this.props.site}
               component={this.state.page[this.props.language]}
               componentId={this.state.page._id}
               handleChange={this.handleChange}
@@ -245,6 +246,7 @@ var Page = React.createClass({
             return (
               <Component
                 key={component.id}
+                site={this.props.site}
                 template={component}
                 component={this.state.page[this.props.language]}
                 componentId={this.state.page._id}

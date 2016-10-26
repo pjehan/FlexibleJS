@@ -36,7 +36,7 @@ module.exports =  React.createClass({
 
     var attrs = {};
     for (var prop in this.props.template) {
-      if (this.props.template.hasOwnProperty(prop) && !['id', 'title', 'help'].includes(prop)) {
+      if (this.props.template.hasOwnProperty(prop) && !['id', 'title', 'help', 'header'].includes(prop)) {
         attrs[prop] = this.props.template[prop];
       }
     }

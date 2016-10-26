@@ -19,7 +19,7 @@ function getPage(req, id, callback) {
 */
 function deletePage(req, id) {
   const db = req.app.locals.db;
-  getPage(id, function(item) {
+  getPage(req, id, function(item) {
     db.collection('pages').find({parent: item._id.toString()}).toArray(function(err, items){
       for (var i = 0; i < items.length; i++) {
         deletePage(items[i]._id);
