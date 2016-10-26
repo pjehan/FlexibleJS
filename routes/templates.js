@@ -10,36 +10,38 @@ function getSites() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'utf-8'));
 }
 
+function getSite(site_id) {
+  var sites = getSites();
+
+  for (var i = 0; i < sites.length; i++) {
+    if (sites[i].id == site_id) {
+      return sites[i];
+    }
+  }
+}
+
+function getTemplate(site_id, template_id) {
+  var site = getSite(site_id);
+
+  for (var i = 0; i < site.templates.length; i++) {
+    if (site.templates[i].id == template_id) {
+      return site.templates[i];
+    }
+  }
+}
+
 router.get('/', function(req, res) {
   return res.json(getSites());
 });
 
 router.get('/:site', function(req, res) {
-  var sites = getSites();
-
-  for (var i = 0; i < sites.length; i++) {
-    if (sites[i].id == req.params.site) {
-      return res.json(sites[i]);
-    }
-  }
-
-  return res.status(404).send('Not Found');
+  var site = getSite(req.params.site);
+  return (site) ? res.json(site) : res.status(404).send('Not Found');
 });
 
 router.get('/:site/:name', function(req, res) {
-  var sites = getSites();
-
-  for (var i = 0; i < sites.length; i++) {
-    if (sites[i].id == req.params.site) {
-      for (var j = 0; j < sites[i].templates.length; j++) {
-        if (sites[i].templates[j].id == req.params.name) {
-          return res.json(sites[i].templates[j]);
-        }
-      }
-    }
-  }
-
-  return res.status(404).send('Not Found');
+  var template = getTemplate(req.params.site, req.params.name);
+  return (template) ? res.json(template) : res.status(404).send('Not Found');
 });
 
 module.exports = router;

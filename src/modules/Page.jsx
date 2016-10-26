@@ -220,19 +220,47 @@ var Page = React.createClass({
         )
       }
 
-      var componentNodes = self.state.template.components.map(function(component){
-        return (
-          <Component
-            key={component.id}
-            template={component}
-            component={self.state.page[this.props.language]}
-            componentId={self.state.page._id}
-            handleChange={self.handleChange}
-            handleNotification={this.props.handleNotification}
-            handleModal={this.props.handleModal}>
-          </Component>
-        );
-      }.bind(self));
+      var componentNodes;
+      var sectionNodes;
+
+      if (this.state.template.components) {
+        componentNodes = this.state.template.components.map(function(component) {
+          return (
+            <Component
+              key={component.id}
+              template={component}
+              component={this.state.page[this.props.language]}
+              componentId={this.state.page._id}
+              handleChange={this.handleChange}
+              handleNotification={this.props.handleNotification}
+              handleModal={this.props.handleModal}>
+            </Component>
+          );
+        }.bind(this));
+      }
+
+      if (this.state.template.sections) {
+        sectionNodes = this.state.template.sections.map(function(section){
+          var sectionComponentNodes = section.components.map(function(component) {
+            return (
+              <Component
+                key={component.id}
+                template={component}
+                component={this.state.page[this.props.language]}
+                componentId={this.state.page._id}
+                handleChange={this.handleChange}
+                handleNotification={this.props.handleNotification}
+                handleModal={this.props.handleModal}>
+              </Component>
+            );
+          }.bind(this));
+          return (
+            <ExpandablePanel id={section.id} header={section.title} open={section.open} key={section.id}>
+              {sectionComponentNodes}
+            </ExpandablePanel>
+          );
+        }.bind(this));
+      }
 
       return (
         <div>
@@ -252,6 +280,7 @@ var Page = React.createClass({
 
               {seo}
               {componentNodes}
+              {sectionNodes}
             </form>
 
           </Panel>

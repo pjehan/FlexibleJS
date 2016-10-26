@@ -47,8 +47,13 @@ module.exports =  React.createClass({
       );
     }.bind(this));
 
+    // If the map is not visible to the user, do not display it (fix when inside Bootstrap collapse)
+    if (!this.props.visible) {
+      return null;
+    }
+
     return (
-      <div style={containerStyle}>
+      <div id={this.props.template.id} style={containerStyle}>
         <GoogleMap
           bootstrapURLKeys={{
             key: this.props.template.api_key

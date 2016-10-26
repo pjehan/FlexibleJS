@@ -1,5 +1,5 @@
 # FlexibleJS
-FlexibleJS is based on NodeJS, ExpressJS, ReactJS and Mongodb. It makes creating a website backend really easy (with only one JSON config file).
+FlexibleJS is based on NodeJS, ExpressJS, ReactJS and Mongodb. It makes creating a website backend really easy (with only two JSON config file).
 
 ## Installation
 1. Clone the repository
@@ -21,7 +21,7 @@ To start, create a copy of the data.json.dist file. You can have a look at this 
 The JSON file contains an array of websites. Each website is described with the following object:
 ```json
 {
-  "id": "site-identifier",
+  "id": "siteIdentifier",
   "title": "Site Name",
   "lang": ["fr", "en"],
   "templates": []
@@ -32,22 +32,34 @@ The JSON file contains an array of websites. Each website is described with the 
 Inside a website, you can add page templates. Each template is described with the following object:
 ```json
 {
-  "id": "page-identifier",
+  "id": "pageIdentifier",
   "title": "Page Name",
   "seo": true,
+  "components": [],
+  "sections": []
+}
+```
+And then inside a page template, you can define a list of components or a list of sections with components inside.
+
+### Sections
+A section display a form collapsible panel containing components.
+```json
+{
+  "id": "sectionIdentifier",
+  "title": "Section Name",
+  "open": true,
   "components": []
 }
 ```
-And then inside a page template, you can define a list of components.
 
 ### Components
-There is 7 component types:
+There is 8 component types:
 
 #### Input
 The input component can be used to display any HTML input element.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "text"
 }
@@ -68,7 +80,7 @@ The type property can be any of the following:
 You can also add any HTML attributes:
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "text",
   "required": "required",
@@ -80,7 +92,7 @@ You can also add any HTML attributes:
 The textarea component can be used to display an HTML textarea element.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "textarea"
 }
@@ -91,7 +103,7 @@ The WYSIWYG component can be used to display a WYSIWYG.
 This component is based on SummerNote for UI.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "wysiwyg"
 }
@@ -102,7 +114,7 @@ The image component can be used to display an image uploader.
 You can use the `multiple` attribute to allow multiple images upload and you can define the image size with `height` and `width` attributes or the a maximum image size with the `max_height` and `max_width` attributes.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "image",
   "multiple": "multiple",
@@ -116,7 +128,7 @@ The dropdown component can be used to display an HTML select option element.
 This component is based on Select2 for UI.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "dropdown",
   "options": ["NodeJS", "ReactJS", "ExpressJS"]
@@ -128,7 +140,7 @@ The map component can be used to display a map and select locations.
 This component is based on Google Map for UI.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "map",
   "api_key": "YOUR_API_KEY",
@@ -141,7 +153,7 @@ This component is based on Google Map for UI.
 The builder component can be used to display a page builder. A page builder allow a website administrator to create a responsive webpage by adding components into rows and columns.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "builder"
 }
@@ -151,9 +163,9 @@ The builder component can be used to display a page builder. A page builder allo
 The list component can be used to display a list of elements. Those elements are pages and have to be of the same type.
 ```json
 {
-  "id": "component-identifier",
+  "id": "componentIdentifier",
   "title": "Component Name",
   "type": "list",
-  "template": "page-identifier"
+  "template": "pageIdentifier"
 }
 ```

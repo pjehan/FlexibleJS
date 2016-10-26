@@ -11,7 +11,7 @@ import Map from '../modules/components/Map.jsx'
 
 module.exports = {
 
-  getFormComponent: function (self, template, value) {
+  getFormComponent: function (self, template, value, visible) {
     switch (template.type) {
       case "text":
       case "email":
@@ -53,7 +53,7 @@ module.exports = {
       break;
       case "map":
       return (
-        <Map template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Map>
+        <Map template={template} value={value} visible={visible} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Map>
       )
       break;
       default:
