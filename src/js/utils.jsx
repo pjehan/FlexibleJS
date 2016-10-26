@@ -33,7 +33,7 @@ module.exports = {
       break;
       case "dropdown":
       return (
-        <Dropdown template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Dropdown>
+        <Dropdown template={template} site={self.props.site} language={self.props.language} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Dropdown>
       )
       break;
       case "image":

@@ -16,7 +16,7 @@ var config = require('./config');
 
 var users = require('./routes/users');
 var files = require('./routes/files');
-var templates = require('./routes/templates');
+var templates = require('./routes/templates').router;
 var pages = require('./routes/pages');
 
 var app = express();

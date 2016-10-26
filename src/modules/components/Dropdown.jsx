@@ -3,19 +3,33 @@ import React from 'react'
 import { FormControl } from 'react-bootstrap'
 import select2 from 'select2';
 
-/*
-  TODO: Select other component. For example, display a list of products to display related products
- */
 module.exports =  React.createClass({
 
   getInitialState: function() {
-    return {id: null, value: (this.props.template.multiple) ? [] : ''};
+    return {id: null, options: [], value: (this.props.template.multiple) ? [] : ''};
   },
 
   componentDidMount: function() {
     var self = this;
+    var options = [];
 
-    this.setState({id: this.props.template.id, value: this.props.value});
+      if (this.props.template.relation) {
+        $.ajax({
+          method: 'GET',
+          url: '/api/pages/dropdown/' + this.props.language + '/' + this.props.site.id,
+          data: {templates: this.props.template.options}
+        }).done(function(options){
+          this.setState({id: this.props.template.id, options: options, value: this.props.value});
+        }.bind(this));
+      } else {
+        for (var i = 0; i < this.props.template.options.length; i++) {
+          options.push({
+            value: this.props.template.options[i],
+            text: this.props.template.options[i]
+          });
+        }
+        this.setState({id: this.props.template.id, options: options, value: this.props.value});
+      }
 
     var self = this;
     // Because the change event is not triggered on the hidden select, we have to trigger it manually
@@ -52,14 +66,14 @@ module.exports =  React.createClass({
     // Exclude some JSON properties so they won't be displayed in the HTML Component
     var attrs = {};
     for (var prop in this.props.template) {
-      if (this.props.template.hasOwnProperty(prop) && !['id', 'type', 'title', 'help', 'options'].includes(prop)) {
+      if (this.props.template.hasOwnProperty(prop) && !['id', 'type', 'title', 'help', 'options', 'relation'].includes(prop)) {
         attrs[prop] = this.props.template[prop];
       }
     }
 
-    var optionNodes = this.props.template.options.map(function(option, index){
+    var optionNodes = this.state.options.map(function(option, index){
       return (
-        <option value={option} key={index}>{option}</option>
+        <option value={option.value} key={index}>{option.text}</option>
       );
     }.bind(this));
 

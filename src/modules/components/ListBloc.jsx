@@ -79,6 +79,7 @@ var ListBloc = React.createClass({
         <Bloc
           key={blocIndex}
           value={bloc}
+          template={this.state.template}
           components={this.state.template.components}
           handleChange={this.handleChange.bind(this, blocIndex)}
           handleDelete={this.handleDelete.bind(this, blocIndex)}

@@ -35,11 +35,13 @@ Inside a website, you can add page templates. Each template is described with th
   "id": "pageIdentifier",
   "title": "Page Name",
   "seo": true,
+  "toString": "Component id",
   "components": [],
   "sections": []
 }
 ```
-And then inside a page template, you can define a list of components or a list of sections with components inside.
+And then inside a page template, you can define a list of components or a list of sections with components inside.  
+The `toString` property is used to identify a template in a dropdown or in a list. Type one of the components id to display it's value.
 
 ### Sections
 A section display a form collapsible panel containing components.
@@ -131,9 +133,12 @@ This component is based on Select2 for UI.
   "id": "componentIdentifier",
   "title": "Component Name",
   "type": "dropdown",
-  "options": ["NodeJS", "ReactJS", "ExpressJS"]
+  "options": ["NodeJS", "ReactJS", "ExpressJS"],
+  "multiple": true
 }
 ```
+You can also display a list of pages. To do so, you need to add a `relation` property and set it to `true` and then define templates ids in the `options` property.
+For the dropdown to display correctly, don't forget to add the `toString` property on the related templates.
 
 #### Map
 The map component can be used to display a map and select locations.  
@@ -160,12 +165,14 @@ The builder component can be used to display a page builder. A page builder allo
 ```
 
 #### List
-The list component can be used to display a list of elements. Those elements are pages and have to be of the same type.
+The list component can be used to display a list of elements. Those elements can be pages or just simple blocs and have to be of the same type.
 ```json
 {
   "id": "componentIdentifier",
   "title": "Component Name",
   "type": "list",
-  "template": "pageIdentifier"
+  "template": "pageIdentifier",
+  "page": false
 }
 ```
+If `page` property is set to `false`, don't forget to add the `toString` property on the related template to define the component value to display in the bloc header.

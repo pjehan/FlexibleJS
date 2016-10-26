@@ -6,11 +6,11 @@ var multiparty = require('multiparty');
 
 var ObjectId = require('mongodb').ObjectId;
 
-function getSites() {
+var getSites = function getSites() {
   return JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'utf-8'));
 }
 
-function getSite(site_id) {
+var getSite = function getSite(site_id) {
   var sites = getSites();
 
   for (var i = 0; i < sites.length; i++) {
@@ -20,7 +20,7 @@ function getSite(site_id) {
   }
 }
 
-function getTemplate(site_id, template_id) {
+var getTemplate = function getTemplate(site_id, template_id) {
   var site = getSite(site_id);
 
   for (var i = 0; i < site.templates.length; i++) {
@@ -44,4 +44,9 @@ router.get('/:site/:name', function(req, res) {
   return (template) ? res.json(template) : res.status(404).send('Not Found');
 });
 
-module.exports = router;
+module.exports = {
+  router: router,
+  getSites: getSites,
+  getSite: getSite,
+  getTemplate: getTemplate
+};

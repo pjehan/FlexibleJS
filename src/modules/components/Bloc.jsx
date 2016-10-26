@@ -27,10 +27,10 @@ module.exports = React.createClass({
       return (<div></div>);
     }
 
-    var headerText = 'No header defined!';
+    var headerText = 'Template ' + this.props.template.id + ' doesn\'t have a toString property';
 
     const componentNodes = this.state.components.map(function(component, index){
-      if (component.header) {
+      if (component.id == this.props.template.toString) {
         headerText = this.state.value[component.id];
       }
       return (

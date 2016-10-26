@@ -6,6 +6,8 @@ var slug = require('slug');
 
 var ObjectId = require('mongodb').ObjectId;
 
+var getTemplate = require('./templates').getTemplate;
+
 function getPage(req, id, callback) {
   const db = req.app.locals.db;
   db.collection('pages').findOne({"_id" : ObjectId(id)}, function (err, item) {
@@ -33,6 +35,32 @@ router.get('/', function(req, res, next) {
   const db = req.app.locals.db;
   db.collection('pages').find({site_id: req.query.site_id, parent: null}).toArray(function(err, items){
     res.json(items);
+  });
+});
+
+router.get('/dropdown/:language/:site_id', function(req, res, next) {
+  const db = req.app.locals.db;
+
+  db.collection('pages').find({ template: { $in: req.query.templates } }).toArray(function(err, items){
+    var options = [];
+
+    for (var i = 0; i < items.length; i++) {
+      var page = items[i];
+      var currentTemplate = getTemplate(req.params.site_id, page.template);
+
+      var option = {
+        value: page._id,
+        text: 'Template ' + page.template + ' doesn\'t have a toString property'
+      };
+
+      if (page[req.params.language] && currentTemplate.toString) {
+        option.text = page[req.params.language][currentTemplate.toString];
+      }
+
+      options.push(option)
+    }
+
+    res.json(options);
   });
 });
 
