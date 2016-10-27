@@ -16,13 +16,15 @@ var ListBloc = React.createClass({
   componentDidMount: function() {
     var self = this;
     $.get('/api/templates/' + this.props.site.id + '/' + this.props.template.template, function(result){
-      self.setState({value: self.props.component[self.props.template.id],template: result});
+      var componentValue = self.props.component[self.props.template.id] || [];
+      self.setState({value: componentValue, template: result});
     });
   },
 
   componentWillReceiveProps: function(newProps) {
-    if (newProps.components) {
-      this.setState({value: newProps.component[newProps.template.id]});
+    if (newProps.component) {
+      var componentValue = newProps.component[newProps.template.id] || [];
+      this.setState({value: componentValue});
     }
   },
 
