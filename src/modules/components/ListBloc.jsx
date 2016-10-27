@@ -70,6 +70,10 @@ var ListBloc = React.createClass({
 
   render() {
 
+    if (!this.state.template) {
+      return null;
+    }
+
     const buttons = (
       <ButtonGroup className='component-btn-group'>
         <Button bsStyle="primary" onClick={this.handleNew}><i className='fa fa-plus'></i> Add</Button>

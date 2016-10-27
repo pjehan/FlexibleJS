@@ -31,7 +31,13 @@ module.exports = React.createClass({
 
     const componentNodes = this.state.components.map(function(component, index){
       if (component.id == this.props.template.toString) {
-        headerText = this.state.value[component.id];
+        if (component.type == 'image') {
+          headerText = (
+            <img src={ '/uploads/' + this.state.value[component.id][0].src + '?resize=20,20' } />
+          );
+        } else {
+          headerText = this.state.value[component.id].toString();
+        }
       }
       return (
         <FormField key={index} id={component.id} title={component.title} help={component.help}>
