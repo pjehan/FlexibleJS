@@ -139,7 +139,9 @@ var Page = React.createClass({
           content: 'Save',
           onClick: function () {
             self.saveChanges();
-            callback();
+            if (callback) {
+              callback();
+            }
           }
         }
       ]
