@@ -24,7 +24,7 @@ module.exports =  React.createClass({
   render() {
 
     if (this.state.page) {
-      return (<ListPage template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></ListPage>)
+      return (<ListPage site={this.props.site} template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></ListPage>)
     } else {
       return (<ListBloc site={this.props.site} template={this.props.template} component={this.props.component} componentId={this.props.componentId} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></ListBloc>)
     }

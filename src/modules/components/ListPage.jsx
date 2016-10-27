@@ -57,6 +57,8 @@ module.exports =  React.createClass({
     var self = this;
 
     var data = this.state.page;
+    console.log(this.props);
+    data.site_id = this.props.site.id;
     data.component_id = this.props.template.id;
 
     $.ajax({
