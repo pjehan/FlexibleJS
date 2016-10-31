@@ -129,7 +129,9 @@ var Page = React.createClass({
       body: this.props.intl.formatMessage({id: 'modal.page.save_changes.message'}),
       icon: 'exclamation-circle text-warning',
       close: function(closeCallback) {
-        callback();
+        if (callback) {
+          callback();
+        }
         closeCallback();
       },
       buttons: [
