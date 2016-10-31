@@ -10,6 +10,14 @@ import { getFormComponent } from '../../js/utils.jsx'
 
 module.exports = React.createClass({
 
+  getInitialState: function() {
+    return {validationState: null};
+  },
+
+  handleValidationState: function(state) {
+    this.setState({validationState: state});
+  },
+
   render() {
 
     var value = this.props.component[this.props.template.id];
@@ -28,7 +36,7 @@ module.exports = React.createClass({
     }
 
     return (
-      <FormField id={this.props.template.id} title={this.props.template.title} help={this.props.template.help}>
+      <FormField id={this.props.template.id} title={this.props.template.title} help={this.props.template.help} validationState={this.state.validationState}>
         {formComponent}
       </FormField>
     );

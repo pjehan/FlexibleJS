@@ -60,10 +60,11 @@ gulp.task('css', function() {
 });
 
 gulp.task('fonts', function(){
-  gulp.src(npmDir + '/react-summernote/dist/summernote.*')
-    .pipe(gulp.dest('./public/css'));
-  return gulp.src(npmDir + '/font-awesome/fonts/**.*')
-  .pipe(gulp.dest('./public/fonts'));
+  return gulp.src([
+    npmDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*',
+    npmDir + '/font-awesome/fonts/**.*',
+  ])
+  .pipe(gulp.dest('./public/fonts/bootstrap'));
 });
 
 gulp.task('nodemon', function() {

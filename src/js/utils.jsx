@@ -25,10 +25,14 @@ module.exports = {
       case "url":
       case "color":
       return (
-        <div>
-          <Input template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Input>
-          <FormControl.Feedback />
-        </div>
+        <Input
+          template={template}
+          value={value}
+          handleChange={self.props.handleChange}
+          handleNotification={self.props.handleNotification}
+          handleModal={self.props.handleModal}
+          handleValidationState={self.handleValidationState}>
+        </Input>
       )
       break;
       case "dropdown":
@@ -61,8 +65,8 @@ module.exports = {
         <Alert bsStyle="danger">
           <strong>{template.type}</strong> component not yet implemented!
         </Alert>
-      )
+        )
+      }
     }
-  }
 
-}
+  }

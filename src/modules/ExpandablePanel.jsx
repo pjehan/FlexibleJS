@@ -17,10 +17,10 @@ module.exports =  React.createClass({
 
     // Add a property on each component to define if the component is visible (panel expanded) or not (panel collapsed)
     const childrenWithProps = React.Children.map(this.props.children,
-     (child) => React.cloneElement(child, {
-       visible: this.state.open
-     })
-   );
+      (child) => React.cloneElement(child, {
+        visible: this.state.open
+      })
+    );
 
     return (
       <Panel collapsible expanded={this.state.open} id={this.props.id} header={header} onEntered={this.handleEntered}>

@@ -26,9 +26,21 @@ module.exports =  React.createClass({
     this.setState({id: newProps.template.id, value: newProps.value});
   },
 
+  getValidationState: function() {
+    switch (this.props.template.type) {
+      case 'email':
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(this.state.value) ? 'success' : 'error';
+        break;
+      default:
+        return null;
+    }
+  },
+
   handleChange: function(event) {
     this.setState({value: event.target.value}, function() {
       this.props.handleChange(this.state);
+      this.props.handleValidationState(this.getValidationState());
     });
   },
 
