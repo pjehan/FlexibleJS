@@ -16,15 +16,6 @@ module.exports =  React.createClass({
     this.setState({id: newProps.template.id, value: newProps.value});
   },
 
-  componentWillUpdate: function(newProps, newState) {
-    if (this.state.value != newState.value) {
-      this.props.handleChange({
-        id: newState.id,
-        value: newState.value
-      });
-    }
-  },
-
   handleChange: function(event) {
     this.setState({value: event.target.value});
   },
