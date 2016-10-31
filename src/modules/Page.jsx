@@ -22,9 +22,9 @@ var Page = React.createClass({
 
   componentDidMount: function() {
     var self = this;
-    $.get('/api/pages/' + this.props.params.id, function(page){
+    this.ajaxGetPage = $.get('/api/pages/' + this.props.params.id, function(page){
       if (self.props.site) {
-        $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
+        this.ajaxGetTemplate = $.get('/api/templates/' + self.props.site.id + '/' + page.template, function(template){
           self.getPageParents(page, [], function(parents) {
             // Create object node per lang if not exists
             for (var i = 0; i < self.props.site.lang.length; i++) {
@@ -54,6 +54,11 @@ var Page = React.createClass({
         });
       }
     });
+  },
+
+  componentWillUnmount: function() {
+    this.ajaxGetPage.abort();
+    this.ajaxGetTemplate.abort();
   },
 
   componentDidUpdate: function() {

@@ -15,10 +15,14 @@ var ListBloc = React.createClass({
 
   componentDidMount: function() {
     var self = this;
-    $.get('/api/templates/' + this.props.site.id + '/' + this.props.template.template, function(result){
+    this.ajaxGetTemplate = $.get('/api/templates/' + this.props.site.id + '/' + this.props.template.template, function(result){
       var componentValue = self.props.component[self.props.template.id] || [];
       self.setState({value: componentValue, template: result});
     });
+  },
+
+  componentWillUnmount: function() {
+    this.ajaxGetTemplate.abort();
   },
 
   componentWillReceiveProps: function(newProps) {
