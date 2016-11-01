@@ -17,7 +17,9 @@ module.exports =  React.createClass({
   },
 
   handleChange: function(event) {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value}, function() {
+      this.props.handleChange(this.state);
+    });
   },
 
   render() {
@@ -31,13 +33,13 @@ module.exports =  React.createClass({
 
     return (
       <FormControl
-      componentClass="textarea"
-      {...attrs}
-      name={this.props.template.id}
-      value={(this.state.value) ? this.state.value : ''}
-      placeholder={this.props.template.placeholder}
-      onChange={this.handleChange}
-      />
+        componentClass="textarea"
+        {...attrs}
+        name={this.props.template.id}
+        value={(this.state.value) ? this.state.value : ''}
+        placeholder={this.props.template.placeholder}
+        onChange={this.handleChange}
+        />
     );
 
   }
