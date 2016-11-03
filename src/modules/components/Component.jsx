@@ -36,7 +36,7 @@ module.exports = React.createClass({
     }
 
     return (
-      <FormField id={this.props.template.id} title={this.props.template.title} help={this.props.template.help} validationState={this.state.validationState}>
+      <FormField id={this.props.template.id} type={this.props.template.type} title={this.props.template.title} help={this.props.template.help} validationState={this.state.validationState}>
         {formComponent}
       </FormField>
     );

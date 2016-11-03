@@ -4,6 +4,7 @@ import { FormControl, Alert } from 'react-bootstrap'
 
 import Input from '../modules/components/Input.jsx'
 import Image from '../modules/components/Image.jsx'
+import Icon from '../modules/components/Icon.jsx'
 import Dropdown from '../modules/components/Dropdown.jsx'
 import Textarea from '../modules/components/Textarea.jsx'
 import Wysiwyg from '../modules/components/Wysiwyg.jsx'
@@ -43,6 +44,11 @@ module.exports = {
       case "image":
       return (
         <Image template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Image>
+      )
+      break;
+      case "icon":
+      return (
+        <Icon template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Icon>
       )
       break;
       case "textarea":
