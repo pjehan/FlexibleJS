@@ -37,7 +37,7 @@ gulp.task('css', function() {
     npmDir + '/animate.css/animate.css',
     npmDir + '/nprogress/nprogress.css',
     npmDir + '/react-summernote/dist/react-summernote.css',
-    npmDir + '/select2/dist/css/select2.css'
+    npmDir + '/select2/dist/css/select2.css',
     npmDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css'
   ]);
   var scssFiles = gulp.src(stylesDir + '/style.scss')
@@ -61,11 +61,8 @@ gulp.task('css', function() {
 });
 
 gulp.task('fonts', function(){
-  return gulp.src([
-    npmDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*',
-    npmDir + '/font-awesome/fonts/**.*',
-  ])
-  .pipe(gulp.dest('./public/fonts/bootstrap'));
+  gulp.src(npmDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'));
+  return gulp.src(npmDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'));
 });
 
 gulp.task('nodemon', function() {
