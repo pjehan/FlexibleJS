@@ -20,7 +20,11 @@ var Image = React.createClass({
   },
 
   getImageUrl: function(img) {
-    return '/uploads/' + img + '?resize=110,110';
+    if (img.endsWith('.svg')) {
+      return '/uploads/' + img;
+    } else {
+      return '/uploads/' + img + '?resize=110,110';
+    }
   },
 
   handleChange: function(e) {
