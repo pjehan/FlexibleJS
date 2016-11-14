@@ -64,7 +64,7 @@ var ListBloc = React.createClass({
           icon: 'trash',
           content: 'Delete',
           onClick: function () {
-            delete value[index];
+            value.splice(index, 1);
             this.changeValue(value);
           }.bind(this)
         }
