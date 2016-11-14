@@ -106,7 +106,7 @@ function buildScript(file, watch) {
   return rebundle();
 }
 
-gulp.task('build', ['nodemon', 'css', 'fonts'], function() {
+gulp.task('build', ['css', 'fonts'], function() {
   return buildScript('app.js', false);
 });
 
