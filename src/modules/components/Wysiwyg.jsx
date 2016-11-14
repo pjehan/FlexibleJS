@@ -47,6 +47,7 @@ module.exports =  React.createClass({
             ['style', ['style']],
             ['font', ['bold', 'underline', 'clear']],
             ['para', ['ul', 'ol', 'paragraph']],
+            ['color', ['color']],
             ['table', ['table']],
             ['insert', ['link', 'picture', 'video']],
             ['view', ['fullscreen', 'codeview']]
