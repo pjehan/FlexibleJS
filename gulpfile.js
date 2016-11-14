@@ -62,6 +62,7 @@ gulp.task('css', function() {
 
 gulp.task('fonts', function(){
   gulp.src(npmDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'));
+  gulp.src(npmDir + '/react-summernote/dist/summernote.*').pipe(gulp.dest('./public/css'));
   return gulp.src(npmDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'));
 });
 
