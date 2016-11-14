@@ -5,6 +5,7 @@ var path = require('path');
 var multiparty = require('multiparty');
 var async = require('async');
 var jimp = require("jimp");
+var spawn = require('child_process').spawn;
 
 const fileDir = __dirname + "/../public/uploads/";
 var imageWidth = null;
@@ -110,6 +111,33 @@ router.post('/upload/:name', function(req, res, next) {
     }, function(err) {
       res.json(originalFilenames);
     });
+  });
+});
+
+router.get('/backup', function(req, res, next) {
+  var zip = spawn('zip', ['-rj', '-', fileDir]);
+
+  res.contentType('zip');
+  zip.stdout.on('data', function (data) {
+    res.write(data);
+  });
+
+  zip.on('exit', function (code) {
+    if(code !== 0) {
+      res.statusCode = 500;
+      console.log('zip process exited with code ' + code);
+      res.end();
+    } else {
+      res.end();
+    }
+  });
+});
+
+router.get('/restore', function(req, res, next) {
+  var form = new multiparty.Form();
+
+  form.parse(req, function(err, fields, files) {
+    console.log(files);
   });
 });
 

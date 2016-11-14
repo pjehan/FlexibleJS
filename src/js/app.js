@@ -10,6 +10,7 @@ import Home from '../modules/Home.jsx'
 import Pages from '../modules/Pages.jsx'
 import Page from '../modules/Page.jsx'
 import Users from '../modules/Users.jsx'
+import Settings from '../modules/Settings.jsx'
 
 function requireAuth(nextState, replace, callback) {
   $.get('/api/users/currentuser', function(user, statusText, xhr) {
@@ -35,6 +36,7 @@ ReactDOM.render(
         <Route path="/pages/:id" component={Page} onEnter={requireAuth}/>
       </Route>
       <Route path="users" component={Users} onEnter={requireAuth}/>
+      <Route path="settings" component={Settings} onEnter={requireAuth}/>
     </Route>
   </Router>
   , document.getElementById('app'))

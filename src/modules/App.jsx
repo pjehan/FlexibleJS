@@ -159,6 +159,9 @@ var MyApp = React.createClass({
           <NavDropdown id="site-dropdown" title={selectedSite}>
             {siteNodes}
           </NavDropdown>
+          <LinkContainer to="/settings">
+            <NavItem>Settings</NavItem>
+          </LinkContainer>
           <NavDropdown id="profile-dropdown" title={this.state.user.username}>
             <MenuItem>Profile</MenuItem>
             <LinkContainer to="/logout">
