@@ -10,21 +10,17 @@ var Image = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({id: this.props.template.id, value: (this.props.value) || []});
+    this.setState({id: this.props.template.id, value: this.props.value || []});
   },
 
   componentWillReceiveProps: function(newProps) {
     if (this.state.id != newProps.template.id || this.state.value != newProps.value) {
-      this.setState({id: newProps.template.id, value: (newProps.value) || []});
+      this.setState({id: newProps.template.id, value: newProps.value || []});
     }
   },
 
   getImageUrl: function(img) {
-    if (img.endsWith('.svg')) {
-      return '/uploads/' + img;
-    } else {
-      return '/uploads/' + img + '?resize=110,110';
-    }
+    return img.endsWith('.svg') ? '/uploads/' + img : '/uploads/' + img + '?resize=110,110';
   },
 
   handleChange: function(e) {
@@ -67,11 +63,9 @@ var Image = React.createClass({
   handleDelete: function(image, e) {
     e.preventDefault();
 
-    var self = this;
-
     var images = this.state.value.filter((obj) => {return obj != image});
-    self.setState({value: images}, function() {
-      self.props.handleChange(self.state);
+    this.setState({value: images}, () => {
+      this.props.handleChange(this.state);
     });
   },
 
@@ -115,8 +109,10 @@ var Image = React.createClass({
 
   render() {
 
+    var imageNodes = null;
+
     if (this.state.value && this.state.value.length > 0) {
-      var imageNodes = this.state.value.map(function(image, index){
+      imageNodes = this.state.value.map(function(image, index){
         return (
           <div key={index}>
             <div className="img-overlay">
@@ -126,41 +122,28 @@ var Image = React.createClass({
               </ButtonGroup>
             </div>
             <img src={this.getImageUrl(image.src)} className="img-thumbnail img-responsive"/>
-            <input type="hidden" name={this.props.template.id} value={image.src}></input>
           </div>
         );
       }.bind(this));
+    }
 
-      return (
-        <div className="row">
-          <div className="col-md-12">
-            <FormControl
-              type="file"
-              name={this.props.template.id}
-              multiple={this.props.template.multiple}
-              onChange={this.handleChange}
-              />
-          </div>
-          <div className="col-md-12">
-            <div className="img-container">
-              {imageNodes}
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
+    return (
+      <div className="row">
+        <div className="col-md-12">
           <FormControl
             type="file"
             name={this.props.template.id}
             multiple={this.props.template.multiple}
             onChange={this.handleChange}
             />
-          <input type="hidden" name={this.props.template.id}></input>
         </div>
-      )
-    }
+        <div className="col-md-12">
+          <div className="img-container">
+            {imageNodes}
+          </div>
+        </div>
+      </div>
+    );
 
   }
 
