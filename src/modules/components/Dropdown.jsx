@@ -34,7 +34,8 @@ module.exports =  React.createClass({
     var self = this;
     // Because the change event is not triggered on the hidden select, we have to trigger it manually
     $('#' + this.props.template.id).select2({
-      placeholder: this.props.template.placeholder
+      placeholder: this.props.template.placeholder,
+      allowClear: !this.props.template.required
     }).on('change', function(event) {
       self.handleChange(event);
     });
@@ -86,6 +87,7 @@ module.exports =  React.createClass({
         placeholder={this.props.template.placeholder}
         onChange={this.handleChange}
         >
+        <option></option>
         {optionNodes}
       </FormControl>
     );
