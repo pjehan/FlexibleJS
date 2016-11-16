@@ -1,8 +1,9 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 
 import { FormControl } from 'react-bootstrap'
 
-module.exports =  React.createClass({
+var Input = React.createClass({
 
   getDefaultValue: function() {
     switch (this.props.template.type) {
@@ -19,28 +20,43 @@ module.exports =  React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({id: this.props.template.id, value: this.props.value});
+    this.setState({id: this.props.template.id, value: this.props.value}, () => {
+      if (this.props.handleValidationState) {
+        this.props.handleValidationState(this.getValidationState());
+      }
+    });
   },
 
   componentWillReceiveProps: function(newProps) {
     this.setState({id: newProps.template.id, value: newProps.value});
   },
 
+  componentDidUpdate(prevProps, nextProps) {
+    if (prevProps.value != nextProps.value) {
+      if (this.props.handleValidationState) {
+        this.props.handleValidationState(this.getValidationState());
+      }
+    }
+  },
+
   getValidationState: function() {
+    if (this.props.template.required && !this.state.value) {
+      return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.required'})};
+    }
     switch (this.props.template.type) {
       case 'email':
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(this.state.value) ? 'success' : 'error';
+        if (!re.test(this.state.value)) {
+          return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.input.email'})};
+        }
         break;
-      default:
-        return null;
     }
+    return {state: 'success'};
   },
 
   handleChange: function(event) {
     this.setState({value: event.target.value}, function() {
       this.props.handleChange(this.state);
-      this.props.handleValidationState(this.getValidationState());
     });
   },
 
@@ -66,3 +82,5 @@ module.exports =  React.createClass({
   }
 
 })
+
+module.exports = injectIntl(Input);

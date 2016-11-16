@@ -33,6 +33,8 @@
   "notification.notactive.title": "Account not active",
   "notification.notactive.message": "Your account is created but not activated yet",
 
+  "validation.required": "Please fill out this field",
+  "validation.input.email": " Invalid email address",
 
   "modal.page.delete.title": "Delete this page?",
   "modal.page.delete.message": "Are you sure you want to delete this page? This action is not reversible.",

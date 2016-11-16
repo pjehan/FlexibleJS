@@ -14,8 +14,12 @@ module.exports = React.createClass({
     return {validationState: null};
   },
 
-  handleValidationState: function(state) {
-    this.setState({validationState: state});
+  handleValidationState: function(validationState) {
+    this.setState({validationState: validationState});
+    if (this.props.handleValid) {
+      var valid = validationState.state != 'error';
+      this.props.handleValid(this.props.template.id, valid);
+    }
   },
 
   render() {

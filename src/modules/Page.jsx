@@ -17,7 +17,7 @@ var Page = React.createClass({
   * seo_open {boolean}: If true, display SEO form
   */
   getInitialState: function() {
-    return {page: null, changes: false, template: null, parents: [], seo_open: false};
+    return {page: null, changes: false, components: [], template: null, parents: [], seo_open: false};
   },
 
   componentDidMount: function() {
@@ -59,6 +59,7 @@ var Page = React.createClass({
   componentWillUnmount: function() {
     this.ajaxGetPage.abort();
     this.ajaxGetTemplate.abort();
+    this.ajaxGetParents.abort();
   },
 
   componentDidUpdate: function() {
@@ -126,6 +127,15 @@ var Page = React.createClass({
     this.setState({page: page, changes: true });
   },
 
+  handleValid: function(id, valid) {
+    var components = this.state.components;
+    if (!components[id]) {
+      components[id] = {};
+    }
+    components[id].valid = valid;
+    this.setState({components: components});
+  },
+
   showSaveChangesModal: function(callback) {
     var self = this;
 
@@ -158,19 +168,32 @@ var Page = React.createClass({
   saveChanges: function() {
     var self = this;
 
-    $.ajax({
-      type: 'PUT',
-      url: '/api/pages/' + this.state.page._id,
-      data: JSON.stringify(this.state.page),
-      contentType: "application/json"
-    })
-    .done(function(data) {
-      self.setState({page: data, changes: false});
-    })
-    .fail(function(jqXHR, textStatus) {
-      console.log(jqXHR);
-      console.log(textStatus);
-    });
+    var valid = true;
+    var components = this.state.components;
+    for (var property in components) {
+      if (components.hasOwnProperty(property)) {
+        if (!components[property].valid) {
+          valid = false;
+          $('#component-' + property).animateCss('shake');
+        }
+      }
+    }
+
+    if (valid) {
+      $.ajax({
+        type: 'PUT',
+        url: '/api/pages/' + this.state.page._id,
+        data: JSON.stringify(this.state.page),
+        contentType: "application/json"
+      })
+      .done(function(data) {
+        self.setState({page: data, changes: false});
+      })
+      .fail(function(jqXHR, textStatus) {
+        console.log(jqXHR);
+        console.log(textStatus);
+      });
+    }
   },
 
   submit: function (e){
@@ -188,7 +211,7 @@ var Page = React.createClass({
       return parents;
     }
 
-    $.get('/api/pages/' + page.parent, function(page){
+    this.ajaxGetParents = $.get('/api/pages/' + page.parent, function(page){
       parents.push(page);
 
       parents = self.getPageParents(page, parents, callback);
@@ -244,6 +267,7 @@ var Page = React.createClass({
               component={this.state.page[this.props.language]}
               componentId={this.state.page._id}
               handleChange={this.handleChange}
+              handleValid={this.handleValid}
               handleNotification={this.props.handleNotification}
               handleModal={this.props.handleModal}>
             </Component>
@@ -264,6 +288,7 @@ var Page = React.createClass({
                 component={this.state.page[this.props.language]}
                 componentId={this.state.page._id}
                 handleChange={this.handleChange}
+                handleValid={this.handleValid}
                 handleNotification={this.props.handleNotification}
                 handleModal={this.props.handleModal}>
               </Component>
@@ -281,7 +306,7 @@ var Page = React.createClass({
         <div>
           <Panel>
 
-            <form action={"api/pages/" + self.state.page._id} method="PUT" onSubmit={self.submit} encType="multipart/form-data">
+            <form action={"api/pages/" + self.state.page._id} method="PUT" onSubmit={self.submit} encType="multipart/form-data" noValidate>
 
               <Panel id="page-header">
                 <Button type="submit" bsStyle="success" className="pull-right" disabled={!this.state.changes} title="Ctrl + S"><i className="fa fa-check"></i> Save</Button>

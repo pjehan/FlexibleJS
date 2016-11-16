@@ -1,12 +1,13 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 
 import { FormControl } from 'react-bootstrap'
 import select2 from 'select2';
 
-module.exports =  React.createClass({
+var Dropdown = React.createClass({
 
   getInitialState: function() {
-    return {id: null, options: [], value: (this.props.template.multiple) ? [] : ''};
+    return {id: null, options: [], value: []};
   },
 
   componentDidMount: function() {
@@ -41,8 +42,15 @@ module.exports =  React.createClass({
     });
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate: function(prevProps, nextProps) {
     $('#' + this.props.template.id).trigger('change.select2');
+  },
+
+  getValidationState: function() {
+    if (this.props.template.required && (!this.state.value || this.state.value.length == 0)) {
+      return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.required'})};
+    }
+    return {state: 'success'};
   },
 
   componentWillReceiveProps: function(newProps) {
@@ -50,7 +58,7 @@ module.exports =  React.createClass({
   },
 
   handleChange: function(event) {
-    var value = event.target.value;
+    var value = [event.target.value];
     if (this.props.template.multiple) {
       value = $('#' + this.props.template.id).select2("val");
       if (value == null) {
@@ -78,12 +86,14 @@ module.exports =  React.createClass({
       );
     }.bind(this));
 
+    var value = (this.props.template.multiple) ? this.state.value : (this.state.value) ? this.state.value[0] : [];
+
     return (
       <FormControl
         componentClass="select"
         {...attrs}
         name={this.props.template.id}
-        value={this.state.value}
+        value={value}
         placeholder={this.props.template.placeholder}
         onChange={this.handleChange}
         >
@@ -95,3 +105,5 @@ module.exports =  React.createClass({
   }
 
 })
+
+module.exports = injectIntl(Dropdown);

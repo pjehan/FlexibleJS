@@ -10,13 +10,32 @@ var Image = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({id: this.props.template.id, value: this.props.value || []});
+    this.setState({id: this.props.template.id, value: this.props.value || []}, () => {
+      if (this.props.handleValidationState) {
+        this.props.handleValidationState(this.getValidationState());
+      }
+    });
   },
 
   componentWillReceiveProps: function(newProps) {
     if (this.state.id != newProps.template.id || this.state.value != newProps.value) {
       this.setState({id: newProps.template.id, value: newProps.value || []});
     }
+  },
+
+  componentDidUpdate(prevProps, nextProps) {
+    if (typeof prevProps.value != 'undefined' && prevProps.value != nextProps.value) {
+      if (this.props.handleValidationState) {
+        this.props.handleValidationState(this.getValidationState());
+      }
+    }
+  },
+
+  getValidationState: function() {
+    if (this.props.template.required && this.state.value.length == 0) {
+      return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.required'})};
+    }
+    return {state: 'success'};
   },
 
   getImageUrl: function(img) {

@@ -38,12 +38,28 @@ module.exports = {
       break;
       case "dropdown":
       return (
-        <Dropdown template={template} site={self.props.site} language={self.props.language} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Dropdown>
+        <Dropdown
+          template={template}
+          site={self.props.site}
+          language={self.props.language}
+          value={value}
+          handleChange={self.props.handleChange}
+          handleNotification={self.props.handleNotification}
+          handleModal={self.props.handleModal}
+          handleValidationState={self.handleValidationState}>
+        </Dropdown>
       )
       break;
       case "image":
       return (
-        <Image template={template} value={value} handleChange={self.props.handleChange} handleNotification={self.props.handleNotification} handleModal={self.props.handleModal}></Image>
+        <Image
+          template={template}
+          value={value}
+          handleChange={self.props.handleChange}
+          handleNotification={self.props.handleNotification}
+          handleModal={self.props.handleModal}
+          handleValidationState={self.handleValidationState}>
+        </Image>
       )
       break;
       case "icon":
