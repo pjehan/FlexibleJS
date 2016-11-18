@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require("fs");
 var path = require('path');
-var slug = require('slug');
+var slugify = require('slug');
 
 var ObjectId = require('mongodb').ObjectId;
 
@@ -12,6 +12,27 @@ function getPage(req, id, callback) {
   const db = req.app.locals.db;
   db.collection('pages').findOne({"_id" : ObjectId(id)}, function (err, item) {
     callback(item);
+  });
+}
+
+function generateSlug(req, slug, number, callback) {
+  const db = req.app.locals.db;
+
+  slug = slugify(slug, {lower: true});
+  db.collection('pages').findOne({"slug": slug}, function (err, item) {
+    console.log(item);
+    if (!item) {
+      callback(slug);
+    } else {
+      if (number == null) {
+        number = 1;
+        slug = slug + '-1';
+      } else {
+        number = number + 1;
+        slug = slug.replace(/\-([0-9]+)$/i, '-' + number);
+      }
+      generateSlug(req, slug, number, callback)
+    }
   });
 }
 
@@ -82,6 +103,8 @@ router.get('/:id/:component_id/children', function(req, res, next) {
 * @return {json} JSON created object
 */
 router.post('/', function(req, res, next) {
+  const db = req.app.locals.db;
+
   var site_id = req.body.site_id;
   var template = req.body.template;
   var title = req.body.title;
@@ -90,14 +113,16 @@ router.post('/', function(req, res, next) {
   var parent = req.body.parent;
   var component_id = req.body.component_id;
 
-  const db = req.app.locals.db;
-  db.collection('pages').insertOne(
-    {site_id: site_id, template: template, parent: parent, component_id: component_id, title: title, slug: slug(title, {lower: true}), created_date: new Date(), updated_date: new Date()},
-    function(err, template) {
-      if (err) throw err;
-      res.json(template.ops[0]);
-    }
-  );
+  // Generate unique slug
+  generateSlug(req, title, null, function(slug) {
+    db.collection('pages').insertOne(
+      {site_id: site_id, template: template, parent: parent, component_id: component_id, title: title, slug: slug, created_date: new Date(), updated_date: new Date()},
+      function(err, template) {
+        if (err) throw err;
+        res.json(template.ops[0]);
+      }
+    );
+  });
 });
 
 /**
