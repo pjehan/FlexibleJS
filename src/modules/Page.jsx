@@ -237,12 +237,14 @@ var Page = React.createClass({
         var seo_metadescription_template = {
           id: 'seo_metadescription',
           title: 'Meta Description',
-          type: 'text'
+          type: 'text',
+          maxLength: 160
         }
         var seo_title_template = {
           id: 'seo_title',
           title: 'Title',
-          type: 'text'
+          type: 'text',
+          maxLength: 60
         }
         seo = (
           <ExpandablePanel header="SEO">
