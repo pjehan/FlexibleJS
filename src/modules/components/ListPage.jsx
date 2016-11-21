@@ -22,7 +22,7 @@ module.exports =  React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    if (newProps.template.template != this.state.page.template) {
+    if (this.state.page && newProps.template.template != this.state.page.template) {
       var self = this;
       $.get('/api/pages/' + newProps.componentId + '/' + newProps.template.id + '/children', function(result){
         self.setState({pages: result});
