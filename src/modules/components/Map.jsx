@@ -47,6 +47,10 @@ module.exports =  React.createClass({
       );
     }.bind(this));
 
+    var mapOptions = {
+      mapTypeControl: true
+    };
+
     // If the map is not visible to the user, do not display it (fix when inside Bootstrap collapse)
     if (!this.props.visible) {
       return null;
@@ -60,6 +64,7 @@ module.exports =  React.createClass({
           }}
           center={this.state.center}
           zoom={this.state.zoom}
+          options={mapOptions}
           onClick={this.handleChange}>
           {markerNodes}
         </GoogleMap>
