@@ -14,6 +14,11 @@
   "form.username": "Username",
   "form.password": "Password",
   "form.active": "Active",
+  "form.seo.metadescription": "Meta Description",
+  "form.seo.title": "Title",
+
+  "form.help.seo.metadescription": "The Meta Description recommended length is 150 characters.",
+  "form.help.seo.title": "The Title length should be less than 55 characters",
 
   "table.boolean.true": "Yes",
   "table.boolean.false": "No",

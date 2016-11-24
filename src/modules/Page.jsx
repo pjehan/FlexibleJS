@@ -232,19 +232,28 @@ var Page = React.createClass({
         );
       }.bind(self));
 
+      var page_name_template = {
+        id: 'title',
+        title: 'Page Name',
+        type: 'text'
+      }
+      var pageName = (
+        <Component key="page_title" template={page_name_template} component={this.state.page} handleChange={this.handleChange}></Component>
+      );
+
       var seo = [];
       if (self.state.template.seo) {
         var seo_metadescription_template = {
           id: 'seo_metadescription',
-          title: 'Meta Description',
-          type: 'text',
-          maxLength: 160
+          title: this.props.intl.formatMessage({id: 'form.seo.metadescription'}),
+          type: 'textarea',
+          help: this.props.intl.formatMessage({id: 'form.help.seo.metadescription'})
         }
         var seo_title_template = {
           id: 'seo_title',
-          title: 'Title',
+          title: this.props.intl.formatMessage({id: 'form.seo.title'}),
           type: 'text',
-          maxLength: 60
+          help: this.props.intl.formatMessage({id: 'form.help.seo.title'})
         }
         seo = (
           <ExpandablePanel header="SEO">
@@ -320,6 +329,7 @@ var Page = React.createClass({
                 </Breadcrumb>
               </Panel>
 
+              {pageName}
               {seo}
               {componentNodes}
               {sectionNodes}
