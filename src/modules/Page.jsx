@@ -249,11 +249,12 @@ var Page = React.createClass({
 
       var seo = [];
       if (self.state.template.seo) {
-        var seo_metadescription_template = {
-          id: 'seo_metadescription',
-          title: this.props.intl.formatMessage({id: 'form.seo.metadescription'}),
-          type: 'textarea',
-          help: this.props.intl.formatMessage({id: 'form.help.seo.metadescription'})
+        var seo_slug_template = {
+          id: 'slug',
+          title: this.props.intl.formatMessage({id: 'form.seo.slug'}),
+          type: 'text',
+          required: true,
+          help: this.props.intl.formatMessage({id: 'form.help.seo.slug'})
         }
         var seo_title_template = {
           id: 'seo_title',
@@ -261,10 +262,17 @@ var Page = React.createClass({
           type: 'text',
           help: this.props.intl.formatMessage({id: 'form.help.seo.title'})
         }
+        var seo_metadescription_template = {
+          id: 'seo_metadescription',
+          title: this.props.intl.formatMessage({id: 'form.seo.metadescription'}),
+          type: 'textarea',
+          help: this.props.intl.formatMessage({id: 'form.help.seo.metadescription'})
+        }
         seo = (
           <ExpandablePanel header="SEO">
-            <Component key="seo_title" template={seo_title_template} component={self.state.page[this.props.language]} handleChange={this.handleChange}></Component>
-            <Component key="seo_metadescription" template={seo_metadescription_template} component={self.state.page[this.props.language]} handleChange={this.handleChange}></Component>
+            <Component key="slug" template={seo_slug_template} component={this.state.page} handleChange={this.handlePageChange} handleValid={this.handleValid}></Component>
+            <Component key="seo_title" template={seo_title_template} component={this.state.page[this.props.language]} handleChange={this.handleChange} handleValid={this.handleValid}></Component>
+            <Component key="seo_metadescription" template={seo_metadescription_template} component={this.state.page[this.props.language]} handleChange={this.handleChange} handleValid={this.handleValid}></Component>
           </ExpandablePanel>
         )
       }

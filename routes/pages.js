@@ -15,13 +15,18 @@ function getPage(req, id, callback) {
   });
 }
 
-function generateSlug(req, slug, number, callback) {
+function getPageBySlug(req, slug, callback) {
   const db = req.app.locals.db;
 
-  slug = slugify(slug, {lower: true});
   db.collection('pages').findOne({"slug": slug}, function (err, item) {
-    console.log(item);
-    if (!item) {
+    callback(item);
+  });
+}
+
+function generateSlug(req, slug, number, callback) {
+  slug = slugify(slug, {lower: true});
+  getPageBySlug(req, slug, function(page) {
+    if (!page) {
       callback(slug);
     } else {
       if (number == null) {
@@ -31,7 +36,7 @@ function generateSlug(req, slug, number, callback) {
         number = number + 1;
         slug = slug.replace(/\-([0-9]+)$/i, '-' + number);
       }
-      generateSlug(req, slug, number, callback)
+      generateSlug(req, slug, number, callback);
     }
   });
 }
@@ -82,6 +87,12 @@ router.get('/dropdown/:language/:site_id', function(req, res, next) {
     }
 
     res.json(options);
+  });
+});
+
+router.get('/is-valid-slug', function(req, res, next) {
+  getPageBySlug(req, req.query.slug, function(page) {
+    res.json(page);
   });
 });
 
@@ -142,16 +153,22 @@ router.put('/:id', function(req, res, next) {
   // Update updated date
   data.updated_date = new Date();
 
-  db.collection('pages').findAndModify(
-    {"_id" : ObjectId(req.params.id)},
-    {},
-    { $set: data},
-    {new: true},
-    function(err, object) {
-      if (err) throw err;
-      res.json(object.value);
+  getPageBySlug(req, data.slug, function(page) {
+    if (page && page._id != req.params.id) {
+      res.status(500).send('Slug already exists');
+    } else {
+      db.collection('pages').findAndModify(
+        {"_id" : ObjectId(req.params.id)},
+        {},
+        { $set: data},
+        {new: true},
+        function(err, object) {
+          if (err) throw err;
+          res.json(object.value);
+        }
+      );
     }
-  );
+  });
 });
 
 router.delete('/:id', function(req, res, next) {

@@ -14,11 +14,13 @@
   "form.username": "Username",
   "form.password": "Password",
   "form.active": "Active",
-  "form.seo.metadescription": "Meta Description",
+  "form.seo.slug": "Slug",
   "form.seo.title": "Title",
+  "form.seo.metadescription": "Meta Description",
 
+  "form.help.seo.slug": "The Slug is a unique and user friendly URL.",
+  "form.help.seo.title": "The Title length should be less than 55 characters.",
   "form.help.seo.metadescription": "The Meta Description recommended length is 150 characters.",
-  "form.help.seo.title": "The Title length should be less than 55 characters",
 
   "table.boolean.true": "Yes",
   "table.boolean.false": "No",
@@ -40,6 +42,7 @@
 
   "validation.required": "Please fill out this field",
   "validation.input.email": " Invalid email address",
+  "validation.input.slug": " A page slug must be unique",
 
   "modal.page.delete.title": "Delete this page?",
   "modal.page.delete.message": "Are you sure you want to delete this page? This action is not reversible.",

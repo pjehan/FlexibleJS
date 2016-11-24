@@ -20,9 +20,12 @@ var Input = React.createClass({
   },
 
   componentDidMount: function() {
+    var self = this;
     this.setState({id: this.props.template.id, value: this.props.value}, () => {
       if (this.props.handleValidationState) {
-        this.props.handleValidationState(this.getValidationState());
+        this.getValidationState(function(validationState) {
+          self.props.handleValidationState(validationState);
+        });
       }
     });
   },
@@ -32,26 +35,43 @@ var Input = React.createClass({
   },
 
   componentDidUpdate(prevProps, nextProps) {
+    var self = this;
     if (prevProps.value != nextProps.value) {
       if (this.props.handleValidationState) {
-        this.props.handleValidationState(this.getValidationState());
+        this.getValidationState(function(validationState) {
+          self.props.handleValidationState(validationState);
+        });
       }
     }
   },
 
-  getValidationState: function() {
+  getValidationState: function(callback) {
+    var self = this;
+
     if (this.props.template.required && !this.state.value) {
-      return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.required'})};
+      return callback({state: 'error', message: this.props.intl.formatMessage({id: 'validation.required'})});
     }
     switch (this.props.template.type) {
       case 'email':
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(this.state.value)) {
-          return {state: 'error', message: this.props.intl.formatMessage({id: 'validation.input.email'})};
+          return callback({state: 'error', message: this.props.intl.formatMessage({id: 'validation.input.email'})});
         }
         break;
     }
-    return {state: 'success'};
+    // If slug, make sure it is unique
+    if (this.props.template.id == 'slug') {
+      $.getJSON('/api/pages/is-valid-slug', {slug: this.state.value})
+      .done(function(page) {
+        if (page && page._id != self.props.component._id) {
+            return callback({state: 'error', message: self.props.intl.formatMessage({id: 'validation.input.slug'})});
+        } else {
+          return callback({state: 'success'});
+        }
+      });
+    } else {
+      return callback({state: 'success'});
+    }
   },
 
   handleChange: function(event) {

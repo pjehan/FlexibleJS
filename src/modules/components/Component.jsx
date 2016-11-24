@@ -36,7 +36,7 @@ module.exports = React.createClass({
         <Builder template={this.props.template} value={value} handleChange={this.props.handleChange} handleNotification={this.props.handleNotification} handleModal={this.props.handleModal}></Builder>
       );
     } else {
-      formComponent = getFormComponent(this, this.props.template, value, this.props.visible);
+      formComponent = getFormComponent(this, this.props.template, this.props.component, value, this.props.visible);
     }
 
     return (
