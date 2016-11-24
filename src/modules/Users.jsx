@@ -148,6 +148,7 @@ var Users = React.createClass({
         <BootstrapTable data={this.state.users} pagination={true} selectRow={selectRowProp}>
           <TableHeaderColumn dataField="username" isKey={true} dataSort={true}><FormattedMessage id="form.username"/></TableHeaderColumn>
           <TableHeaderColumn dataField="active" dataFormat={this.booleanFormatter} dataSort={true}><FormattedMessage id="form.active"/></TableHeaderColumn>
+          <TableHeaderColumn dataField="admin" dataFormat={this.booleanFormatter} dataSort={true}><FormattedMessage id="form.admin"/></TableHeaderColumn>
         </BootstrapTable>
 
         <Modal show={this.state.userModal.visible} onHide={this.closeUserModal}>
@@ -167,6 +168,9 @@ var Users = React.createClass({
               </FormGroup>
               <FormGroup>
                 <Checkbox name="active" defaultChecked={this.state.user.active} onChange={this.handleUserChange}><FormattedMessage id="form.active"/></Checkbox>
+              </FormGroup>
+              <FormGroup>
+                <Checkbox name="admin" defaultChecked={this.state.user.admin} onChange={this.handleUserChange}><FormattedMessage id="form.admin"/></Checkbox>
               </FormGroup>
 
             </Modal.Body>

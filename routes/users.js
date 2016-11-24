@@ -59,6 +59,7 @@ router.post('/register', function(req, res) {
     if (err) throw err
     var user = req.body;
     user.active = (nbAccounts === 0); // User is active if no user in database
+    user.admin = (nbAccounts === 0); // User is admin if no user in database
     insertUser(user, function(err, account) {
       if (err) res.status(500).json(err); // Return notification
       res.json(account);

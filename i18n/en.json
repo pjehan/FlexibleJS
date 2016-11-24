@@ -14,6 +14,7 @@
   "form.username": "Username",
   "form.password": "Password",
   "form.active": "Active",
+  "form.admin": "Admin",
   "form.seo.slug": "Slug",
   "form.seo.title": "Title",
   "form.seo.metadescription": "Meta Description",
