@@ -127,6 +127,12 @@ var Page = React.createClass({
     this.setState({page: page, changes: true });
   },
 
+  handlePageChange: function(data) {
+    var page = this.state.page;
+    page[data.id] = data.value;
+    this.setState({page: page, changes: true });
+  },
+
   handleValid: function(id, valid) {
     var components = this.state.components;
     if (!components[id]) {
@@ -238,7 +244,7 @@ var Page = React.createClass({
         type: 'text'
       }
       var pageName = (
-        <Component key="page_title" template={page_name_template} component={this.state.page} handleChange={this.handleChange}></Component>
+        <Component key="page_title" template={page_name_template} component={this.state.page} handleChange={this.handlePageChange}></Component>
       );
 
       var seo = [];
