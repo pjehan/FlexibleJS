@@ -43,7 +43,7 @@ module.exports = React.createClass({
       }
       return (
         <FormField key={index} id={component.id} type={component.type} title={component.title} help={component.help}>
-          {getFormComponent(this, component, this.state.value[component.id])}
+          {getFormComponent(this, component, null, this.state.value[component.id])}
         </FormField>
       );
     }.bind(this));

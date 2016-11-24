@@ -135,7 +135,7 @@ var BuilderCol = React.createClass({
         <div>
           <Col md={col.size}>
             <Panel header={header} className="panel-hover-header">
-              {getFormComponent(this, template, col.value)}
+              {getFormComponent(this, template, this.props.component, col.value)}
             </Panel>
           </Col>
         </div>
