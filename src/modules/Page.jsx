@@ -254,6 +254,7 @@ var Page = React.createClass({
           title: this.props.intl.formatMessage({id: 'form.seo.slug'}),
           type: 'text',
           required: true,
+          pattern: '^([a-z0-9-]*)$',
           help: this.props.intl.formatMessage({id: 'form.help.seo.slug'})
         }
         var seo_title_template = {

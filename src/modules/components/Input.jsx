@@ -16,12 +16,12 @@ var Input = React.createClass({
   },
 
   getInitialState: function() {
-    return {id: null, value: this.getDefaultValue()};
+    return {id: null, value: this.getDefaultValue(), pattern: null};
   },
 
   componentDidMount: function() {
     var self = this;
-    this.setState({id: this.props.template.id, value: this.props.value}, () => {
+    this.setState({id: this.props.template.id, value: this.props.value, pattern: this.props.template.pattern}, () => {
       if (this.props.handleValidationState) {
         this.getValidationState(function(validationState) {
           self.props.handleValidationState(validationState);
@@ -31,7 +31,7 @@ var Input = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState({id: newProps.template.id, value: newProps.value});
+    this.setState({id: newProps.template.id, value: newProps.value, pattern: this.props.template.pattern});
   },
 
   componentDidUpdate(prevProps, nextProps) {
@@ -61,7 +61,10 @@ var Input = React.createClass({
     }
     // If slug, make sure it is unique
     if (this.props.template.id == 'slug') {
-      $.getJSON('/api/pages/is-valid-slug', {slug: this.state.value})
+      if (this.ajaxIsValidSlug) {
+        this.ajaxIsValidSlug.abort();
+      }
+      this.ajaxIsValidSlug = $.getJSON('/api/pages/is-valid-slug', {slug: this.state.value})
       .done(function(page) {
         if (page && page._id != self.props.component._id) {
             return callback({state: 'error', message: self.props.intl.formatMessage({id: 'validation.input.slug'})});
@@ -75,6 +78,12 @@ var Input = React.createClass({
   },
 
   handleChange: function(event) {
+    if (this.state.pattern) {
+      var re = new RegExp(this.state.pattern);
+      if (!re.test(event.target.value)) {
+        return false;
+      }
+    }
     this.setState({value: event.target.value}, function() {
       this.props.handleChange(this.state);
     });
