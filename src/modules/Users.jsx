@@ -41,10 +41,10 @@ var Users = React.createClass({
     var user = this.state.user;
     switch (e.target.type) {
       case 'checkbox':
-        user[e.target.name] = e.target.checked;
-        break;
+      user[e.target.name] = e.target.checked;
+      break;
       default:
-        user[e.target.name] = e.target.value;
+      user[e.target.name] = e.target.value;
     }
     this.setState({user: user});
   },
@@ -148,7 +148,7 @@ var Users = React.createClass({
         <BootstrapTable data={this.state.users} pagination={true} selectRow={selectRowProp}>
           <TableHeaderColumn dataField="username" isKey={true} dataSort={true}><FormattedMessage id="form.username"/></TableHeaderColumn>
           <TableHeaderColumn dataField="active" dataFormat={this.booleanFormatter} dataSort={true}><FormattedMessage id="form.active"/></TableHeaderColumn>
-          <TableHeaderColumn dataField="admin" dataFormat={this.booleanFormatter} dataSort={true}><FormattedMessage id="form.admin"/></TableHeaderColumn>
+          <TableHeaderColumn dataField="role" dataSort={true}><FormattedMessage id="form.role"/></TableHeaderColumn>
         </BootstrapTable>
 
         <Modal show={this.state.userModal.visible} onHide={this.closeUserModal}>
@@ -170,7 +170,11 @@ var Users = React.createClass({
                 <Checkbox name="active" defaultChecked={this.state.user.active} onChange={this.handleUserChange}><FormattedMessage id="form.active"/></Checkbox>
               </FormGroup>
               <FormGroup>
-                <Checkbox name="admin" defaultChecked={this.state.user.admin} onChange={this.handleUserChange}><FormattedMessage id="form.admin"/></Checkbox>
+                <FormControl name="role" defaultValue={this.state.user.role} componentClass="select" onChange={this.handleUserChange}>
+                  <option value="super_admin"><FormattedMessage id="form.role.superadmin"/></option>
+                  <option value="admin"><FormattedMessage id="form.role.admin"/></option>
+                  <option value="editor"><FormattedMessage id="form.role.editor"/></option>
+                </FormControl>
               </FormGroup>
 
             </Modal.Body>
