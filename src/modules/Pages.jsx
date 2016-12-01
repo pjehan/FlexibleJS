@@ -123,7 +123,7 @@ var Pages = React.createClass({
         <LinkContainer to={"/pages/" + page._id} key={page._id}>
           <NavItem eventKey={page._id}>
             {page.title}
-            <Button className="pull-right" bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)}>
+            <Button className={this.props.currentUser.role !== 'super_admin' ? 'pull-right hidden' : 'pull-right'} bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)} >
               <i className="fa fa-trash"></i>
             </Button>
           </NavItem>
