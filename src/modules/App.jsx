@@ -122,7 +122,7 @@ var MyApp = React.createClass({
 
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {site: this.state.selectedSite, handleNotification: this.addNotification, handleUser: this.handleUser, handleModal: this.handleModal})
+      React.cloneElement(child, {site: this.state.selectedSite, currentUser: this.state.user, handleNotification: this.addNotification, handleUser: this.handleUser, handleModal: this.handleModal})
     );
   },
 

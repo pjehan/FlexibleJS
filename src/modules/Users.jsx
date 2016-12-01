@@ -130,18 +130,47 @@ var Users = React.createClass({
   },
 
   render() {
+    var unselectable = [];
+    for (var i = 0; i < this.state.users.length; i++) {
+      var user = this.state.users[i];
+      if (user.role === 'super_admin' && this.props.currentUser.role !== 'super_admin' || this.props.currentUser.role === 'editor') {
+        unselectable.push(user.username);
+      }
+    }
+
     var selectRowProp = {
       mode: "radio",
       clickToSelect: true,
       onSelect: this.onRowSelect,
-      onSelectAll: this.onSelectAll
+      onSelectAll: this.onSelectAll,
+      unselectable: unselectable
     };
+
+    var formRole;
+    if (this.props.currentUser) {
+      if (this.props.currentUser.role === 'super_admin') {
+        formRole = (
+          <FormControl name="role" defaultValue={this.state.user.role} componentClass="select" onChange={this.handleUserChange}>
+            <option value="super_admin">{this.props.intl.formatMessage({id: 'form.role.superadmin'})}</option>
+            <option value="admin">{this.props.intl.formatMessage({id: 'form.role.admin'})}</option>
+            <option value="editor">{this.props.intl.formatMessage({id: 'form.role.editor'})}</option>
+          </FormControl>
+        );
+      } else if (this.props.currentUser.role === 'admin' && this.state.user.role !== 'super_admin') {
+        formRole = (
+          <FormControl name="role" defaultValue={this.state.user.role} componentClass="select" onChange={this.handleUserChange}>
+            <option value="admin">{this.props.intl.formatMessage({id: 'form.role.admin'})}</option>
+            <option value="editor">{this.props.intl.formatMessage({id: 'form.role.editor'})}</option>
+          </FormControl>
+        );
+      }
+    }
 
     return (
       <Grid>
         <h1><FormattedMessage id="title.users"/></h1>
         <ButtonGroup>
-          <Button bsStyle="primary" onClick={this.openNewUserModal}><i className="fa fa-plus"></i> <FormattedMessage id="btn.add"/></Button>
+          <Button bsStyle="primary" onClick={this.openNewUserModal} disabled={this.props.currentUser && this.props.currentUser.role === 'editor'}><i className="fa fa-plus"></i> <FormattedMessage id="btn.add"/></Button>
           <Button bsStyle="warning" onClick={this.openEditUserModal} disabled={this.state.selectedUsers.length <= 0}><i className="fa fa-edit"></i> <FormattedMessage id="btn.edit"/></Button>
           <Button bsStyle="danger" onClick={this.handleDeleteUser} disabled={this.state.selectedUsers.length <= 0}><i className="fa fa-trash"></i> <FormattedMessage id="btn.delete"/></Button>
         </ButtonGroup>
@@ -167,14 +196,11 @@ var Users = React.createClass({
                 <FormControl type="password" name="password" disabled={this.state.userModal.method == 'PUT'} onChange={this.handleUserChange} />
               </FormGroup>
               <FormGroup>
-                <Checkbox name="active" defaultChecked={this.state.user.active} onChange={this.handleUserChange}><FormattedMessage id="form.active"/></Checkbox>
+                <ControlLabel><FormattedMessage id="form.role"/></ControlLabel>
+                {formRole}
               </FormGroup>
               <FormGroup>
-                <FormControl name="role" defaultValue={this.state.user.role} componentClass="select" onChange={this.handleUserChange}>
-                  <option value="super_admin"><FormattedMessage id="form.role.superadmin"/></option>
-                  <option value="admin"><FormattedMessage id="form.role.admin"/></option>
-                  <option value="editor"><FormattedMessage id="form.role.editor"/></option>
-                </FormControl>
+                <Checkbox name="active" defaultChecked={this.state.user.active} onChange={this.handleUserChange}><FormattedMessage id="form.active"/></Checkbox>
               </FormGroup>
 
             </Modal.Body>
