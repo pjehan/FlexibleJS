@@ -118,12 +118,14 @@ var Pages = React.createClass({
   render() {
     var self = this;
 
+    var superAdmin = (this.props.currentUser && this.props.currentUser.role === 'super_admin');
+
     var pageNodes = this.state.pages.map(function(page){
       return (
         <LinkContainer to={"/pages/" + page._id} key={page._id}>
           <NavItem eventKey={page._id}>
             {page.title}
-            <Button className={this.props.currentUser.role !== 'super_admin' ? 'pull-right hidden' : 'pull-right'} bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)} >
+            <Button className={superAdmin ? 'pull-right' : 'pull-right hidden'} bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)} >
               <i className="fa fa-trash"></i>
             </Button>
           </NavItem>
@@ -160,7 +162,7 @@ var Pages = React.createClass({
               {pageNodes}
             </Nav>
             <hr />
-            <Button bsStyle="primary" bsSize="large" block onClick={this.openNewPageModal}><i className="fa fa-plus"></i> Add New Page</Button>
+            <Button bsStyle="primary" bsSize="large" block className={superAdmin ? '' : 'hidden'} onClick={this.openNewPageModal}><i className="fa fa-plus"></i> Add New Page</Button>
 
             <Modal show={this.state.showNewPageModal} onHide={this.closeNewPageModal}>
               <form action={"/api/pages"} method="POST" onSubmit={this.submitNewPage}>
