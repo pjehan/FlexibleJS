@@ -4,12 +4,18 @@
   "btn.delete": "Delete",
   "btn.login": "Login",
   "btn.register": "Register",
+  "btn.import": "Import",
+  "btn.export": "Export",
 
   "title.login": "Login",
   "title.register": "Register",
   "title.users": "Users",
   "title.user.new": "New user",
   "title.user.edit": "Edit user",
+  "title.settings": "Settings",
+  "title.backup": "Backup",
+  "title.database": "Database",
+  "title.files": "Files",
 
   "form.username": "Username",
   "form.password": "Password",
