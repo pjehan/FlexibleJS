@@ -2,7 +2,7 @@ import React from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { Grid, Row, Col, Panel, Breadcrumb, Button } from 'react-bootstrap'
+import { Grid, Row, Col, Panel, Breadcrumb, Button, ButtonGroup } from 'react-bootstrap'
 
 import ExpandablePanel from '../modules/ExpandablePanel.jsx'
 import Component from '../modules/components/Component.jsx'
@@ -335,7 +335,10 @@ var Page = React.createClass({
             <form action={"api/pages/" + self.state.page._id} method="PUT" onSubmit={self.submit} encType="multipart/form-data" noValidate>
 
               <Panel id="page-header">
-                <Button type="submit" bsStyle="success" className="pull-right" disabled={!this.state.changes} title="Ctrl + S"><i className="fa fa-check"></i> Save</Button>
+                <ButtonGroup className="pull-right">
+                  <a href={this.props.site.url + "/" + this.props.site.lang + "/" + this.state.page.slug} target="_blank" className="btn btn-primary"><i className="fa fa-external-link"></i> Open</a>
+                  <Button type="submit" bsStyle="success" disabled={!this.state.changes} title="Ctrl + S"><i className="fa fa-check"></i> Save</Button>
+                </ButtonGroup>
                 <Breadcrumb>
                   {breadcrumbNodes}
                   <Breadcrumb.Item href="#" active>
