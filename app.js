@@ -14,6 +14,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var config = require('./config');
 
+var settings = require('./routes/settings');
 var users = require('./routes/users');
 var files = require('./routes/files');
 var templates = require('./routes/templates').router;
@@ -43,6 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api/settings', settings);
 app.use('/api/users', users);
 app.use('/api/files', files);
 app.use('/api/templates', templates);
