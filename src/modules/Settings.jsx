@@ -13,6 +13,28 @@ var Settings = React.createClass({
     });
   },
 
+  importDatabase: function(event) {
+    var form = $(event.target).parents('form')[0];
+
+    var data = new FormData(form);
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/settings/import-database/' + event.target.name,
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+    })
+    .done(function(data) {
+      console.log(data);
+    })
+    .fail(function(jqXHR, textStatus) {
+      console.log(jqXHR);
+      console.log(textStatus);
+    });
+  },
+
   render() {
 
     const title = (
@@ -25,12 +47,14 @@ var Settings = React.createClass({
         <Panel header={title}>
 
           <h4><FormattedMessage id="title.database"/></h4>
-          <ButtonToolbar>
-            <ControlLabel className="btn btn-primary" htmlFor="formImportDb">
-              <i className="fa fa-download"></i><FormControl id="formImportDb" type="file" className="hidden"/> <FormattedMessage id="btn.import"/>
-            </ControlLabel>
-            <Button bsStyle="primary" onClick={this.exportDatabase}><i className="fa fa-upload"></i> <FormattedMessage id="btn.export"/></Button>
-          </ButtonToolbar>
+          <form encType="multipart/form-data">
+            <ButtonToolbar>
+              <ControlLabel className="btn btn-primary" htmlFor="formImportDb">
+                <i className="fa fa-download"></i><FormControl id="formImportDb" type="file" name="formImportDb" className="hidden" onChange={this.importDatabase}/> <FormattedMessage id="btn.import"/>
+              </ControlLabel>
+              <Button bsStyle="primary" onClick={this.exportDatabase}><i className="fa fa-upload"></i> <FormattedMessage id="btn.export"/></Button>
+            </ButtonToolbar>
+          </form>
 
           <h4><FormattedMessage id="title.files"/></h4>
           <ButtonToolbar>
