@@ -336,7 +336,7 @@ var Page = React.createClass({
 
               <Panel id="page-header">
                 <ButtonGroup className="pull-right">
-                  <a href={this.props.site.url + "/" + this.props.site.lang + "/" + this.state.page.slug} target="_blank" className="btn btn-primary"><i className="fa fa-external-link"></i> Open</a>
+                  <a href={this.props.site.url + "/" + this.props.site.lang + "/" + this.state.page.slug} target="_blank" disabled={!this.state.template.seo} className="btn btn-primary"><i className="fa fa-external-link"></i> Open</a>
                   <Button type="submit" bsStyle="success" disabled={!this.state.changes} title="Ctrl + S"><i className="fa fa-check"></i> Save</Button>
                 </ButtonGroup>
                 <Breadcrumb>
