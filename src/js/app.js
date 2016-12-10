@@ -6,7 +6,7 @@ import App from '../modules/App.jsx'
 import Login from '../modules/account/Login.jsx'
 import Logout from '../modules/account/Logout.jsx'
 import Register from '../modules/account/Register.jsx'
-import Home from '../modules/Home.jsx'
+import Dashboard from '../modules/Dashboard.jsx'
 import Pages from '../modules/Pages.jsx'
 import Page from '../modules/Page.jsx'
 import Users from '../modules/Users.jsx'
@@ -31,7 +31,7 @@ ReactDOM.render(
       <Route path="login" component={Login} />
       <Route path="logout" component={Logout} />
       <Route path="register" component={Register} />
-      <IndexRoute component={Home} onEnter={requireAuth}/>
+      <IndexRoute component={Dashboard} onEnter={requireAuth}/>
       <Route path="/pages" component={Pages} onEnter={requireAuth}>
         <Route path="/pages/:id" component={Page} onEnter={requireAuth}/>
       </Route>

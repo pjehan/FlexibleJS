@@ -135,7 +135,7 @@ var MyApp = React.createClass({
       leftNav = (
         <Nav>
           <LinkContainer to="/" onlyActiveOnIndex={true}>
-            <NavItem>Home</NavItem>
+            <NavItem>Dashboard</NavItem>
           </LinkContainer>
           <LinkContainer to="/pages">
             <NavItem>Pages</NavItem>

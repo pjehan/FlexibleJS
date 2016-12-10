@@ -16,6 +16,7 @@ var config = require('./config');
 
 var settings = require('./routes/settings');
 var users = require('./routes/users');
+var dashboard = require('./routes/dashboard');
 var files = require('./routes/files');
 var templates = require('./routes/templates').router;
 var pages = require('./routes/pages');
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/settings', settings);
 app.use('/api/users', users);
+app.use('/api/dashboard', dashboard);
 app.use('/api/files', files);
 app.use('/api/templates', templates);
 app.use('/api/pages', pages);

@@ -48,3 +48,6 @@ data.json
 
 # FlexibleJS config file
 config.js
+
+# Google Api Key
+gapi_key.json
