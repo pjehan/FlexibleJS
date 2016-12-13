@@ -98,11 +98,12 @@ module.exports =  React.createClass({
             var options = {
               query: {
                 dimensions: 'ga:region',
-                filters: 'ga:country==France'
+                filters: 'ga:countryIsoCode==' + region
               },
               chart: {
                 options: {
-                  region: region
+                  region: region,
+                  resolution: 'provinces'
                 }
               }
             };
