@@ -271,7 +271,7 @@ var Page = React.createClass({
         }
         seo = (
           <ExpandablePanel header="SEO">
-            <Component key="slug" template={seo_slug_template} component={this.state.page} handleChange={this.handlePageChange} handleValid={this.handleValid}></Component>
+            <Component key="slug" site={this.props.site} template={seo_slug_template} component={this.state.page} handleChange={this.handlePageChange} handleValid={this.handleValid}></Component>
             <Component key="seo_title" template={seo_title_template} component={this.state.page[this.props.language]} handleChange={this.handleChange} handleValid={this.handleValid}></Component>
             <Component key="seo_metadescription" template={seo_metadescription_template} component={this.state.page[this.props.language]} handleChange={this.handleChange} handleValid={this.handleValid}></Component>
           </ExpandablePanel>

@@ -64,7 +64,7 @@ var Input = React.createClass({
       if (this.ajaxIsValidSlug) {
         this.ajaxIsValidSlug.abort();
       }
-      this.ajaxIsValidSlug = $.getJSON('/api/pages/is-valid-slug', {slug: this.state.value})
+      this.ajaxIsValidSlug = $.getJSON('/api/pages/is-valid-slug', {site_id: this.props.site.id, slug: this.state.value})
       .done(function(page) {
         if (page && page._id != self.props.component._id) {
             return callback({state: 'error', message: self.props.intl.formatMessage({id: 'validation.input.slug'})});

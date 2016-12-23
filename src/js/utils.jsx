@@ -29,6 +29,7 @@ module.exports = {
         <Input
           template={template}
           value={value}
+          site={self.props.site}
           component={self.props.component}
           handleChange={self.props.handleChange}
           handleNotification={self.props.handleNotification}
