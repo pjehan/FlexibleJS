@@ -5,9 +5,19 @@ var path = require('path');
 var multiparty = require('multiparty');
 
 var ObjectId = require('mongodb').ObjectId;
+const template_dir = path.join(__dirname, '../templates');
 
 var getSites = function getSites() {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'utf-8'));
+  var sites = [];
+  var files = fs.readdirSync(template_dir);
+  
+  files.forEach(file => {
+    if (path.extname(file) === '.json') {
+      sites.push(JSON.parse(fs.readFileSync(path.join(template_dir, file)), 'utf-8'));
+    }
+  });
+  
+  return sites;
 }
 
 var getSite = function getSite(site_id) {

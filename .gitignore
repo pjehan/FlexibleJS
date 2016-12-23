@@ -43,8 +43,9 @@ public
 .sass-cache/
 *.css.map
 
-# FlexibleJS data structure
-data.json
+# FlexibleJS templates
+templates/*
+!templates/README.md
 
 # FlexibleJS config file
 config.js
