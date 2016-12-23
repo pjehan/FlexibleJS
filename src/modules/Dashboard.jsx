@@ -48,7 +48,7 @@ module.exports =  React.createClass({
           reportType: 'ga',
           query: {
             'dimensions': 'ga:date',
-            'metrics': 'ga:sessions',
+            'metrics': 'ga:sessions, ga:users',
             'start-date': self.state.date_start,
             'end-date': self.state.date_end
           },
