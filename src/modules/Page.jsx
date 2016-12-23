@@ -287,6 +287,7 @@ var Page = React.createClass({
             <Component
               key={component.id}
               visible={true}
+              currentUser={this.props.currentUser}
               template={component}
               site={this.props.site}
               language={this.props.language}
@@ -308,6 +309,7 @@ var Page = React.createClass({
               <Component
                 key={component.id}
                 visible={section.open}
+                currentUser={this.props.currentUser}
                 template={component}
                 site={this.props.site}
                 language={this.props.language}

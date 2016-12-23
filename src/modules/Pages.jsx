@@ -111,7 +111,7 @@ var Pages = React.createClass({
 
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {language: this.state.language, site: this.props.site, handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
+      React.cloneElement(child, {currentUser: this.props.currentUser, language: this.state.language, site: this.props.site, handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
     );
   },
 
