@@ -16,6 +16,7 @@ var watchify = require('watchify');
 var babelify = require('babelify');
 
 var npmDir = './node_modules'
+var bowerDir = './public/bower_components'
 var scriptsDir = './src/js';
 var stylesDir = './src/css';
 var buildScriptsDir = './public/js';
@@ -34,11 +35,11 @@ function handleErrors() {
 gulp.task('css', function() {
 
   var cssFiles = gulp.src([
-    npmDir + '/animate.css/animate.css',
-    npmDir + '/nprogress/nprogress.css',
-    npmDir + '/react-summernote/dist/react-summernote.css',
-    npmDir + '/select2/dist/css/select2.css',
-    npmDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css'
+    bowerDir + '/animate.css/animate.css',
+    bowerDir + '/nprogress/nprogress.css',
+    bowerDir + '/summernote/dist/summernote.css',
+    bowerDir + '/select2/dist/css/select2.css',
+    bowerDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css'
   ]);
   var scssFiles = gulp.src(stylesDir + '/style.scss')
   .pipe(sass({
@@ -61,9 +62,9 @@ gulp.task('css', function() {
 });
 
 gulp.task('fonts', function(){
-  gulp.src(npmDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'));
-  gulp.src(npmDir + '/react-summernote/dist/summernote.*').pipe(gulp.dest('./public/css'));
-  return gulp.src(npmDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'));
+  gulp.src(bowerDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'));
+  gulp.src(bowerDir + '/summernote/dist/font/summernote.*').pipe(gulp.dest('./public/css'));
+  return gulp.src(bowerDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'));
 });
 
 gulp.task('nodemon', function() {

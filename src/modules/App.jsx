@@ -50,19 +50,19 @@ var MyApp = React.createClass({
 
     NProgress.configure({ parent: 'main' });
 
-    $(document).ajaxStart(function() {
+    $(document).on('ajaxStart', function() {
       NProgress.start();
     });
 
-    $(document).ajaxStop(function() {
+    $(document).on('ajaxStop', function() {
       NProgress.done();
     });
 
-    $(document).ready(function () {
+    $(document).on('ready', function () {
       NProgress.start();
     });
 
-    $(window).load(function () {
+    $(window).on('load', function () {
       NProgress.done();
     });
   },

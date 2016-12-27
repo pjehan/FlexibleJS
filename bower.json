@@ -1,0 +1,28 @@
+{
+  "name": "flexiblejs",
+  "description": "",
+  "main": "",
+  "authors": [
+    "pjehan <pierre.jehan@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/pjehan/FlexibleJS",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
+    "font-awesome": "Font-Awesome#^4.7.0",
+    "animate.css": "animate-css#^3.5.2",
+    "bootswatch": "^3.3.7",
+    "select2": "^4.0.3",
+    "select2-bootstrap-theme": "^0.1.0-beta.9",
+    "nprogress": "^0.2.0",
+    "summernote": "^0.8.2"
+  }
+}
