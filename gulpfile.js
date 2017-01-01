@@ -45,9 +45,9 @@ gulp.task('css', function() {
   .pipe(sass({
     outputStyle: 'compressed',
     includePaths: [
-      npmDir + '/bootstrap-sass/assets/stylesheets',
-      npmDir + '/bootswatch/paper', // Edit this line to change Bootswatch theme
-      npmDir + '/font-awesome/scss',
+      bowerDir + '/bootstrap-sass/assets/stylesheets',
+      bowerDir + '/bootswatch/paper', // Edit this line to change Bootswatch theme
+      bowerDir + '/font-awesome/scss',
     ]})
     .on("error", notify.onError(function (error) {
       return "Error: " + error.message;
