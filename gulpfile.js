@@ -39,15 +39,16 @@ gulp.task('css', function() {
     bowerDir + '/nprogress/nprogress.css',
     bowerDir + '/summernote/dist/summernote.css',
     bowerDir + '/select2/dist/css/select2.css',
-    bowerDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css'
+    bowerDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css',
+    bowerDir + '/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
   ]);
   var scssFiles = gulp.src(stylesDir + '/style.scss')
   .pipe(sass({
     outputStyle: 'compressed',
     includePaths: [
-      npmDir + '/bootstrap-sass/assets/stylesheets',
-      npmDir + '/bootswatch/paper', // Edit this line to change Bootswatch theme
-      npmDir + '/font-awesome/scss',
+      bowerDir + '/bootstrap-sass/assets/stylesheets',
+      bowerDir + '/bootswatch/paper', // Edit this line to change Bootswatch theme
+      bowerDir + '/font-awesome/scss',
     ]})
     .on("error", notify.onError(function (error) {
       return "Error: " + error.message;

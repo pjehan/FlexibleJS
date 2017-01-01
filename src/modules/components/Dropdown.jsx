@@ -2,7 +2,6 @@ import React from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 
 import { FormControl } from 'react-bootstrap'
-import select2 from 'select2';
 
 var Dropdown = React.createClass({
 

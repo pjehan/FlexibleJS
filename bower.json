@@ -23,6 +23,7 @@
     "select2": "^4.0.3",
     "select2-bootstrap-theme": "^0.1.0-beta.9",
     "nprogress": "^0.2.0",
-    "summernote": "^0.8.2"
+    "summernote": "^0.8.2",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43"
   }
 }

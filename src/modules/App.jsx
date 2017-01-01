@@ -27,8 +27,6 @@ switch (lang) {
   messages = enMessages;
 }
 
-var NProgress = require('nprogress');
-
 var MyApp = React.createClass({
 
   getInitialState() {
@@ -47,6 +45,8 @@ var MyApp = React.createClass({
       }
       self.setState({sites: sites, selectedSite: selectedSite});
     });
+    
+    moment.locale(navigator.language);
 
     NProgress.configure({ parent: 'main' });
 
