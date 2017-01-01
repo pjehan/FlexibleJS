@@ -32,16 +32,18 @@ var Input = React.createClass({
     });
     
     // Datepicker
-    input.datetimepicker({
-      icons: {
-        time: "fa fa-clock-o",
-        date: "fa fa-calendar",
-        up: "fa fa-arrow-up",
-        down: "fa fa-arrow-down"
-      },
-      viewMode: 'years',
-      locale: moment.locale()
-    });
+    if (this.props.template.type == 'date' || this.props.template.type == 'datetime') {
+      input.datetimepicker({
+        icons: {
+          time: "fa fa-clock-o",
+          date: "fa fa-calendar",
+          up: "fa fa-arrow-up",
+          down: "fa fa-arrow-down"
+        },
+        viewMode: 'years',
+        locale: moment.locale()
+      });
+    }
   },
   
   componentWillReceiveProps: function(newProps) {
@@ -108,7 +110,11 @@ var Input = React.createClass({
     var attrs = {};
     for (var prop in this.props.template) {
       if (this.props.template.hasOwnProperty(prop) && !['id', 'title', 'help', 'header'].includes(prop)) {
-        attrs[prop] = this.props.template[prop];
+        if (prop == 'type' && (this.props.template[prop] == 'date' || this.props.template[prop] == 'datetime')) {
+          attrs[prop] = 'text';
+        } else {
+          attrs[prop] = this.props.template[prop];
+        }
       }
     }
     
