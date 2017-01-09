@@ -64,7 +64,7 @@ gulp.task('css', function() {
 
 gulp.task('fonts', function(){
   gulp.src(bowerDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'));
-  gulp.src(bowerDir + '/summernote/dist/font/summernote.*').pipe(gulp.dest('./public/css'));
+  gulp.src(bowerDir + '/summernote/dist/font/summernote.*').pipe(gulp.dest('./public/css/font'));
   return gulp.src(bowerDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'));
 });
 
