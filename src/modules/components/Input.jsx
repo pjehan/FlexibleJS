@@ -33,15 +33,17 @@ var Input = React.createClass({
     
     // Datepicker
     if (this.props.template.type == 'date' || this.props.template.type == 'datetime') {
+      var format = (this.props.template.type == 'date') ? 'YYYY-MM-DD' : 'YYYY-MM-DD hh:mm:ss';
       input.datetimepicker({
+        format: format,
+        viewMode: 'years',
+        locale: moment.locale(),
         icons: {
           time: "fa fa-clock-o",
           date: "fa fa-calendar",
           up: "fa fa-arrow-up",
           down: "fa fa-arrow-down"
-        },
-        viewMode: 'years',
-        locale: moment.locale()
+        }
       });
     }
   },
