@@ -33,7 +33,6 @@ module.exports =  React.createClass({
     });
 
     textarea.on('summernote.keyup', function() {
-      console.log(textarea.summernote('code'));
       self.setState({value: textarea.summernote('code')}, function() {
         self.props.handleChange(self.state);
       });
@@ -41,7 +40,9 @@ module.exports =  React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState({id: newProps.template.id, value: newProps.value});
+    this.setState({id: newProps.template.id, value: newProps.value}, function(){
+        $('textarea.' + this.state.elementClass).summernote("code", this.state.value);
+    });
   },
 
   handleChange: function(value) {
