@@ -45,7 +45,7 @@ var MyApp = React.createClass({
       }
       self.setState({sites: sites, selectedSite: selectedSite});
     });
-    
+
     moment.locale(navigator.language);
 
     NProgress.configure({ parent: 'main' });
@@ -207,6 +207,8 @@ var MyApp = React.createClass({
       }.bind(this));
     }
 
+    var navbarStyle = (window.location.host.startsWith('localhost')) ? 'default' : 'inverse';
+
     return (
       <IntlProvider locale={navigator.language} messages={messages} defaultLocale='en'>
         <div>
@@ -217,7 +219,7 @@ var MyApp = React.createClass({
             })}
             />
 
-          <Navbar bsStyle="inverse" fixedTop={true}>
+          <Navbar bsStyle={navbarStyle} fixedTop={true}>
             <Navbar.Header>
               <Navbar.Brand>
                 <a href="/" className="rubberBand animated">Flexible</a>
