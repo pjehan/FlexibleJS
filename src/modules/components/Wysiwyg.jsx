@@ -7,17 +7,15 @@ import randomstring from 'randomstring';
 module.exports =  React.createClass({
 
   getInitialState: function() {
-    return {id: this.props.template.id, value: this.props.value, elementClass: randomstring.generate({length: 8, charset: 'alphabetic'})};
+    return {id: this.props.template.id, value: this.props.value, wysiwyg: null, elementClass: randomstring.generate({length: 8, charset: 'alphabetic'})};
   },
 
   componentDidMount: function() {
-    var self = this;
+    var wysiwyg = $('textarea.' + this.state.elementClass);
 
-    this.setState({id: this.props.template.id, value: this.props.value});
+    this.setState({wysiwyg: wysiwyg});
 
-    var textarea = $('textarea.' + this.state.elementClass);
-
-    textarea.summernote({
+    wysiwyg.summernote({
       lang: 'fr-FR',
       height: 250,
       dialogsInBody: true,
@@ -32,16 +30,19 @@ module.exports =  React.createClass({
       ]
     });
 
-    textarea.on('summernote.keyup', function() {
-      self.setState({value: textarea.summernote('code')}, function() {
-        self.props.handleChange(self.state);
+    wysiwyg.on('summernote.keyup', () => {
+      this.setState({value: this.state.wysiwyg.summernote('code')}, function() {
+        this.props.handleChange(this.state);
       });
     });
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState({id: newProps.template.id, value: newProps.value}, function(){
-        $('textarea.' + this.state.elementClass).summernote("code", this.state.value);
+    this.setState({id: newProps.template.id, value: newProps.value}, () => {
+      // Check if content has been updated from parent component
+      if (newProps.value != this.state.wysiwyg.summernote("code")) {
+        this.state.wysiwyg.summernote("code", this.state.value);
+      }
     });
   },
 
@@ -52,7 +53,6 @@ module.exports =  React.createClass({
   },
 
   render() {
-
     var attrs = {};
     for (var prop in this.props.template) {
       if (this.props.template.hasOwnProperty(prop) && !['id', 'title', 'type', 'help', 'header'].includes(prop)) {

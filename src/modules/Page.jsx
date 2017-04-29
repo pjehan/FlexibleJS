@@ -159,7 +159,7 @@ var Page = React.createClass({
         {
           style: 'success',
           icon: 'check',
-          content: 'Save',
+          content: this.props.intl.formatMessage({id: 'btn.save'}),
           onClick: function () {
             self.saveChanges();
             if (callback) {
