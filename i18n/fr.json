@@ -28,6 +28,7 @@
   "title.backup": "Sauvegarde",
   "title.database": "Base de données",
   "title.files": "Fichiers",
+  "title.editImageAlt": "Modifier le texte alternatif de l'image",
   "title.newpage": "Nouvelle page",
 
   "label.loggedout": "Vous êtes maintenant déconnecté",

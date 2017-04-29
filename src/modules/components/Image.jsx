@@ -44,39 +44,47 @@ var Image = React.createClass({
 
   handleChange: function(e) {
     var self = this;
-    var form = $(e.target).parents('form')[0];
 
-    var data = new FormData(form);
-    data.append('flexibleImageHeight', this.props.template.height);
-    data.append('flexibleImageWidth', this.props.template.width);
-    data.append('flexibleImageMaxHeight', this.props.template.max_height);
-    data.append('flexibleImageMaxWidth', this.props.template.max_width);
+    for (var i = 0; i < e.target.files.length; i++) {
+      let file = e.target.files[i]
+      let reader = new FileReader();
 
-    $.ajax({
-      type: 'POST',
-      url: '/api/files/upload/' + e.target.name,
-      data: data,
-      cache: false,
-      contentType: false,
-      processData: false,
-    })
-    .done(function(data) {
-      var images = (self.props.template.multiple) ? self.state.value : [];
-      var newImages = [];
-      for (var i = 0; i < data.length; i++) {
-        newImages.push({
-          src: data[i],
-          alt: null
+      reader.onloadend = () => {
+        let formData = new FormData();
+        formData.append(this.props.template.id, file)
+        formData.append('flexibleImageHeight', this.props.template.height);
+        formData.append('flexibleImageWidth', this.props.template.width);
+        formData.append('flexibleImageMaxHeight', this.props.template.max_height);
+        formData.append('flexibleImageMaxWidth', this.props.template.max_width);
+        $.ajax({
+          type: 'POST',
+          url: '/api/files/upload',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+        })
+        .done(function(data) {
+          var images = (self.props.template.multiple) ? self.state.value : [];
+          var newImages = [];
+          for (var i = 0; i < data.length; i++) {
+            newImages.push({
+              src: data[i],
+              alt: null
+            });
+          }
+          self.setState({value: images.concat(newImages)}, function() {
+            this.props.handleChange(this.state);
+          });
+        })
+        .fail(function(jqXHR, textStatus) {
+          console.log(jqXHR);
+          console.log(textStatus);
         });
       }
-      self.setState({value: images.concat(newImages)}, function() {
-        this.props.handleChange(this.state);
-      });
-    })
-    .fail(function(jqXHR, textStatus) {
-      console.log(jqXHR);
-      console.log(textStatus);
-    });
+
+      reader.readAsDataURL(file);
+    };
   },
 
   handleDelete: function(image, e) {
@@ -95,7 +103,7 @@ var Image = React.createClass({
     var alt = image.alt;
 
     this.props.handleModal({
-      title: 'Edit image alternate text',//this.props.intl.formatMessage({id: 'modal.page.delete.title'}),
+      title: this.props.intl.formatMessage({id: 'title.editImageAlt'}),
       body: (
         <FormControl type="text" defaultValue={alt} onChange={this.handleAltChange.bind(this, image)} />
       ),
@@ -103,7 +111,7 @@ var Image = React.createClass({
         {
           style: 'success',
           icon: 'check',
-          content: 'Save',
+          content: this.props.intl.formatMessage({id: 'btn.save'}),
           onClick: function () {
             self.props.handleChange(self.state);
           }

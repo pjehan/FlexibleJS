@@ -75,8 +75,7 @@ function uploadFile(file, callback) {
   });
 }
 
-router.post('/upload/:name', function(req, res, next) {
-  var fieldName = req.params.name;
+router.post('/upload', function(req, res, next) {
   var form = new multiparty.Form();
 
   // Upload images
@@ -93,7 +92,7 @@ router.post('/upload/:name', function(req, res, next) {
         async.eachSeries(Object.keys(files[fieldKey]), function (fileKey, fileNext){
           var file = files[fieldKey][fileKey];
 
-          if (file.fieldName == fieldName && file.size > 0) {
+          if (file.size > 0) {
             uploadFile(file, function(err, filename) {
               originalFilenames.push(filename);
               fileNext();
