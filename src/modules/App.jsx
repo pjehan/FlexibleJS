@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { addLocaleData, IntlProvider } from 'react-intl'
+import { addLocaleData, IntlProvider, FormattedMessage } from 'react-intl'
 import en from 'react-intl/locale-data/en'
 import fr from 'react-intl/locale-data/fr'
 import enMessages from '../../i18n/en.json'
@@ -135,13 +135,13 @@ var MyApp = React.createClass({
       leftNav = (
         <Nav>
           <LinkContainer to="/" onlyActiveOnIndex={true}>
-            <NavItem>Dashboard</NavItem>
+            <NavItem><FormattedMessage id="btn.dashboard"/></NavItem>
           </LinkContainer>
           <LinkContainer to="/pages">
-            <NavItem>Pages</NavItem>
+            <NavItem><FormattedMessage id="btn.pages"/></NavItem>
           </LinkContainer>
           <LinkContainer to="/users">
-            <NavItem>Users</NavItem>
+            <NavItem><FormattedMessage id="btn.users"/></NavItem>
           </LinkContainer>
         </Nav>
       );
@@ -160,12 +160,12 @@ var MyApp = React.createClass({
             {siteNodes}
           </NavDropdown>
           <LinkContainer to="/settings">
-            <NavItem>Settings</NavItem>
+            <NavItem><FormattedMessage id="btn.settings"/></NavItem>
           </LinkContainer>
           <NavDropdown id="profile-dropdown" title={this.state.user.username}>
-            <MenuItem>Profile</MenuItem>
+            <MenuItem><FormattedMessage id="btn.profile"/></MenuItem>
             <LinkContainer to="/logout">
-              <MenuItem>Logout</MenuItem>
+              <MenuItem><FormattedMessage id="btn.logout"/></MenuItem>
             </LinkContainer>
           </NavDropdown>
         </Nav>
@@ -174,10 +174,10 @@ var MyApp = React.createClass({
       rightNav = (
         <Nav pullRight>
           <LinkContainer to="/login">
-            <NavItem>Login</NavItem>
+            <NavItem><FormattedMessage id="btn.login"/></NavItem>
           </LinkContainer>
           <LinkContainer to="/register">
-            <NavItem>Register</NavItem>
+            <NavItem><FormattedMessage id="btn.register"/></NavItem>
           </LinkContainer>
         </Nav>
       );
@@ -241,7 +241,7 @@ var MyApp = React.createClass({
               {modalBody}
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={this.handleModalClose}>Close</Button>
+              <Button onClick={this.handleModalClose}><FormattedMessage id="btn.close"/></Button>
               {modalButtons}
             </Modal.Footer>
           </Modal>

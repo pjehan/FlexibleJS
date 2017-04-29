@@ -88,7 +88,7 @@ var Pages = React.createClass({
         {
           style: 'danger',
           icon: 'trash',
-          content: 'Delete',
+          content: this.props.intl.formatMessage({id: 'btn.delete'}),
           onClick: function () {
             $.ajax({
               type: 'DELETE',
@@ -162,17 +162,17 @@ var Pages = React.createClass({
               {pageNodes}
             </Nav>
             <hr />
-            <Button bsStyle="primary" bsSize="large" block className={superAdmin ? '' : 'hidden'} onClick={this.openNewPageModal}><i className="fa fa-plus"></i> Add New Page</Button>
+            <Button bsStyle="primary" bsSize="large" block className={superAdmin ? '' : 'hidden'} onClick={this.openNewPageModal}><i className="fa fa-plus"></i> <FormattedMessage id="btn.newpage"/></Button>
 
             <Modal show={this.state.showNewPageModal} onHide={this.closeNewPageModal}>
               <form action={"/api/pages"} method="POST" onSubmit={this.submitNewPage}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Add New Page</Modal.Title>
+                  <Modal.Title><FormattedMessage id="title.newpage"/></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 
                   <FormGroup controlId="template">
-                    <ControlLabel>Template</ControlLabel>
+                    <ControlLabel><FormattedMessage id="form.template"/></ControlLabel>
                     <FormControl
                       name="template"
                       componentClass="select"
@@ -180,7 +180,7 @@ var Pages = React.createClass({
                       defaultValue=""
                       required={true}
                       onChange={this.handleNewPageChange}>
-                      <option disabled value=""> -- Select a template -- </option>
+                      <option disabled value=""> -- {this.props.intl.formatMessage({id: 'form.template.select'})} -- </option>
                       {templateNodes}
                     </FormControl>
                     <FormControl.Feedback />
@@ -188,11 +188,11 @@ var Pages = React.createClass({
                   </FormGroup>
 
                   <FormGroup controlId="title">
-                    <ControlLabel>Title</ControlLabel>
+                    <ControlLabel><FormattedMessage id="form.title"/></ControlLabel>
                     <FormControl
                       type="text"
                       name="title"
-                      placeholder="Title"
+                      placeholder={this.props.intl.formatMessage({id: 'form.title'})}
                       required={true}
                       onChange={this.handleNewPageChange}
                       />
@@ -202,8 +202,8 @@ var Pages = React.createClass({
 
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button onClick={this.closeNewPageModal}><i className="fa fa-times"></i> Close</Button>
-                  <Button type="submit" bsStyle="success"><i className="fa fa-check"></i> Create</Button>
+                  <Button onClick={this.closeNewPageModal}><i className="fa fa-times"></i> <FormattedMessage id="btn.close"/></Button>
+                  <Button type="submit" bsStyle="success"><i className="fa fa-check"></i> <FormattedMessage id="btn.create"/></Button>
                 </Modal.Footer>
               </form>
             </Modal>

@@ -1,9 +1,11 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
+import { withRouter } from 'react-router'
 import { browserHistory } from 'react-router'
 
 import { Grid } from 'react-bootstrap'
 
-module.exports =  React.createClass({
+var Logout = React.createClass({
   componentDidMount() {
     var self = this;
     $.get('/api/users/logout', function() {
@@ -17,8 +19,10 @@ module.exports =  React.createClass({
   render() {
     return (
       <Grid>
-        <p>You are now logged out</p>
+        <p><FormattedMessage id="label.loggedout"/></p>
       </Grid>
     )
   }
 })
+
+module.exports = withRouter(injectIntl(Logout));

@@ -62,7 +62,7 @@ var ListBloc = React.createClass({
         {
           style: 'danger',
           icon: 'trash',
-          content: 'Delete',
+          content: this.props.intl.formatMessage({id: 'btn.delete'}),
           onClick: function () {
             value.splice(index, 1);
             this.changeValue(value);
@@ -80,7 +80,7 @@ var ListBloc = React.createClass({
 
     const buttons = (
       <ButtonGroup className='component-btn-group'>
-        <Button bsStyle="primary" onClick={this.handleNew}><i className='fa fa-plus'></i> Add</Button>
+        <Button bsStyle="primary" onClick={this.handleNew}><i className='fa fa-plus'></i> <FormattedMessage id="btn.add"/></Button>
       </ButtonGroup>
     );
 

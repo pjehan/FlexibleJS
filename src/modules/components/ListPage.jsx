@@ -1,4 +1,5 @@
 import React from 'react'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import { browserHistory } from 'react-router'
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
@@ -7,7 +8,7 @@ import { ButtonGroup, Button, Modal, OverlayTrigger, FormGroup, FormControl, Con
 
 import moment from 'moment'
 
-module.exports =  React.createClass({
+var ListPage = React.createClass({
 
   getInitialState: function() {
     return {pages: [], page: null, selectedPages: []};
@@ -141,29 +142,29 @@ module.exports =  React.createClass({
     return (
       <div>
         <ButtonGroup className='component-btn-group'>
-          <Button bsStyle="primary" onClick={this.openNewPageModal}><i className="fa fa-plus"></i> Add</Button>
-          <Button bsStyle="warning" onClick={this.handleEditPage} disabled={this.state.selectedPages.length <= 0}><i className="fa fa-edit"></i> Edit</Button>
-          <Button bsStyle="danger" onClick={this.handleDeletePage} disabled={this.state.selectedPages.length <= 0}><i className="fa fa-trash"></i> Delete</Button>
+          <Button bsStyle="primary" onClick={this.openNewPageModal}><i className="fa fa-plus"></i> <FormattedMessage id="btn.add"/></Button>
+          <Button bsStyle="warning" onClick={this.handleEditPage} disabled={this.state.selectedPages.length <= 0}><i className="fa fa-edit"></i> <FormattedMessage id="btn.edit"/></Button>
+          <Button bsStyle="danger" onClick={this.handleDeletePage} disabled={this.state.selectedPages.length <= 0}><i className="fa fa-trash"></i> <FormattedMessage id="btn.delete"/></Button>
         </ButtonGroup>
         <BootstrapTable data={this.state.pages} pagination={true} selectRow={selectRowProp}>
-          <TableHeaderColumn dataField="title" isKey={true} dataSort={true}>Title</TableHeaderColumn>
-          <TableHeaderColumn dataField="created_date" dataFormat={this.dateFormatter} dataSort={true}>Created date</TableHeaderColumn>
-          <TableHeaderColumn dataField="updated_date" dataFormat={this.dateFormatter} dataSort={true}>Modified date</TableHeaderColumn>
+          <TableHeaderColumn dataField="title" isKey={true} dataSort={true}><FormattedMessage id="form.title"/></TableHeaderColumn>
+          <TableHeaderColumn dataField="created_date" dataFormat={this.dateFormatter} dataSort={true}><FormattedMessage id="form.createdDate"/></TableHeaderColumn>
+          <TableHeaderColumn dataField="updated_date" dataFormat={this.dateFormatter} dataSort={true}><FormattedMessage id="form.modifiedDate"/></TableHeaderColumn>
         </BootstrapTable>
 
         <Modal show={this.state.showNewPageModal} onHide={this.closeNewPageModal}>
           <form action={"/api/pages"} method="POST" onSubmit={this.submitNewPage}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New Page</Modal.Title>
+              <Modal.Title><FormattedMessage id="btn.newpage"/></Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
               <FormGroup controlId="title">
-                <ControlLabel>Title</ControlLabel>
+                <ControlLabel><FormattedMessage id="form.title"/></ControlLabel>
                 <FormControl
                   type="text"
                   name="title"
-                  placeholder="Title"
+                  placeholder={this.props.intl.formatMessage({id: 'form.title'})}
                   required={true}
                   onChange={this.handleNewPageChange}
                   />
@@ -173,8 +174,8 @@ module.exports =  React.createClass({
 
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={this.closeNewPageModal}><i className="fa fa-times"></i> Close</Button>
-              <Button type="submit" bsStyle="success"><i className="fa fa-check"></i> Create</Button>
+              <Button onClick={this.closeNewPageModal}><i className="fa fa-times"></i> <FormattedMessage id="btn.close"/></Button>
+              <Button type="submit" bsStyle="success"><i className="fa fa-check"></i> <FormattedMessage id="btn.create"/></Button>
             </Modal.Footer>
           </form>
         </Modal>
@@ -185,3 +186,5 @@ module.exports =  React.createClass({
   }
 
 })
+
+module.exports = injectIntl(ListPage);
