@@ -147,7 +147,8 @@ var ListPage = React.createClass({
           <Button bsStyle="danger" onClick={this.handleDeletePage} disabled={this.state.selectedPages.length <= 0}><i className="fa fa-trash"></i> <FormattedMessage id="btn.delete"/></Button>
         </ButtonGroup>
         <BootstrapTable data={this.state.pages} pagination={true} selectRow={selectRowProp}>
-          <TableHeaderColumn dataField="title" isKey={true} dataSort={true}><FormattedMessage id="form.title"/></TableHeaderColumn>
+          <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField="title" dataSort={true}><FormattedMessage id="form.title"/></TableHeaderColumn>
           <TableHeaderColumn dataField="created_date" dataFormat={this.dateFormatter} dataSort={true}><FormattedMessage id="form.createdDate"/></TableHeaderColumn>
           <TableHeaderColumn dataField="updated_date" dataFormat={this.dateFormatter} dataSort={true}><FormattedMessage id="form.modifiedDate"/></TableHeaderColumn>
         </BootstrapTable>
