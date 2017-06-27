@@ -30,7 +30,7 @@ module.exports =  React.createClass({
       ]
     });
 
-    wysiwyg.on('summernote.keyup', () => {
+    wysiwyg.on('summernote.change', () => {
       this.setState({value: this.state.wysiwyg.summernote('code')}, function() {
         this.props.handleChange(this.state);
       });
