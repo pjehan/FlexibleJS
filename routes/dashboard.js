@@ -3,10 +3,10 @@ var router = express.Router();
 var moment = require('moment');
 var google = require('googleapis');
 
-router.get('/gapi-key', function(req, res) {
-  const service_account_email = req.app.locals.config.gapi.email;
+router.get('/gapi-key/:viewId/:email', function(req, res) {
   const service_account_key_file = __dirname + '/../gapi_key.json';
-  const view_id = req.app.locals.config.gapi.view_id;
+  const service_account_email = (req.params.email != 'undefined') ? req.params.email : req.app.locals.config.gapi.email;
+  const view_id = (req.params.viewId != 'undefined') ? req.params.viewId : req.app.locals.config.gapi.viewId;
 
   var jwtClient = new google.auth.JWT(
     service_account_email,
@@ -20,7 +20,7 @@ router.get('/gapi-key', function(req, res) {
       console.log(err);
       return;
     }
-    return res.json({token: token, view_id: view_id});
+    return res.json({token: token, viewId: view_id});
   });
 
 });

@@ -25,100 +25,116 @@ var Dashboard = React.createClass({
   },
 
   componentDidMount: function() {
-    var self = this;
+    this.handleSiteChange(this.props.site);
+  },
 
-    gapi.analytics.ready(function() {
+  componentWillReceiveProps: function (nextProps) {
+    if (!this.props.site || this.props.site.id != nextProps.site.id) {
+      this.handleSiteChange(nextProps.site);
+    }
+  },
 
-      $.get('/api/dashboard/gapi-key')
-      .done(function(result){
+  handleSiteChange: function(site) {
+    if (site) {
+      var self = this;
 
-        var options = {
-          query: {
-            ids: 'ga:' + result.view_id
+      gapi.analytics.ready(function() {
+
+        // Get website gapi data or global gapi data from the config.js file
+        var viewId = (site.gapi && site.gapi.viewId) ? site.gapi.viewId : undefined;
+        var email = (site.gapi && site.gapi.email) ? site.gapi.email : undefined;
+
+        $.get('/api/dashboard/gapi-key/' + viewId + '/' + email)
+        .done(function(result){
+
+          var options = {
+            query: {
+              ids: 'ga:' + result.viewId
+            }
           }
-        }
 
-        gapi.analytics.auth.authorize({
-          'serverAuth': {
-            'access_token': result.token.access_token
-          }
-        });
-
-        var mapChartClickListener;
-
-        timeline = new gapi.analytics.googleCharts.DataChart({
-          reportType: 'ga',
-          query: {
-            'dimensions': 'ga:date',
-            'metrics': 'ga:sessions, ga:users',
-            'start-date': self.state.date_start,
-            'end-date': self.state.date_end
-          },
-          chart: {
-            type: 'LINE',
-            container: 'timeline'
-          }
-        });
-        timeline.set(options).execute();
-
-        devices = new gapi.analytics.googleCharts.DataChart({
-          reportType: 'ga',
-          query: {
-            'dimensions': 'ga:deviceCategory',
-            'metrics': 'ga:sessions',
-            'start-date': self.state.date_start,
-            'end-date': self.state.date_end
-          },
-          chart: {
-            type: 'PIE',
-            container: 'devices'
-          }
-        });
-        devices.set(options).execute();
-
-        map = new gapi.analytics.googleCharts.DataChart({
-          reportType: 'ga',
-          query: {
-            'dimensions': 'ga:country',
-            'metrics': 'ga:sessions',
-            'start-date': self.state.date_start,
-            'end-date': self.state.date_end
-          },
-          chart: {
-            type: 'GEO',
-            container: 'map'
-          }
-        });
-
-        map.on('success', function(response) {
-
-          var chart = response.chart;
-          var dataTable = response.dataTable;
-
-          mapChartClickListener = google.visualization.events.addListener(chart, 'regionClick', function(event) {
-            var region = event.region;
-            var options = {
-              query: {
-                dimensions: 'ga:region',
-                filters: 'ga:countryIsoCode==' + region
-              },
-              chart: {
-                options: {
-                  region: region,
-                  resolution: 'provinces'
-                }
-              }
-            };
-
-            map.set(options).execute();
+          gapi.analytics.auth.authorize({
+            'serverAuth': {
+              'access_token': result.token.access_token
+            }
           });
 
+          var mapChartClickListener;
+
+          timeline = new gapi.analytics.googleCharts.DataChart({
+            reportType: 'ga',
+            query: {
+              'dimensions': 'ga:date',
+              'metrics': 'ga:sessions, ga:users',
+              'start-date': self.state.date_start,
+              'end-date': self.state.date_end
+            },
+            chart: {
+              type: 'LINE',
+              container: 'timeline'
+            }
+          });
+          timeline.set(options).execute();
+
+          devices = new gapi.analytics.googleCharts.DataChart({
+            reportType: 'ga',
+            query: {
+              'dimensions': 'ga:deviceCategory',
+              'metrics': 'ga:sessions',
+              'start-date': self.state.date_start,
+              'end-date': self.state.date_end
+            },
+            chart: {
+              type: 'PIE',
+              container: 'devices'
+            }
+          });
+          devices.set(options).execute();
+
+          map = new gapi.analytics.googleCharts.DataChart({
+            reportType: 'ga',
+            query: {
+              'dimensions': 'ga:country',
+              'metrics': 'ga:sessions',
+              'start-date': self.state.date_start,
+              'end-date': self.state.date_end
+            },
+            chart: {
+              type: 'GEO',
+              container: 'map'
+            }
+          });
+
+          map.on('success', function(response) {
+
+            var chart = response.chart;
+            var dataTable = response.dataTable;
+
+            mapChartClickListener = google.visualization.events.addListener(chart, 'regionClick', function(event) {
+              var region = event.region;
+              var options = {
+                query: {
+                  dimensions: 'ga:region',
+                  filters: 'ga:countryIsoCode==' + region
+                },
+                chart: {
+                  options: {
+                    region: region,
+                    resolution: 'provinces'
+                  }
+                }
+              };
+
+              map.set(options).execute();
+            });
+
+          });
+          map.set(options).execute();
+
         });
-        map.set(options).execute();
 
       });
-
-    });
+    }
   },
 
   refreshCharts: function() {

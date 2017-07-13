@@ -1,6 +1,22 @@
 # FlexibleJS
 FlexibleJS is based on NodeJS, ExpressJS, ReactJS and Mongodb. It makes creating a website backend really easy (with only two JSON config file).
 
+## Table of contents
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Website](#website)
+  - [Page Template](#page-template)
+  - [Sections](#sections)
+  - [Components](#components)
+    - [Input](#input)
+    - [Textarea](#textarea)
+    - [WYSIWYG](#wysiwyg)
+    - [Image](#image)
+    - [Dropdown](#dropdown)
+    - [Map](#map)
+    - [Builder](#builder)
+    - [List](#list)
+
 ## Installation
 1. Clone the repository
 2. Run the following command
@@ -176,3 +192,15 @@ The list component can be used to display a list of elements. Those elements can
 }
 ```
 If `page` property is set to `false`, don't forget to add the `toString` property on the related template to define the component value to display in the bloc header.
+
+# Google Analytics
+To display GA data on the dashboard, you first need to create a Service Account from the [Google Developers Console](https://console.developers.google.com).  
+After, you have to move the json file at the root of your project and name it "gapi_key.json".  
+Then, you need to give the authorization to the Service Account User on the GA view you'd like to see from the dashboard.  
+Finally, you can define the Google API email and view_id for the entire administration or just for a specific website :
+```json
+"gapi": {
+  "email": "user@appspot.gserviceaccount.com",
+  "viewId": "12345678"
+}
+```
