@@ -15,32 +15,31 @@ class Settings extends React.Component {
 
   importDatabase(event) {
     var form = $(event.target).parents('form')[0];
-
     var data = new FormData(form);
 
-    $.ajax({
-      type: 'POST',
-      url: '/api/settings/import-database/' + event.target.name,
-      data: data,
+    fetch('/api/settings/import-database/' + event.target.name, {
+      method: 'POST',
+      body: data,
       cache: false,
       contentType: false,
       processData: false,
     })
-    .done(function(data) {
-      console.log(data);
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
       this.props.handleNotification({
         title: this.props.intl.formatMessage({id: 'notification.importdb.success.title'}),
         message: this.props.intl.formatMessage({id: 'notification.importdb.success.message'})
       });
     })
-    .fail(function(jqXHR, textStatus) {
-      console.log(jqXHR);
-      console.log(textStatus);
+    .catch((error) => {
+      console.log(error);
       this.props.handleNotification({
         title: this.props.intl.formatMessage({id: 'notification.importdb.error.title'}),
         message: this.props.intl.formatMessage({id: 'notification.importdb.error.message'})
       });
-    });
+    })
   }
 
   exportFiles() {
@@ -100,7 +99,7 @@ class Settings extends React.Component {
           <form encType="multipart/form-data">
             <ButtonToolbar>
               <ControlLabel className="btn btn-primary" htmlFor="formImportDb">
-                <i className="fa fa-download"></i><FormControl id="formImportDb" type="file" name="formImportDb" className="hidden" onChange={this.importDatabase}/> <FormattedMessage id="btn.import"/>
+                <i className="fa fa-download"></i><FormControl id="formImportDb" type="file" name="formImportDb" className="hidden" onChange={this.importDatabase.bind(this)}/> <FormattedMessage id="btn.import"/>
               </ControlLabel>
               <Button bsStyle="primary" onClick={this.exportDatabase}><i className="fa fa-upload"></i> <FormattedMessage id="btn.export"/></Button>
             </ButtonToolbar>
