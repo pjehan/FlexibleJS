@@ -55,7 +55,7 @@ function createFilesBackup(dbname, callback) {
 
 router.get('/export-database', function(req, res) {
   const dbname = req.app.locals.config.db.name;
-  createBackup(dbname, function(filepath) {
+  createDbBackup(dbname, function(filepath) {
     res.json({path: filepath});
   });
 });
