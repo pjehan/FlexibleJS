@@ -3,6 +3,7 @@ var router = express.Router();
 var multiparty = require('multiparty');
 var path = require('path');
 var fs = require('fs');
+var filesize = require('filesize');
 var archiver = require('archiver');
 var unzip =  require('unzip-stream');
 var moment = require("moment");
@@ -115,6 +116,32 @@ router.post('/import-files/:name', (req, res) => {
       res.statut(500).json(err);
     })
 
+  });
+})
+
+router.get('/list-backup-files', (req, res) => {
+  fs.readdir(backupDir, (err, files) => {
+    if (err) throw err;
+
+    let listFiles = [];
+
+    files.forEach(file => {
+      let stats = fs.statSync(backupDir + file);
+      listFiles.push({
+        filename: file,
+        size: filesize(stats.size),
+        createdAt: moment(stats.birthtime).format("DD MMM YYYY HH:mm:ss")
+      });
+    });
+
+    res.json({files: listFiles});
+  })
+})
+
+router.delete('/delete-file/:filename', (req, res) => {
+  fs.unlink(backupDir + req.params.filename, err => {
+    if (err) throw err;
+    res.json({sucess: true});
   });
 })
 

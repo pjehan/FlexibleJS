@@ -31,6 +31,10 @@ a[disabled] {
   z-index: 999;
 }
 
+.btn.pull-right {
+  margin-left: 0.5em;
+}
+
 .btn-drag {
   cursor: move;
 }
@@ -107,4 +111,14 @@ a[disabled] {
 
 .expandable-panel-heading .btn {
   margin-left: 5px;
+}
+
+.settings-files {
+  max-height: 250px;
+  overflow: auto;
+  .list-group-item-heading {
+    display: inline-block;
+    margin-right: 1em;
+    font-size: 1.5em;
+  }
 }
