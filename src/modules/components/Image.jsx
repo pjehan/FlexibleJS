@@ -45,6 +45,8 @@ var Image = React.createClass({
   handleChange: function(e) {
     var self = this;
 
+    const nbFiles = e.target.files.length;
+
     for (var i = 0; i < e.target.files.length; i++) {
       let file = e.target.files[i]
       let reader = new FileReader();
@@ -75,6 +77,10 @@ var Image = React.createClass({
           }
           self.setState({value: images.concat(newImages)}, function() {
             this.props.handleChange(this.state);
+            // If only one image uploaded, show alt modal
+            if (nbFiles == 1) {
+              this.handleAlt(newImages[0]);
+            }
           });
         })
         .fail(function(jqXHR, textStatus) {
@@ -97,7 +103,9 @@ var Image = React.createClass({
   },
 
   handleAlt: function(image, e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     var self = this;
     var alt = image.alt;
