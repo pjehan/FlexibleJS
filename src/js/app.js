@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
@@ -14,15 +13,14 @@ import Settings from '../modules/Settings.jsx'
 
 function requireAuth(nextState, replace, callback) {
   $.get('/api/users/currentuser', function(user, statusText, xhr) {
-    if (xhr.status != 200 || user === undefined || !user.active) {
+    if (xhr.status !== 200 || user === undefined || !user.active) {
       replace({
         pathname: '/login',
         state: { nextPathname: nextState.location.pathname }
-      });
+      })
     }
-    callback();
-  });
-
+    callback()
+  })
 }
 
 ReactDOM.render(

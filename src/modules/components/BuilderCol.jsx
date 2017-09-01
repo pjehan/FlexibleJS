@@ -10,38 +10,38 @@ import flow from 'lodash.flow'
 import { getFormComponent } from '../../js/utils.jsx'
 
 var rowSource = {
-  beginDrag: function (props) {
+  beginDrag: function(props) {
     return {
       index: props.index
-    };
+    }
   }
 }
 
 var rowTarget = {
   hover(props, monitor, component) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
+    const dragIndex = monitor.getItem().index
+    const hoverIndex = props.index
 
     if (dragIndex === hoverIndex) {
-      return;
+      return
     }
 
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-    const clientOffset = monitor.getClientOffset();
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect()
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+    const clientOffset = monitor.getClientOffset()
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top
 
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-      return;
+      return
     }
 
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-      return;
+      return
     }
 
-    props.handleMoveCol(dragIndex, hoverIndex);
+    props.handleMoveCol(dragIndex, hoverIndex)
 
-    monitor.getItem().index = hoverIndex;
+    monitor.getItem().index = hoverIndex
   }
 }
 
@@ -50,59 +50,54 @@ function collectSource(connect, monitor) {
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
-  };
+  }
 }
 
 function collectTarget(connect) {
   return {
     connectDropTarget: connect.dropTarget()
-  };
+  }
 }
 
 var BuilderCol = React.createClass({
 
   getInitialState: function() {
-    return {id: null, value: null};
+    return {id: null, value: null}
   },
 
   componentDidMount: function() {
-    this.setState({id: this.props.component.id, value: this.props.component});
+    this.setState({id: this.props.component.id, value: this.props.component})
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setState({id: newProps.component.id, value: newProps.component});
+    this.setState({id: newProps.component.id, value: newProps.component})
   },
 
   handleChange: function(data) {
-    var col = clone(this.state.value);
-    col.value = data.value;
+    var col = clone(this.state.value)
+    col.value = data.value
     this.setState({value: col}, function() {
-      this.props.handleChange(this.state);
-    });
+      this.props.handleChange(this.state)
+    })
   },
 
   handleColDelete: function(event) {
-    this.props.handleColDelete(this.state.value);
+    this.props.handleColDelete(this.state.value)
   },
 
   handleColResize: function(event) {
-    var col = clone(this.state.value);
-    col.size = parseInt(event.target.value);
+    var col = clone(this.state.value)
+    col.size = parseInt(event.target.value)
     this.setState({value: col}, function() {
-      this.props.handleChange(this.state.value);
-    });
+      this.props.handleChange(this.state.value)
+    })
   },
 
   render() {
-    var isDragging = this.props.isDragging;
-    var connectDragSource = this.props.connectDragSource;
-    var connectDropTarget = this.props.connectDropTarget;
-    var style = {
-      opacity: isDragging ? 0 : 1,
-      cursor: 'move'
-    };
+    var connectDragSource = this.props.connectDragSource
+    var connectDropTarget = this.props.connectDropTarget
 
-    var col = this.state.value;
+    var col = this.state.value
 
     if (col) {
       var template = {
@@ -125,7 +120,7 @@ var BuilderCol = React.createClass({
                 max="12"
                 value={col.size}
                 onChange={this.handleColResize}
-                />
+              />
             </InputGroup>
           </FormGroup>
         </div>
@@ -139,15 +134,15 @@ var BuilderCol = React.createClass({
             </Panel>
           </Col>
         </div>
-      ));
+      ))
     }
 
-    return null;
+    return null
   }
 
-});
+})
 
 module.exports = flow(
   DragSource('BuilderCol', rowSource, collectSource),
   DropTarget('BuilderCol', rowTarget, collectTarget)
-)(BuilderCol);
+)(BuilderCol)

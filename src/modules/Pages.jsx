@@ -2,83 +2,83 @@ import React from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { Grid, Row, Col, Button, Nav, NavItem, Modal, OverlayTrigger, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
+import { Grid, Row, Col, Button, Nav, NavItem, Modal, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 import { browserHistory } from 'react-router'
 
 var Pages = React.createClass({
 
   getInitialState: function() {
-    return {pages: [], templates: [], page: {}, language: null, showNewPageModal: false};
+    return {pages: [], templates: [], page: {}, language: null, showNewPageModal: false}
   },
 
   componentDidMount: function() {
-    this.handleSiteChange(this.props);
+    this.handleSiteChange(this.props)
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    if (!this.props.site || this.props.site.id != nextProps.site.id) {
-      this.handleSiteChange(nextProps);
+  componentWillReceiveProps: function(nextProps) {
+    if (!this.props.site || this.props.site.id !== nextProps.site.id) {
+      this.handleSiteChange(nextProps)
     }
   },
 
   handleSiteChange: function(props) {
     if (props.site) {
-      var self = this;
+      var self = this
       $.get('/api/pages/', {site_id: props.site.id})
-      .done(function(result){
-        self.setState({pages: result});
-        browserHistory.push('/pages'); // Redirect user to pages to reset selected page
-      });
-      this.setState({templates: props.site.templates, language: props.site.lang[0]});
+        .done(function(result) {
+          self.setState({pages: result})
+          browserHistory.push('/pages') // Redirect user to pages to reset selected page
+        })
+      this.setState({templates: props.site.templates, language: props.site.lang[0]})
     }
   },
 
   handleLanguageChange: function(event) {
-    this.setState({ language: event.target.value });
+    this.setState({ language: event.target.value })
   },
 
   closeNewPageModal() {
-    this.setState({ showNewPageModal: false });
+    this.setState({ showNewPageModal: false })
   },
 
   openNewPageModal() {
-    this.setState({ showNewPageModal: true });
+    this.setState({ showNewPageModal: true })
   },
 
   handleNewPageChange: function(event) {
-    var page = this.state.page;
-    page[event.target.id] = event.target.value;
-    this.setState({page: page});
+    var page = this.state.page
+    page[event.target.id] = event.target.value
+    this.setState({page: page})
   },
 
-  submitNewPage: function (e){
-    e.preventDefault();
-    var self = this;
+  submitNewPage: function(e) {
+    e.preventDefault()
+    var self = this
 
-    var page = this.state.page;
-    page.site_id = this.props.site.id;
+    var page = this.state.page
+    page.site_id = this.props.site.id
 
     $.ajax({
       type: 'POST',
       url: '/api/pages/',
       data: page
     })
-    .done(function(data) {
-      self.closeNewPageModal();
-      var pages = self.state.pages;
-      pages.push(data);
-      self.setState({pages: pages});
-    })
-    .fail(function(jqXhr) {
-      console.log('failed to register');
-    });
+      .done(function(data) {
+        self.closeNewPageModal()
+        var pages = self.state.pages
+        pages.push(data)
+        self.setState({pages: pages})
+      })
+      .fail(function(jqXhr) {
+        console.log('failed to register')
+      })
   },
 
   handleDeletePage: function(page, e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    var self = this;
+    var self = this
 
     this.props.handleModal({
       title: this.props.intl.formatMessage({id: 'modal.page.delete.title'}),
@@ -89,97 +89,65 @@ var Pages = React.createClass({
           style: 'danger',
           icon: 'trash',
           content: this.props.intl.formatMessage({id: 'btn.delete'}),
-          onClick: function () {
+          onClick: function() {
             $.ajax({
               type: 'DELETE',
               url: '/api/pages/' + page._id
             })
-            .done(function(data) {
-              var pages = self.state.pages.filter(function(obj) {
-                return obj._id !== page._id;
-              });
-              self.setState({pages: pages});
-            })
-            .fail(function(jqXhr) {
-              console.log('failed to delete page');
-            });
+              .done(function(data) {
+                var pages = self.state.pages.filter(function(obj) {
+                  return obj._id !== page._id
+                })
+                self.setState({pages: pages})
+              })
+              .fail(function(jqXhr) {
+                console.log('failed to delete page')
+              })
           }
         }
       ]
-    });
-  },
-
-  navDragStart: function(idFrom, e){
-    e.dataTransfer.setData("idFrom", idFrom);
-  },
-
-  navDragOver: function(e){
-    e.preventDefault();
-    return true;
-  },
-
-  navDragEnter: function(e){
-    e.target.parentNode.className = "is-dragover";
-  },
-
-  navDragLeave: function(e){
-    e.target.parentNode.className = "";
-  },
-
-  navDrop: function(idTo, e){
-    e.target.parentNode.className = "";
-    var idFrom = e.dataTransfer.getData("idFrom");
-
-    fetch('/api/pages/swap/' + idFrom + '/' + idTo, { method: 'PUT' })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      fetch('/api/pages?site_id=' + this.props.site.id)
-      .then((response) => response.json())
-      .then((responseJson) => this.setState({pages: responseJson}))
-      .catch((error) => console.error('Failed to swap pages', error));
     })
-    .catch((error) => console.error('Failed to retrieve pages', error));
   },
 
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
       React.cloneElement(child, {currentUser: this.props.currentUser, language: this.state.language, site: this.props.site, handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
-    );
+    )
   },
 
   render() {
-    var self = this;
+    var self = this
 
-    var superAdmin = (this.props.currentUser && this.props.currentUser.role === 'super_admin');
+    var superAdmin = (this.props.currentUser && this.props.currentUser.role === 'super_admin')
 
-    var pageNodes = this.state.pages.map((page) => {
+    var pageNodes = this.state.pages.map(function(page) {
       return (
-        <LinkContainer to={"/pages/" + page._id} key={page._id}>
-          <NavItem eventKey={page._id} draggable='true' onDragStart={this.navDragStart.bind(this, page._id)} onDragOver={this.navDragOver} onDragEnter={this.navDragEnter} onDragLeave={this.navDragLeave} onDrop={this.navDrop.bind(this, page._id)}>
-            {page.title} ({page.order})
+        <LinkContainer to={'/pages/' + page._id} key={page._id}>
+          <NavItem eventKey={page._id}>
+            {page.title}
             <Button className={superAdmin ? 'pull-right' : 'pull-right hidden'} bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)} >
               <i className="fa fa-trash"></i>
             </Button>
           </NavItem>
         </LinkContainer>
-      );
-    });
+      )
+    }.bind(this))
 
-    var templateNodes = this.state.templates.map(function(template){
+    var templateNodes = this.state.templates.map(function(template) {
       return (
         <option value={template.id} key={template.id}>{template.title}</option>
-      );
-    }.bind(this));
+      )
+    })
 
-    var site;
-    var languageNodes;
+    var site
+    var languageNodes
     if (this.props.site) {
-      site = this.props.site.title;
-      languageNodes = this.props.site.lang.map(function(language){
+      site = this.props.site.title
+      languageNodes = this.props.site.lang.map(function(language) {
         return (
           <option value={language} key={language}>{language}</option>
-        );
-      }.bind(this));
+        )
+      })
     }
 
     return (
@@ -197,7 +165,7 @@ var Pages = React.createClass({
             <Button bsStyle="primary" bsSize="large" block className={superAdmin ? '' : 'hidden'} onClick={this.openNewPageModal}><i className="fa fa-plus"></i> <FormattedMessage id="btn.newpage"/></Button>
 
             <Modal show={this.state.showNewPageModal} onHide={this.closeNewPageModal}>
-              <form action={"/api/pages"} method="POST" onSubmit={this.submitNewPage}>
+              <form action={'/api/pages'} method="POST" onSubmit={this.submitNewPage}>
                 <Modal.Header closeButton>
                   <Modal.Title><FormattedMessage id="title.newpage"/></Modal.Title>
                 </Modal.Header>
@@ -227,7 +195,7 @@ var Pages = React.createClass({
                       placeholder={this.props.intl.formatMessage({id: 'form.title'})}
                       required={true}
                       onChange={this.handleNewPageChange}
-                      />
+                    />
                     <FormControl.Feedback />
                     <HelpBlock></HelpBlock>
                   </FormGroup>
@@ -249,4 +217,4 @@ var Pages = React.createClass({
   }
 })
 
-module.exports = injectIntl(Pages);
+module.exports = injectIntl(Pages)

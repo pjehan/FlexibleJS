@@ -7,24 +7,24 @@ import fr from 'react-intl/locale-data/fr'
 import enMessages from '../../i18n/en.json'
 import frMessages from '../../i18n/fr.json'
 
-import { Button, Nav, Navbar, NavDropdown, MenuItem, NavItem, Modal, FormGroup, FormControl } from 'react-bootstrap'
+import { Button, Nav, Navbar, NavDropdown, MenuItem, NavItem, Modal } from 'react-bootstrap'
 
 import { OrderedSet } from 'immutable'
 import { NotificationStack } from 'react-notification'
 
 import HTML5Backend from 'react-dnd-html5-backend'
-import { DragDropContext } from 'react-dnd';
+import { DragDropContext } from 'react-dnd'
 
-addLocaleData([...en, ...fr]);
+addLocaleData([...en, ...fr])
 
-var lang = (navigator.language.indexOf('-') > 1) ? navigator.language.substring(0, navigator.language.indexOf('-')) : navigator.language;
-var messages;
+var lang = (navigator.language.indexOf('-') > 1) ? navigator.language.substring(0, navigator.language.indexOf('-')) : navigator.language
+var messages
 switch (lang) {
   case 'fr':
-  messages = frMessages;
-  break;
+    messages = frMessages
+    break
   default:
-  messages = enMessages;
+    messages = enMessages
 }
 
 var MyApp = React.createClass({
@@ -34,87 +34,86 @@ var MyApp = React.createClass({
   },
 
   componentDidMount: function() {
-    var self = this;
-    $.get('/api/users/currentuser', function(user){
-      self.setState({user: user});
-    });
-    $.get('/api/templates', function(sites){
-      var selectedSite = self.state.selectedSite;
+    var self = this
+    $.get('/api/users/currentuser', function(user) {
+      self.setState({user: user})
+    })
+    $.get('/api/templates', function(sites) {
+      var selectedSite = self.state.selectedSite
       if (!selectedSite) {
-        selectedSite = sites[0];
+        selectedSite = sites[0]
       }
-      self.setState({sites: sites, selectedSite: selectedSite});
-    });
+      self.setState({sites: sites, selectedSite: selectedSite})
+    })
 
-    moment.locale(navigator.language);
+    moment.locale(navigator.language)
 
-    NProgress.configure({ parent: 'main' });
+    NProgress.configure({ parent: 'main' })
 
     $(document).on('ajaxStart', function() {
-      NProgress.start();
-    });
+      NProgress.start()
+    })
 
     $(document).on('ajaxStop', function() {
-      NProgress.done();
-    });
+      NProgress.done()
+    })
 
-    $(document).on('ready', function () {
-      NProgress.start();
-    });
+    $(document).on('ready', function() {
+      NProgress.start()
+    })
 
-    $(window).on('load', function () {
-      NProgress.done();
-    });
+    $(window).on('load', function() {
+      NProgress.done()
+    })
   },
 
   handleUser: function(user) {
-    this.setState({ user: user });
+    this.setState({ user: user })
   },
 
   handleSiteChange: function(site, event) {
-    this.setState({ selectedSite: site });
+    this.setState({ selectedSite: site })
   },
 
-  handleModal: function (modal) {
-    modal.show = true;
-    this.setState({ modal: modal });
+  handleModal: function(modal) {
+    modal.show = true
+    this.setState({ modal: modal })
   },
 
   handleModalClose: function() {
-    var self = this;
+    var self = this
 
     // If a function is defined when the close button is clicked
     if (this.state.modal.close) {
       this.state.modal.close(function() {
-        self.close();
-      });
+        self.close()
+      })
     } else {
-      self.close();
+      self.close()
     }
   },
 
   close() {
-    this.setState({ modal: { show: false } });
+    this.setState({ modal: { show: false } })
   },
 
   addNotification: function(notification) {
-    var notifications = this.state.notifications;
-    var id = notifications.size + 1;
-    var newCount = this.state.count + 1;
+    var notifications = this.state.notifications
+    var newCount = this.state.count + 1
 
-    notification['key'] = newCount;
-    notification['action'] = 'Dismiss';
-    notification['dismissAfter'] = 3400;
-    notification['onDismiss'] = this.removeNotification(newCount);
+    notification['key'] = newCount
+    notification['action'] = 'Dismiss'
+    notification['dismissAfter'] = 3400
+    notification['onDismiss'] = this.removeNotification(newCount)
 
     return this.setState({
       count: newCount,
       notifications: notifications.add(notification)
-    });
+    })
   },
 
-  removeNotification (count) {
-    const notifications = this.state.notifications;
+  removeNotification(count) {
+    const notifications = this.state.notifications
     this.setState({
       notifications: notifications.filter(n => n.key !== count)
     })
@@ -123,14 +122,12 @@ var MyApp = React.createClass({
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
       React.cloneElement(child, {site: this.state.selectedSite, currentUser: this.state.user, handleNotification: this.addNotification, handleUser: this.handleUser, handleModal: this.handleModal})
-    );
+    )
   },
 
   render() {
-    var self = this;
-
-    var leftNav;
-    var rightNav;
+    var leftNav
+    var rightNav
     if (this.state.user && this.state.user.active) {
       leftNav = (
         <Nav>
@@ -144,15 +141,15 @@ var MyApp = React.createClass({
             <NavItem><FormattedMessage id="btn.users"/></NavItem>
           </LinkContainer>
         </Nav>
-      );
+      )
 
-      var siteNodes = this.state.sites.map(function(site){
+      var siteNodes = this.state.sites.map(function(site) {
         return (
-          <MenuItem onClick={this.handleSiteChange.bind(this, site)} className={(this.state.selectedSite == site) ? 'active' : ''} key={site.id}>{site.title}</MenuItem>
-        );
-      }.bind(this));
+          <MenuItem onClick={this.handleSiteChange.bind(this, site)} className={(this.state.selectedSite === site) ? 'active' : ''} key={site.id}>{site.title}</MenuItem>
+        )
+      }.bind(this))
 
-      var selectedSite = (this.state.selectedSite) ? this.state.selectedSite.title : "";
+      var selectedSite = (this.state.selectedSite) ? this.state.selectedSite.title : ''
 
       rightNav = (
         <Nav pullRight>
@@ -169,7 +166,7 @@ var MyApp = React.createClass({
             </LinkContainer>
           </NavDropdown>
         </Nav>
-      );
+      )
     } else {
       rightNav = (
         <Nav pullRight>
@@ -180,11 +177,11 @@ var MyApp = React.createClass({
             <NavItem><FormattedMessage id="btn.register"/></NavItem>
           </LinkContainer>
         </Nav>
-      );
+      )
     }
 
-    var modalIcon = (this.state.modal.icon) ? (<i className={'fa fa-' + this.state.modal.icon + ' fa-3x'}></i>) : '';
-    var modalBody = this.state.modal.body;
+    var modalIcon = (this.state.modal.icon) ? (<i className={'fa fa-' + this.state.modal.icon + ' fa-3x'}></i>) : ''
+    var modalBody = this.state.modal.body
     if (modalIcon) {
       modalBody = (
         <div className="row">
@@ -195,19 +192,19 @@ var MyApp = React.createClass({
             {this.state.modal.body}
           </div>
         </div>
-      );
+      )
     }
-    var modalButtons;
+    var modalButtons
     if (this.state.modal.buttons) {
-      modalButtons = this.state.modal.buttons.map(function(button, index){
-        var buttonIcon = (button.icon) ? (<i className={'fa fa-' + button.icon}></i>) : '';
+      modalButtons = this.state.modal.buttons.map(function(button, index) {
+        var buttonIcon = (button.icon) ? (<i className={'fa fa-' + button.icon}></i>) : ''
         return (
-          <Button bsStyle={button.style} onClick={ () => { button.onClick(); this.close(); } } key={index}>{buttonIcon} {button.content}</Button>
-        );
-      }.bind(this));
+          <Button bsStyle={button.style} onClick={ () => { button.onClick(); this.close() } } key={index}>{buttonIcon} {button.content}</Button>
+        )
+      }.bind(this))
     }
 
-    var navbarStyle = (window.location.host.startsWith('localhost')) ? 'default' : 'inverse';
+    var navbarStyle = (window.location.host.startsWith('localhost')) ? 'default' : 'inverse'
 
     return (
       <IntlProvider locale={navigator.language} messages={messages} defaultLocale='en'>
@@ -217,7 +214,7 @@ var MyApp = React.createClass({
             onDismiss={notification => this.setState({
               notifications: this.state.notifications.delete(notification)
             })}
-            />
+          />
 
           <Navbar bsStyle={navbarStyle} fixedTop={true}>
             <Navbar.Header>
@@ -250,6 +247,6 @@ var MyApp = React.createClass({
       </IntlProvider>
     )
   }
-});
+})
 
-module.exports = DragDropContext(HTML5Backend)(MyApp);
+module.exports = DragDropContext(HTML5Backend)(MyApp)

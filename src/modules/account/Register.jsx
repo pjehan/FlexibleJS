@@ -8,15 +8,15 @@ var Register = React.createClass({
 
   getInitialState() {
     return {
-      username: "",
-      password: ""
+      username: '',
+      password: ''
     }
   },
 
   handleChange: function(event) {
-    var change = {};
-    change[event.target.name] = event.target.value;
-    this.setState(change);
+    var change = {}
+    change[event.target.name] = event.target.value
+    this.setState(change)
   },
 
   handleSubmit(event) {
@@ -25,27 +25,27 @@ var Register = React.createClass({
     var data = {
       username: this.state.username,
       password: this.state.password
-    };
+    }
 
-    var self = this;
+    var self = this
     $.ajax({
       type: 'POST',
       url: '/api/users/register',
       data: JSON.stringify(data),
-      contentType: "application/json"
+      contentType: 'application/json'
     })
-    .done(function(user) {
-      self.props.handleNotification({
-        title: self.props.intl.formatMessage({id: 'notification.newuser.title'}),
-        message: self.props.intl.formatMessage({id: 'notification.newuser.message'})
-      });
-    })
-    .fail(function(jqXHR, textStatus) {
-      self.props.handleNotification({
-        title: self.props.intl.formatMessage({id: jqXHR.responseJSON.title}),
-        message: self.props.intl.formatMessage({id: jqXHR.responseJSON.message}, {username: data.username})
-      });
-    });
+      .done(function(user) {
+        self.props.handleNotification({
+          title: self.props.intl.formatMessage({id: 'notification.newuser.title'}),
+          message: self.props.intl.formatMessage({id: 'notification.newuser.message'})
+        })
+      })
+      .fail(function(jqXHR, textStatus) {
+        self.props.handleNotification({
+          title: self.props.intl.formatMessage({id: jqXHR.responseJSON.title}),
+          message: self.props.intl.formatMessage({id: jqXHR.responseJSON.message}, {username: data.username})
+        })
+      })
   },
 
   render() {
@@ -66,6 +66,6 @@ var Register = React.createClass({
       </Grid>
     )
   }
-});
+})
 
-module.exports = withRouter(injectIntl(Register));
+module.exports = withRouter(injectIntl(Register))

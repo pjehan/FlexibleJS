@@ -1,7 +1,7 @@
 import React from 'react'
 
-const K_WIDTH = 40;
-const K_HEIGHT = 40;
+const K_WIDTH = 40
+const K_HEIGHT = 40
 
 const markerStyle = {
   // initially any map object has left top corner at lat lng coordinates
@@ -15,16 +15,16 @@ const markerStyle = {
   textAlign: 'center',
   fontSize: 36,
   padding: 4
-};
+}
 
-module.exports =  React.createClass({
+module.exports = React.createClass({
 
   render() {
     return (
-       <div className="fa fa-map-marker text-primary" style={markerStyle}>
-          {this.props.text}
-       </div>
-    );
+      <div className="fa fa-map-marker text-primary" style={markerStyle}>
+        {this.props.text}
+      </div>
+    )
   }
 
-});
+})

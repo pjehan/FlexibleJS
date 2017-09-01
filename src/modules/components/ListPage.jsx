@@ -4,31 +4,31 @@ import { browserHistory } from 'react-router'
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 
-import { ButtonGroup, Button, Modal, OverlayTrigger, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
+import { ButtonGroup, Button, Modal, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 import moment from 'moment'
 
 var ListPage = React.createClass({
 
   getInitialState: function() {
-    return {pages: [], page: null, selectedPages: []};
+    return {pages: [], page: null, selectedPages: []}
   },
 
   componentDidMount: function() {
-    var self = this;
-    $.get('/api/pages/' + this.props.componentId + '/' + this.props.template.id + '/children', function(result){
-      self.setState({pages: result});
-    });
-    this.setState({page: {template: this.props.template.template, parent: this.props.componentId}});
+    var self = this
+    $.get('/api/pages/' + this.props.componentId + '/' + this.props.template.id + '/children', function(result) {
+      self.setState({pages: result})
+    })
+    this.setState({page: {template: this.props.template.template, parent: this.props.componentId}})
   },
 
   componentWillReceiveProps: function(newProps) {
-    if (this.state.page && newProps.template.template != this.state.page.template) {
-      var self = this;
-      $.get('/api/pages/' + newProps.componentId + '/' + newProps.template.id + '/children', function(result){
-        self.setState({pages: result});
-      });
-      this.setState({page: {template: newProps.template.template, parent: newProps.componentId}});
+    if (this.state.page && newProps.template.template !== this.state.page.template) {
+      var self = this
+      $.get('/api/pages/' + newProps.componentId + '/' + newProps.template.id + '/children', function(result) {
+        self.setState({pages: result})
+      })
+      this.setState({page: {template: newProps.template.template, parent: newProps.componentId}})
     }
   },
 
@@ -36,108 +36,107 @@ var ListPage = React.createClass({
     this.props.handleChange({
       id: event.target.id,
       value: event.target.value
-    });
+    })
   },
 
   closeNewPageModal() {
-    this.setState({ showNewPageModal: false });
+    this.setState({ showNewPageModal: false })
   },
 
   openNewPageModal() {
-    this.setState({ showNewPageModal: true });
+    this.setState({ showNewPageModal: true })
   },
 
   handleNewPageChange: function(e) {
-    var page = this.state.page;
-    page[e.target.name] = e.target.value;
-    this.setState({page: page});
+    var page = this.state.page
+    page[e.target.name] = e.target.value
+    this.setState({page: page})
   },
 
-  submitNewPage: function (e){
-    e.preventDefault();
-    var self = this;
+  submitNewPage: function(e) {
+    e.preventDefault()
+    var self = this
 
-    var data = this.state.page;
-    console.log(this.props);
-    data.site_id = this.props.site.id;
-    data.component_id = this.props.template.id;
+    var data = this.state.page
+    console.log(this.props)
+    data.site_id = this.props.site.id
+    data.component_id = this.props.template.id
 
     $.ajax({
       type: 'POST',
       url: '/api/pages/',
       data: data
     })
-    .done(function(data) {
-      self.closeNewPageModal();
-      var pages = self.state.pages;
-      pages.unshift(data);
-      self.setState({pages: pages});
-    })
-    .fail(function(jqXhr) {
-      console.log('failed to create new page');
-    });
+      .done(function(data) {
+        self.closeNewPageModal()
+        var pages = self.state.pages
+        pages.unshift(data)
+        self.setState({pages: pages})
+      })
+      .fail(function(jqXhr) {
+        console.log('failed to create new page')
+      })
   },
 
   handleEditPage: function(e) {
-    browserHistory.push('/pages/' + this.state.selectedPages[0]._id);
+    browserHistory.push('/pages/' + this.state.selectedPages[0]._id)
   },
 
   handleDeletePage: function(e) {
-    var self = this;
+    var self = this
 
     for (var i = 0; i < this.state.selectedPages.length; i++) {
-      var page = this.state.selectedPages[i];
+      var page = this.state.selectedPages[i]
       $.ajax({
         type: 'DELETE',
         url: '/api/pages/' + page._id
       })
-      .done(function(data) {
-        var pages = self.state.pages.filter(function(obj) {
-          return obj._id !== page._id;
-        });
-        self.setState({pages: pages, selectedPages: []});
-      })
-      .fail(function(jqXhr) {
-        console.log('failed to delete page');
-      });
+        .done(function(data) {
+          var pages = self.state.pages.filter(function(obj) {
+            return obj._id !== page._id
+          })
+          self.setState({pages: pages, selectedPages: []})
+        })
+        .fail(function(jqXhr) {
+          console.log('failed to delete page')
+        })
     }
   },
 
-  dateFormatter(cell, row){
-    return moment(cell).format('YYYY/MM/DD hh:mm:ss');
+  dateFormatter(cell, row) {
+    return moment(cell).format('YYYY/MM/DD hh:mm:ss')
   },
 
-  onRowSelect(row, isSelected){
-    var selectedPages = this.state.selectedPages;
+  onRowSelect(row, isSelected) {
+    var selectedPages = this.state.selectedPages
 
     if (isSelected) {
-      selectedPages = []; // Remove this line for checkbox selection
-      selectedPages.push(row);
+      selectedPages = [] // Remove this line for checkbox selection
+      selectedPages.push(row)
     } else {
       selectedPages = selectedPages.filter(function(obj) {
-        return obj._id !== row._id;
-      });
+        return obj._id !== row._id
+      })
     }
 
-    this.setState({selectedPages: selectedPages});
+    this.setState({selectedPages: selectedPages})
   },
 
-  onSelectAll(isSelected){
+  onSelectAll(isSelected) {
     if (isSelected) {
-      this.setState({selectedPages: this.state.pages});
+      this.setState({selectedPages: this.state.pages})
     } else {
-      this.setState({selectedPages: []});
+      this.setState({selectedPages: []})
     }
   },
 
   render() {
-
     var selectRowProp = {
-      mode: "radio",
+      mode: 'radio',
       clickToSelect: true,
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
-    };
+    }
 
     return (
       <div>
@@ -154,7 +153,7 @@ var ListPage = React.createClass({
         </BootstrapTable>
 
         <Modal show={this.state.showNewPageModal} onHide={this.closeNewPageModal}>
-          <form action={"/api/pages"} method="POST" onSubmit={this.submitNewPage}>
+          <form action={'/api/pages'} method="POST" onSubmit={this.submitNewPage}>
             <Modal.Header closeButton>
               <Modal.Title><FormattedMessage id="btn.newpage"/></Modal.Title>
             </Modal.Header>
@@ -168,7 +167,7 @@ var ListPage = React.createClass({
                   placeholder={this.props.intl.formatMessage({id: 'form.title'})}
                   required={true}
                   onChange={this.handleNewPageChange}
-                  />
+                />
                 <FormControl.Feedback />
                 <HelpBlock></HelpBlock>
               </FormGroup>
@@ -182,10 +181,9 @@ var ListPage = React.createClass({
         </Modal>
 
       </div>
-    );
-
+    )
   }
 
 })
 
-module.exports = injectIntl(ListPage);
+module.exports = injectIntl(ListPage)

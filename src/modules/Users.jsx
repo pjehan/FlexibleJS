@@ -1,152 +1,151 @@
 import React from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
-import { browserHistory } from 'react-router'
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
-import { Grid, ButtonGroup, Button, Modal, OverlayTrigger, FormGroup, FormControl, ControlLabel, Checkbox, HelpBlock } from 'react-bootstrap'
+import { Grid, ButtonGroup, Button, Modal, FormGroup, FormControl, ControlLabel, Checkbox } from 'react-bootstrap'
 
 var Users = React.createClass({
   getInitialState: function() {
-    return {users: [], user: {}, selectedUsers: [], userModal: {visible: false}};
+    return {users: [], user: {}, selectedUsers: [], userModal: {visible: false}}
   },
 
   componentDidMount: function() {
-    var self = this;
-    $.get('/api/users', function(users){
-      self.setState({users: users});
-    });
+    var self = this
+    $.get('/api/users', function(users) {
+      self.setState({users: users})
+    })
   },
 
   closeUserModal() {
-    this.setState({ userModal: {visible: false}});
+    this.setState({ userModal: { visible: false } })
   },
 
   openNewUserModal() {
-    var userModal = this.state.userModal;
-    userModal.visible = true;
-    userModal.method = 'POST';
-    userModal.title = this.props.intl.formatMessage({id: 'title.user.new'});
-    this.setState({ user: {}, userModal: userModal });
+    var userModal = this.state.userModal
+    userModal.visible = true
+    userModal.method = 'POST'
+    userModal.title = this.props.intl.formatMessage({id: 'title.user.new'})
+    this.setState({ user: {}, userModal: userModal })
   },
 
   openEditUserModal() {
-    var userModal = this.state.userModal;
-    userModal.visible = true;
-    userModal.method = 'PUT';
-    userModal.title = this.props.intl.formatMessage({id: 'title.user.edit'});
-    this.setState({ user: this.state.selectedUsers[0], userModal: userModal });
+    var userModal = this.state.userModal
+    userModal.visible = true
+    userModal.method = 'PUT'
+    userModal.title = this.props.intl.formatMessage({id: 'title.user.edit'})
+    this.setState({ user: this.state.selectedUsers[0], userModal: userModal })
   },
 
   handleUserChange: function(e) {
-    var user = this.state.user;
+    var user = this.state.user
     switch (e.target.type) {
       case 'checkbox':
-      user[e.target.name] = e.target.checked;
-      break;
+        user[e.target.name] = e.target.checked
+        break
       default:
-      user[e.target.name] = e.target.value;
+        user[e.target.name] = e.target.value
     }
-    this.setState({user: user});
+    this.setState({user: user})
   },
 
-  submitUser: function (e){
-    e.preventDefault();
-    var self = this;
+  submitUser: function(e) {
+    e.preventDefault()
+    var self = this
 
-    var data = this.state.user;
+    var data = this.state.user
 
     $.ajax({
       type: this.state.userModal.method,
       url: '/api/users/',
       data: data
     })
-    .done(function(data) {
-      var users = self.state.users;
-      if (self.state.userModal.method == 'PUT') {
-        users.forEach((item, i) => {if (item._id == data._id) users[i] = data})
-      } else {
-        users.unshift(data);
-      }
-      self.setState({users: users, selectedUsers: []});
-      self.closeUserModal();
-    })
-    .fail(function(jqXhr) {
-      self.props.handleNotification({
-        title: self.props.intl.formatMessage({id: 'notification.newuser.error.title'}),
-        message: self.props.intl.formatMessage({id: 'notification.newuser.error.message'})
-      });
-    });
+      .done(function(data) {
+        var users = self.state.users
+        if (self.state.userModal.method === 'PUT') {
+          users.forEach((item, i) => { if (item._id === data._id) users[i] = data })
+        } else {
+          users.unshift(data)
+        }
+        self.setState({users: users, selectedUsers: []})
+        self.closeUserModal()
+      })
+      .fail(function(jqXhr) {
+        self.props.handleNotification({
+          title: self.props.intl.formatMessage({id: 'notification.newuser.error.title'}),
+          message: self.props.intl.formatMessage({id: 'notification.newuser.error.message'})
+        })
+      })
   },
 
   handleDeleteUser: function(e) {
-    var self = this;
+    var self = this
 
     for (var i = 0; i < this.state.selectedUsers.length; i++) {
-      var user = this.state.selectedUsers[i];
+      var user = this.state.selectedUsers[i]
       $.ajax({
         type: 'DELETE',
         url: '/api/users/' + user._id
       })
-      .done(function(data) {
-        var users = self.state.users.filter(function(obj) {
-          return obj._id !== user._id;
-        });
-        self.setState({users: users, selectedUsers: []});
-      })
-      .fail(function(jqXhr) {
-        self.props.handleNotification({
-          title: self.props.intl.formatMessage({id: 'notification.deleteuser.error.title'}),
-          message: self.props.intl.formatMessage({id: 'notification.deleteuser.error.message'})
-        });
-      });
+        .done(function(data) {
+          var users = self.state.users.filter(function(obj) {
+            return obj._id !== user._id
+          })
+          self.setState({users: users, selectedUsers: []})
+        })
+        .fail(function(jqXhr) {
+          self.props.handleNotification({
+            title: self.props.intl.formatMessage({id: 'notification.deleteuser.error.title'}),
+            message: self.props.intl.formatMessage({id: 'notification.deleteuser.error.message'})
+          })
+        })
     }
   },
 
-  booleanFormatter(cell, row){
-    return (cell) ? this.props.intl.formatMessage({id: 'table.boolean.true'}) : this.props.intl.formatMessage({id: 'table.boolean.false'});
+  booleanFormatter(cell, row) {
+    return (cell) ? this.props.intl.formatMessage({id: 'table.boolean.true'}) : this.props.intl.formatMessage({id: 'table.boolean.false'})
   },
 
-  onRowSelect(row, isSelected){
-    var selectedUsers = this.state.selectedUsers;
+  onRowSelect(row, isSelected) {
+    var selectedUsers = this.state.selectedUsers
 
     if (isSelected) {
-      selectedUsers = []; // Remove this line for checkbox selection
-      selectedUsers.push(row);
+      selectedUsers = [] // Remove this line for checkbox selection
+      selectedUsers.push(row)
     } else {
       selectedUsers = selectedUsers.filter(function(obj) {
-        return obj._id !== row._id;
-      });
+        return obj._id !== row._id
+      })
     }
 
-    this.setState({selectedUsers: selectedUsers});
+    this.setState({selectedUsers: selectedUsers})
   },
 
-  onSelectAll(isSelected){
+  onSelectAll(isSelected) {
     if (isSelected) {
-      this.setState({selectedUsers: this.state.users});
+      this.setState({selectedUsers: this.state.users})
     } else {
-      this.setState({selectedUsers: []});
+      this.setState({selectedUsers: []})
     }
   },
 
   render() {
-    var unselectable = [];
+    var unselectable = []
     for (var i = 0; i < this.state.users.length; i++) {
-      var user = this.state.users[i];
-      if (user.role === 'super_admin' && this.props.currentUser.role !== 'super_admin' || this.props.currentUser.role === 'editor') {
-        unselectable.push(user.username);
+      var user = this.state.users[i]
+      if (user.role === 'super_admin' && (this.props.currentUser.role !== 'super_admin' || this.props.currentUser.role === 'editor')) {
+        unselectable.push(user.username)
       }
     }
 
     var selectRowProp = {
-      mode: "radio",
+      mode: 'radio',
       clickToSelect: true,
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll,
       unselectable: unselectable
-    };
+    }
 
-    var formRole;
+    var formRole
     if (this.props.currentUser) {
       if (this.props.currentUser.role === 'super_admin') {
         formRole = (
@@ -155,14 +154,14 @@ var Users = React.createClass({
             <option value="admin">{this.props.intl.formatMessage({id: 'form.role.admin'})}</option>
             <option value="editor">{this.props.intl.formatMessage({id: 'form.role.editor'})}</option>
           </FormControl>
-        );
+        )
       } else if (this.props.currentUser.role === 'admin' && this.state.user.role !== 'super_admin') {
         formRole = (
           <FormControl name="role" defaultValue={this.state.user.role} componentClass="select" onChange={this.handleUserChange}>
             <option value="admin">{this.props.intl.formatMessage({id: 'form.role.admin'})}</option>
             <option value="editor">{this.props.intl.formatMessage({id: 'form.role.editor'})}</option>
           </FormControl>
-        );
+        )
       }
     }
 
@@ -181,7 +180,7 @@ var Users = React.createClass({
         </BootstrapTable>
 
         <Modal show={this.state.userModal.visible} onHide={this.closeUserModal}>
-          <form action={"/api/users"} method={this.state.userModal.method} onSubmit={this.submitUser}>
+          <form action={'/api/users'} method={this.state.userModal.method} onSubmit={this.submitUser}>
             <Modal.Header closeButton>
               <Modal.Title>{this.state.userModal.title}</Modal.Title>
             </Modal.Header>
@@ -193,7 +192,7 @@ var Users = React.createClass({
               </FormGroup>
               <FormGroup>
                 <ControlLabel><FormattedMessage id="form.password"/></ControlLabel>
-                <FormControl type="password" name="password" disabled={this.state.userModal.method == 'PUT'} onChange={this.handleUserChange} />
+                <FormControl type="password" name="password" disabled={this.state.userModal.method === 'PUT'} onChange={this.handleUserChange} />
               </FormGroup>
               <FormGroup>
                 <ControlLabel><FormattedMessage id="form.role"/></ControlLabel>
@@ -213,6 +212,6 @@ var Users = React.createClass({
       </Grid>
     )
   }
-});
+})
 
-module.exports = injectIntl(Users);
+module.exports = injectIntl(Users)

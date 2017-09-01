@@ -8,15 +8,15 @@ var Login = React.createClass({
 
   getInitialState() {
     return {
-      username: "",
-      password: ""
+      username: '',
+      password: ''
     }
   },
 
   handleChange: function(event) {
-    var change = {};
-    change[event.target.name] = event.target.value;
-    this.setState(change);
+    var change = {}
+    change[event.target.name] = event.target.value
+    this.setState(change)
   },
 
   handleSubmit(event) {
@@ -25,36 +25,36 @@ var Login = React.createClass({
     var data = {
       username: this.state.username,
       password: this.state.password
-    };
+    }
 
-    var self = this;
+    var self = this
     $.ajax({
       type: 'POST',
       url: '/api/users/login',
       data: JSON.stringify(data),
-      contentType: "application/json"
+      contentType: 'application/json'
     })
-    .done(function(user) {
-      self.props.handleUser(user);
-      if (user.active) {
-        self.props.router.replace('/');
-      } else {
-        self.props.handleNotification({
-          title: self.props.intl.formatMessage({id: 'notification.notactive.title'}),
-          message: self.props.intl.formatMessage({id: 'notification.notactive.message'})
-        });
-      }
-    })
-    .fail(function(jqXHR, textStatus) {
-      switch (jqXHR.status) {
-        case 401:
-        self.props.handleNotification({
-          title: self.props.intl.formatMessage({id: 'notification.unauthorized.title'}),
-          message: self.props.intl.formatMessage({id: 'notification.unauthorized.message'})
-        });
-        break;
-      }
-    });
+      .done(function(user) {
+        self.props.handleUser(user)
+        if (user.active) {
+          self.props.router.replace('/')
+        } else {
+          self.props.handleNotification({
+            title: self.props.intl.formatMessage({id: 'notification.notactive.title'}),
+            message: self.props.intl.formatMessage({id: 'notification.notactive.message'})
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus) {
+        switch (jqXHR.status) {
+          case 401:
+            self.props.handleNotification({
+              title: self.props.intl.formatMessage({id: 'notification.unauthorized.title'}),
+              message: self.props.intl.formatMessage({id: 'notification.unauthorized.message'})
+            })
+            break
+        }
+      })
   },
 
   render() {
@@ -75,6 +75,6 @@ var Login = React.createClass({
       </Grid>
     )
   }
-});
+})
 
-module.exports = withRouter(injectIntl(Login));
+module.exports = withRouter(injectIntl(Login))

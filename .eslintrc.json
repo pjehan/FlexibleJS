@@ -1,0 +1,32 @@
+{
+  "extends": "standard",
+
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true
+  },
+
+  "globals": {
+    "React": true,
+    "gapi": true,
+    "NProgress": true,
+    "google": true,
+    "moment": true
+  },
+
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+
+  "plugins": [
+    "react"
+  ],
+
+  "rules": {
+    "space-before-function-paren": ["error", "never"],
+    "react/jsx-uses-vars": [2]
+  }
+}

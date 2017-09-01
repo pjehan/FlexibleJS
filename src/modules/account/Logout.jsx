@@ -1,19 +1,18 @@
 import React from 'react'
 import { injectIntl, FormattedMessage } from 'react-intl'
-import { withRouter } from 'react-router'
-import { browserHistory } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
 
 import { Grid } from 'react-bootstrap'
 
 var Logout = React.createClass({
   componentDidMount() {
-    var self = this;
+    var self = this
     $.get('/api/users/logout', function() {
-      self.props.handleUser(null);
+      self.props.handleUser(null)
       setTimeout(function() {
-        browserHistory.push('/login');
+        browserHistory.push('/login')
       }, 3000)
-    });
+    })
   },
 
   render() {
@@ -25,4 +24,4 @@ var Logout = React.createClass({
   }
 })
 
-module.exports = withRouter(injectIntl(Logout));
+module.exports = withRouter(injectIntl(Logout))
