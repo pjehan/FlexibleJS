@@ -5,6 +5,11 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pjehan/FlexibleJS.git"
+  },
+  "license": "GPL-3.0",
   "devDependencies": {
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
@@ -58,6 +63,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^1.0.0",
+    "pug": "^2.0.0-rc.3",
     "randomstring": "^1.1.5",
     "react": "^15.1.0",
     "react-bootstrap": "^0.30.0",
