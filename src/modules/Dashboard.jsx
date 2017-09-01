@@ -45,6 +45,8 @@ var Dashboard = React.createClass({
 
         $.get('/api/dashboard/gapi-key/' + viewId + '/' + email)
           .done(function(result) {
+            if (typeof result.viewId === 'undefined') return false
+
             var options = {
               query: {
                 ids: 'ga:' + result.viewId
