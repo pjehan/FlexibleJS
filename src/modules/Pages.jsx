@@ -109,6 +109,38 @@ var Pages = React.createClass({
     });
   },
 
+  navDragStart: function(idFrom, e){
+    e.dataTransfer.setData("idFrom", idFrom);
+  },
+
+  navDragOver: function(e){
+    e.preventDefault();
+    return true;
+  },
+
+  navDragEnter: function(e){
+    e.target.parentNode.className = "is-dragover";
+  },
+
+  navDragLeave: function(e){
+    e.target.parentNode.className = "";
+  },
+
+  navDrop: function(idTo, e){
+    e.target.parentNode.className = "";
+    var idFrom = e.dataTransfer.getData("idFrom");
+
+    fetch('/api/pages/swap/' + idFrom + '/' + idTo, { method: 'PUT' })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      fetch('/api/pages?site_id=' + this.props.site.id)
+      .then((response) => response.json())
+      .then((responseJson) => this.setState({pages: responseJson}))
+      .catch((error) => console.error('Failed to swap pages', error));
+    })
+    .catch((error) => console.error('Failed to retrieve pages', error));
+  },
+
   renderChildren: function() {
     return React.Children.map(this.props.children, child =>
       React.cloneElement(child, {currentUser: this.props.currentUser, language: this.state.language, site: this.props.site, handleNotification: this.props.handleNotification, handleModal: this.props.handleModal})
@@ -120,18 +152,18 @@ var Pages = React.createClass({
 
     var superAdmin = (this.props.currentUser && this.props.currentUser.role === 'super_admin');
 
-    var pageNodes = this.state.pages.map(function(page){
+    var pageNodes = this.state.pages.map((page) => {
       return (
         <LinkContainer to={"/pages/" + page._id} key={page._id}>
-          <NavItem eventKey={page._id}>
-            {page.title}
+          <NavItem eventKey={page._id} draggable='true' onDragStart={this.navDragStart.bind(this, page._id)} onDragOver={this.navDragOver} onDragEnter={this.navDragEnter} onDragLeave={this.navDragLeave} onDrop={this.navDrop.bind(this, page._id)}>
+            {page.title} ({page.order})
             <Button className={superAdmin ? 'pull-right' : 'pull-right hidden'} bsStyle="danger" bsSize="xsmall" onClick={self.handleDeletePage.bind(this, page)} >
               <i className="fa fa-trash"></i>
             </Button>
           </NavItem>
         </LinkContainer>
       );
-    }.bind(this));
+    });
 
     var templateNodes = this.state.templates.map(function(template){
       return (

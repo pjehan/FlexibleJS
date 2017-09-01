@@ -39,6 +39,10 @@ a[disabled] {
   cursor: move;
 }
 
+.nav.nav-pills > .is-dragover {
+  border-bottom: #ccc dashed 2px;
+}
+
 .breadcrumb {
   margin-bottom: 0;
 }
