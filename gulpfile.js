@@ -76,7 +76,7 @@ gulp.task('nodemon', function() {
   gutil.log('Nodemon...')
   return nodemon({
     script: 'app.js',
-    ext: 'css js jade',
+    ext: 'css js pug',
     ignore: ['public/*', 'src/*'],
     env: { 'NODE_ENV': 'development' }
   }).on('restart', function() {
