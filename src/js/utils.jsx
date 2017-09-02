@@ -1,3 +1,4 @@
+import React from 'react'
 import { Alert } from 'react-bootstrap'
 
 import Input from '../modules/components/Input.jsx'

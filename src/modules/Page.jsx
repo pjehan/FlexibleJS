@@ -56,9 +56,9 @@ var Page = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.ajaxGetPage.abort()
-    this.ajaxGetTemplate.abort()
-    this.ajaxGetParents.abort()
+    if (this.ajaxGetPage) this.ajaxGetPage.abort()
+    if (this.ajaxGetTemplate) this.ajaxGetTemplate.abort()
+    if (this.ajaxGetParents) this.ajaxGetParents.abort()
 
     if (this.state.changes) {
       this.showSaveChangesModal()
