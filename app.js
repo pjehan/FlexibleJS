@@ -55,7 +55,7 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 // mongoose
-mongoose.connect(config.db.url)
+mongoose.connect(config.db.url, { useMongoClient: true })
 
 app.get('*', function(req, res) {
   res.render('index')
