@@ -207,7 +207,7 @@ router.put('/:id', function(req, res, next) {
   data.updated_date = new Date()
 
   getPageBySlug(req, data.site_id, data.slug, function(page) {
-    if (page && page._id !== req.params.id) {
+    if (page && String(page._id) !== req.params.id) {
       res.status(500).send('Slug already exists')
     } else {
       db.collection('pages').findAndModify(
