@@ -44,6 +44,11 @@ var Input = React.createClass({
           down: 'fa fa-arrow-down'
         }
       })
+      input.on('dp.change', function(e) {
+        this.setState({ value: e.date.format(format) }, function() {
+          this.props.handleChange(this.state)
+        })
+      }.bind(this))
     }
   },
 
