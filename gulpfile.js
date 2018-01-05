@@ -36,7 +36,8 @@ gulp.task('css', function() {
     nodeDir + '/summernote/dist/summernote.css',
     nodeDir + '/select2/dist/css/select2.css',
     nodeDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css',
-    nodeDir + '/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
+    nodeDir + '/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+    nodeDir + '/react-bootstrap-table/dist/react-bootstrap-table.min.css'
   ])
   var scssFiles = gulp.src(stylesDir + '/style.scss')
     .pipe(sass({
