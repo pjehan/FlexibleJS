@@ -14,7 +14,7 @@ const reactify = require('reactify')
 const watchify = require('watchify')
 const babelify = require('babelify')
 
-const bowerDir = './public/bower_components'
+const nodeDir = './node_modules'
 const scriptsDir = './src/js'
 const stylesDir = './src/css'
 const buildScriptsDir = './public/js'
@@ -31,20 +31,20 @@ function handleErrors() {
 
 gulp.task('css', function() {
   var cssFiles = gulp.src([
-    bowerDir + '/animate.css/animate.css',
-    bowerDir + '/nprogress/nprogress.css',
-    bowerDir + '/summernote/dist/summernote.css',
-    bowerDir + '/select2/dist/css/select2.css',
-    bowerDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css',
-    bowerDir + '/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
+    nodeDir + '/animate.css/animate.css',
+    nodeDir + '/nprogress/nprogress.css',
+    nodeDir + '/summernote/dist/summernote.css',
+    nodeDir + '/select2/dist/css/select2.css',
+    nodeDir + '/select2-bootstrap-theme/dist/select2-bootstrap.css',
+    nodeDir + '/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
   ])
   var scssFiles = gulp.src(stylesDir + '/style.scss')
     .pipe(sass({
       outputStyle: 'compressed',
       includePaths: [
-        bowerDir + '/bootstrap-sass/assets/stylesheets',
-        bowerDir + '/bootswatch/paper', // Edit this line to change Bootswatch theme
-        bowerDir + '/font-awesome/scss'
+        nodeDir + '/bootstrap-sass/assets/stylesheets',
+        nodeDir + '/bootswatch-sass/paper', // Edit this line to change Bootswatch theme
+        nodeDir + '/font-awesome/scss'
       ]})
       .on('error', notify.onError(function(error) {
         return 'Error: ' + error.message
@@ -59,9 +59,9 @@ gulp.task('css', function() {
 })
 
 gulp.task('fonts', function() {
-  gulp.src(bowerDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'))
-  gulp.src(bowerDir + '/summernote/dist/font/summernote.*').pipe(gulp.dest('./public/css/font'))
-  return gulp.src(bowerDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'))
+  gulp.src(nodeDir + '/bootstrap-sass/assets/fonts/bootstrap/**.*').pipe(gulp.dest('./public/fonts/bootstrap'))
+  gulp.src(nodeDir + '/summernote/dist/font/summernote.*').pipe(gulp.dest('./public/css/font'))
+  return gulp.src(nodeDir + '/font-awesome/fonts/**.*').pipe(gulp.dest('./public/fonts'))
 })
 
 gulp.task('lint', function() {
@@ -87,8 +87,10 @@ gulp.task('nodemon', function() {
 
 function buildScript(file, watch) {
   var props = {
-    entries: [scriptsDir + '/script.js', scriptsDir + '/' + file],
-    debug: true,
+    entries: [
+      scriptsDir + '/script.js',
+      scriptsDir + '/' + file],
+    debug: watch,
     transform: [babelify, reactify],
     cache: {},
     packageCache: {}
@@ -100,6 +102,17 @@ function buildScript(file, watch) {
   }
   function rebundle() {
     var stream = bundler.bundle()
+    gulp.src([
+      nodeDir + '/jquery/dist/jquery.min.js',
+      nodeDir + '/moment/min/moment-with-locales.min.js',
+      nodeDir + '/nprogress/nprogress.js',
+      nodeDir + '/bootstrap/dist/js/bootstrap.min.js',
+      nodeDir + '/select2/dist/js/select2.min.js',
+      nodeDir + '/summernote/dist/summernote.min.js',
+      nodeDir + '/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+    ])
+    .pipe(concat('plugins.js'))
+    .pipe(gulp.dest(buildScriptsDir + '/'))
     return stream.on('error', handleErrors)
       .pipe(source(file))
       .pipe(gulp.dest(buildScriptsDir + '/'))
